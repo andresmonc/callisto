@@ -41,7 +41,7 @@ public class RequestField extends HBox {
         return actionButton;
     }
 
-    public ComboBox<String> getDropdown() {
+    public ComboBox<String> getMethod() {
         return dropdown;
     }
 }

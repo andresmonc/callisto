@@ -1,5 +1,6 @@
 package com.jmoncayo.callisto.ui.requestview;
 
+import com.jmoncayo.callisto.ui.controllers.RequestController;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
@@ -12,7 +13,8 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestView extends VBox {
 
-    public RequestView(RequestField requestField, RequestDetails tabsComponent) {
+    public RequestView(RequestController requestController, RequestField requestField, RequestDetails tabsComponent) {
+
         // Set up the RequestField and TabsComponent in a VBox
         this.getChildren().addAll(requestField, tabsComponent);
 
@@ -34,7 +36,6 @@ public class RequestView extends VBox {
         responseDisplay.setPrefHeight(600);
         responseArea.getChildren().addAll(label, dropdown, responseDisplay);
 
-
         // Add the top section and response area to the SplitPane
         splitPane.getItems().addAll(topSection, responseArea);
 
@@ -46,5 +47,12 @@ public class RequestView extends VBox {
 
         // Set the VBox to stretch in width
         this.setFillWidth(true);
+
+
+        // request submission
+
+        requestField.getActionButton().setOnAction(event -> {
+            responseDisplay.setText(requestController.submitRequest(requestField.getRequestURL().getText(),requestField.getMethod().getValue()));
+        });
     }
 }
