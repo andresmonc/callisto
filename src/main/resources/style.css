@@ -1,0 +1,20 @@
+.split-pane-divider {
+    -fx-background-color: #e8e8e8;; /* Set the color of the divider line */
+    -fx-background-insets: 0, 0; /* Remove padding if any */
+    -fx-padding: 0; /* Ensure no extra space around the divider */
+    -fx-border-width: 0 5 0 5; /* Optional: Add a border on the sides to emphasize the line */
+    -fx-border-color: #e8e8e8;; /* Optional: Set the border color */
+}
+
+
+.side-nav {
+    -fx-background-color: #e8e8e8;
+}
+
+.collapse-button {
+    -fx-background-radius: 50%;
+}
+
+.request-url {
+    -fx-background-color: #ff0000;
+}
