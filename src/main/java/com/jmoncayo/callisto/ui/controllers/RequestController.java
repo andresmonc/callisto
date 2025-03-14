@@ -1,5 +1,6 @@
 package com.jmoncayo.callisto.ui.controllers;
 
+import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.ApiRequestService;
 import javafx.scene.control.ComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class RequestController {
     }
 
     public String submitRequest(String text, String method) {
-        apiRequestService.submitRequest();
+        apiRequestService.submitRequest(ApiRequest.builder().url("").method(method).build());
         System.out.println(method + ":" + text);
         return "RESPONSE SUCCESSFUL";
     }

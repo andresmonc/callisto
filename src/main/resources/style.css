@@ -6,7 +6,6 @@
     -fx-border-color: #e8e8e8;; /* Optional: Set the border color */
 }
 
-
 .side-nav {
     -fx-background-color: #e8e8e8;
 }
@@ -16,5 +15,5 @@
 }
 
 .request-url {
-    -fx-background-color: #ff0000;
+    -fx-background-color: #ffffff;
 }

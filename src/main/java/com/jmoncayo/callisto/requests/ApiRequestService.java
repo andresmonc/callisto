@@ -15,7 +15,7 @@ public class ApiRequestService {
         this.httpClient = WebClient.builder().build();
     }
 
-    public void submitRequest(){
+    public void submitRequest(ApiRequest request){
 
     }
 }
