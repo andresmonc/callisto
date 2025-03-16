@@ -1,10 +1,8 @@
-package com.jmoncayo.callisto.ui;
+package com.jmoncayo.callisto.ui.sidenavigation;
 
-import com.jmoncayo.callisto.ui.controllers.MainController;
 import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.SplitPane;
-import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -17,7 +15,7 @@ public class SideNavigationPanel extends VBox {
     private static final int MAX_WIDTH = 200;
 
     @Autowired
-    public SideNavigationPanel(SplitPane splitPane) {
+    public SideNavigationPanel(SplitPane splitPane, SideNavigationCollectionView sideNavigationCollectionView) {
         // set style class
         this.getStyleClass().add("side-nav");
         // Create the collapse button
@@ -28,9 +26,7 @@ public class SideNavigationPanel extends VBox {
         // Add the collapse button and other buttons
         this.getChildren().addAll(
                 collapseButton,
-                new Button("Home"),
-                new Button("Settings"),
-                new Button("About")
+                sideNavigationCollectionView
         );
 
         // Delay the listener setup until the SplitPane is fully initialized

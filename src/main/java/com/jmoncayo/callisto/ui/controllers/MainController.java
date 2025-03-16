@@ -1,6 +1,6 @@
 package com.jmoncayo.callisto.ui.controllers;
 
-import com.jmoncayo.callisto.ui.SideNavigationPanel;
+import com.jmoncayo.callisto.ui.sidenavigation.SideNavigationPanel;
 import com.jmoncayo.callisto.ui.requestview.RequestView;
 import javafx.scene.control.SplitPane;
 import javafx.scene.layout.BorderPane;
