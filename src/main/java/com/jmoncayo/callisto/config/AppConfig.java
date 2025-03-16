@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
-@ComponentScan(basePackages = "com.jmoncayo.callisto") // Replace with your package
+@ComponentScan(basePackages = "com.jmoncayo.callisto")
 public class AppConfig {
 
     @Bean
