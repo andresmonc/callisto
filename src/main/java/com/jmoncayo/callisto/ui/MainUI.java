@@ -15,7 +15,7 @@ import java.util.Objects;
 
 public class MainUI extends Application {
 
-    private ApplicationContext context;
+    private AnnotationConfigApplicationContext context;
 
     @Override
     public void start(Stage primaryStage) {
@@ -32,6 +32,15 @@ public class MainUI extends Application {
 
         primaryStage.setScene(scene);
         primaryStage.show();
+    }
+
+    @Override
+    public void stop() throws Exception {
+        // Shutdown Spring
+        super.stop();
+        if (context != null) {
+            context.close();
+        }
     }
 
     public static void main(String[] args) {

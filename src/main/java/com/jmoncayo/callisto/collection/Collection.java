@@ -12,4 +12,5 @@ import java.util.List;
 public class Collection {
     private String name;
     private List<ApiRequest> requests = new ArrayList<>();
+
 }
