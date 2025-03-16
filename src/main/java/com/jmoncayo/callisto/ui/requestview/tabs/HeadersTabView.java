@@ -77,7 +77,9 @@ public class HeadersTabView extends StackPane {
             String newValue = event.getNewValue();
 
             // Check if the row being edited is the placeholder row
-            if ("Key".equals(header.getKey()) && "Value".equals(header.getValue()) && "Description".equals(header.getDescription())) {
+            if (header.isPlaceholder()) {
+                // No longer a placeholder
+                header.setPlaceholder(false);
                 // a new placeholder row after the edit
                 tableView.getItems().add(new Header("Key", "Value", "Description"));
             }
@@ -99,7 +101,9 @@ public class HeadersTabView extends StackPane {
 
         // Add a placeholder row if there isn't one already
         if (!hasPlaceholderRow(tableView)) {
-            tableView.getItems().add(new Header("Key", "Value", "Description"));
+            Header placeHolder = new Header("Key", "Value", "Description");
+            tableView.getItems().add(placeHolder);
+            placeHolder.setPlaceholder(true);
         }
     }
 
@@ -117,6 +121,7 @@ public class HeadersTabView extends StackPane {
         private final SimpleStringProperty key;
         private final SimpleStringProperty value;
         private final SimpleStringProperty description;
+        private boolean isPlaceholder;
 
         public Header(String key, String value, String description) {
             this.key = new SimpleStringProperty(key);
@@ -146,6 +151,14 @@ public class HeadersTabView extends StackPane {
 
         public void setDescription(String description) {
             this.description.set(description);
+        }
+
+        public void setPlaceholder(boolean placeholder) {
+            isPlaceholder = placeholder;
+        }
+
+        public boolean isPlaceholder() {
+            return isPlaceholder;
         }
     }
 }

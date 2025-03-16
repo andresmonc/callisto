@@ -22,11 +22,11 @@ public class RequestController {
     }
 
     public Mono<String> submitRequest(String url, String method) {
-
         return apiRequestService.submitRequest(
                 ApiRequest.builder()
                         .url(url)
                         .headers(headers.stream()
+                                .filter(header -> !header.isPlaceholder())
                                 .map(header -> Header.builder()
                                         .key(header.getKey())
                                         .value(header.getValue())
