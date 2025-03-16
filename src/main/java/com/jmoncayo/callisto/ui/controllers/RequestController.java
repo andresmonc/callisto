@@ -5,6 +5,7 @@ import com.jmoncayo.callisto.requests.ApiRequestService;
 import javafx.scene.control.ComboBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import reactor.core.publisher.Mono;
 
 @Component
 public class RequestController {
@@ -16,9 +17,7 @@ public class RequestController {
         this.apiRequestService = apiRequestService;
     }
 
-    public String submitRequest(String text, String method) {
-        apiRequestService.submitRequest(ApiRequest.builder().url("").method(method).build());
-        System.out.println(method + ":" + text);
-        return "RESPONSE SUCCESSFUL";
+    public Mono<String> submitRequest(String url, String method) {
+        return apiRequestService.submitRequest(ApiRequest.builder().url(url).method(method).build());
     }
 }

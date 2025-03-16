@@ -1,6 +1,7 @@
 package com.jmoncayo.callisto.ui.requestview;
 
 import com.jmoncayo.callisto.ui.controllers.RequestController;
+import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
@@ -13,7 +14,13 @@ import org.springframework.stereotype.Component;
 @Component
 public class RequestView extends VBox {
 
+    private final RequestController requestController;
+    private final RequestField requestField;
+    private final TextArea responseDisplay;
+
     public RequestView(RequestController requestController, RequestField requestField, RequestDetails tabsComponent) {
+        this.requestController = requestController;
+        this.requestField = requestField;
 
         // Set up the RequestField and TabsComponent in a VBox
         this.getChildren().addAll(requestField, tabsComponent);
@@ -31,7 +38,8 @@ public class RequestView extends VBox {
         Text label = new Text("Response | ");
         ComboBox<String> dropdown = new ComboBox<>();
         dropdown.getItems().addAll("Option 1", "Option 2", "Option 3");
-        var responseDisplay = new TextArea("asdfjklasdjklfasdf");
+        this.responseDisplay = new TextArea("asdfjklasdjklfasdf");
+        responseDisplay.setEditable(false);
         responseDisplay.setMinHeight(0);
         responseDisplay.setPrefHeight(600);
         responseArea.getChildren().addAll(label, dropdown, responseDisplay);
@@ -51,8 +59,26 @@ public class RequestView extends VBox {
 
         // request submission
 
-        requestField.getActionButton().setOnAction(event -> {
-            responseDisplay.setText(requestController.submitRequest(requestField.getRequestURL().getText(),requestField.getMethod().getValue()));
-        });
+//        requestField.getActionButton().setOnAction(event -> {
+//            responseDisplay.setText(requestController.submitRequest(requestField.getRequestURL().getText(),requestField.getMethod().getValue()));
+//        });
+        requestField.getActionButton().setOnAction(event -> handleRequest());
+    }
+
+    private void handleRequest() {
+        String url = requestField.getRequestURL().getText();
+        String method = requestField.getMethod().getValue();
+        if (url == null || url.isEmpty()) {
+            responseDisplay.setText("Error: URL cannot be empty.");
+            return;
+        }
+        if (method == null) {
+            responseDisplay.setText("Error: Method must be selected.");
+        }
+        responseDisplay.setText("Sending request...");
+
+        requestController.submitRequest(url, method)
+                .subscribe(response -> Platform.runLater(() -> responseDisplay.setText(response)),
+                        error -> Platform.runLater(() -> responseDisplay.setText("Error: " + error.getMessage())));
     }
 }
