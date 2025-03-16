@@ -1,6 +1,6 @@
 package com.jmoncayo.callisto.config;
 
-import javafx.scene.control.SplitPane;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -10,8 +10,8 @@ import org.springframework.context.annotation.Configuration;
 public class AppConfig {
 
     @Bean
-    public SplitPane splitPane() {
-        return new SplitPane();
+    public ObjectMapper objectMapper() {
+        return new ObjectMapper();
     }
 
 }
