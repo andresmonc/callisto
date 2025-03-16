@@ -20,12 +20,12 @@ public class DataLoaderService {
     }
 
     @PostConstruct
-    public void loadDataToServices() {
+    public void loadDataToServices() throws IOException {
         try {
-            Storage data = fileStorageService.loadFromFile(Storage.class, "fileName");
+            Storage data = fileStorageService.loadFromFile(Storage.class, "callisto_data.json");
             collectionService.load(data.getUnSavedCollections());
         } catch (IOException e) {
-            e.printStackTrace();
+            fileStorageService.saveToFile(new Storage(), "callisto_data.json");
         }
     }
 }
