@@ -1,16 +1,16 @@
 package com.jmoncayo.callisto.ui.requestview.tabs;
 
+import javafx.beans.property.SimpleStringProperty;
+import javafx.geometry.Pos;
 import javafx.scene.control.Label;
-import javafx.scene.layout.StackPane;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.geometry.Pos;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
-import javafx.beans.property.SimpleStringProperty;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 @Component
 public class HeadersTabView extends StackPane {
@@ -54,6 +54,29 @@ public class HeadersTabView extends StackPane {
 
         // Add the VBox to the StackPane
         this.getChildren().add(vbox);
+
+        // Editable
+        // Make the TableView editable
+        tableView.setEditable(true);
+
+        // Set the columns to be editable
+        keyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        valueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+        descriptionColumn.setCellFactory(TextFieldTableCell.forTableColumn());
+
+        // Add edit commit handlers to update the model
+        keyColumn.setOnEditCommit(event -> {
+            Header header = event.getRowValue();
+            header.setKey(event.getNewValue());
+        });
+        valueColumn.setOnEditCommit(event -> {
+            Header header = event.getRowValue();
+            header.setValue(event.getNewValue());
+        });
+        descriptionColumn.setOnEditCommit(event -> {
+            Header header = event.getRowValue();
+            header.setDescription(event.getNewValue());
+        });
     }
 
     public static class Header {
@@ -75,6 +98,18 @@ public class HeadersTabView extends StackPane {
 
         public String getDescription() {
             return description.get();
+        }
+
+        public void setKey(String key) {
+            this.key.set(key);
+        }
+
+        public void setValue(String value) {
+            this.value.set(value);
+        }
+
+        public void setDescription(String description) {
+            this.description.set(description);
         }
     }
 }
