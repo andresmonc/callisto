@@ -6,18 +6,12 @@ import javafx.scene.control.TabPane;
 import javafx.scene.layout.StackPane;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class RequestDetails extends TabPane {
-    public RequestDetails() {
-        // Create individual tabs
-        Tab params = new Tab("Params");
-        params.setClosable(false);
-        params.setContent(new StackPane(new Label("Content for Tab 1")));  // Replace with your actual view content
-
-        Tab authorization = new Tab("Authorization");
-        authorization.setClosable(false);
-        authorization.setContent(new StackPane(new Label("Content for Tab 2")));  // Replace with your actual view content
-
+    public RequestDetails(List<Tab> tabs) {
+        this.getTabs().addAll(tabs);
         Tab headers = new Tab("Headers");
         headers.setClosable(false);
         headers.setContent(new StackPane(new Label("Content for Tab 4")));  // Replace with your actual view content
@@ -33,8 +27,5 @@ public class RequestDetails extends TabPane {
         Tab settings = new Tab("Settings");
         settings.setClosable(false);
         settings.setContent(new StackPane(new Label("Content for Tab 7")));  // Replace with your actual view content
-
-        // Add the tabs to the TabPane
-        this.getTabs().addAll(params, authorization, headers, body);
     }
 }
