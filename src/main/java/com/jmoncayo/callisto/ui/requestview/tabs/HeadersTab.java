@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 @Order(3)
 public class HeadersTab extends Tab {
-    public HeadersTab() {
+    public HeadersTab(HeadersTabView headersTabView) {
         this.setText("Headers");
         this.setClosable(false);
-        this.setContent(new StackPane(new Label("Headers")));
+        this.setContent(headersTabView);
     }
 }
