@@ -26,6 +26,16 @@ public class FileStorageService {
 
     public void saveToFile(Object object, String filename) throws IOException {
         File file = getFilePath(filename).toFile();
+        if (file.getParentFile() != null && !file.getParentFile().exists()) {
+            file.getParentFile().mkdirs();  // Creates the directories if they don't exist
+        }
+
+        // Check if the file exists, and create it if it doesn't
+        if (!file.exists()) {
+            file.createNewFile();  // Creates the file if it does not exist
+        }
+
+        // Now, write the object to the file
         mapper.writeValue(file, object);
     }
 
