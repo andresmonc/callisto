@@ -1,29 +1,27 @@
 package com.jmoncayo.callisto.collection;
 
 import com.jmoncayo.callisto.storage.Loadable;
-import jakarta.annotation.PreDestroy;
 import lombok.Getter;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class CollectionService implements Loadable<Collection> {
 
     @Getter
-    private List<Collection> collections;
-
-    public CollectionService(List<Collection> collections) {
-        this.collections = collections;
-    }
+    private List<Collection> collections = new ArrayList<>();
 
     @Override
     public void load(List<Collection> data) {
-        this.collections = data;
+        this.collections = Objects.requireNonNullElseGet(data, ArrayList::new);
     }
 
-    @PreDestroy
-    public void preDestroy() {
-        System.out.println("test!!!!!!!");
+    public Collection createCollection() {
+        Collection collection = Collection.builder().name("New Collection").build();
+        collections.add(collection);
+        return collection;
     }
 }

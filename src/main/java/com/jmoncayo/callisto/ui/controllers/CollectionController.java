@@ -20,4 +20,8 @@ public class CollectionController {
     public List<Collection> getCollections() {
         return collectionService.getCollections();
     }
+
+    public Collection addCollection() {
+        return collectionService.createCollection();
+    }
 }

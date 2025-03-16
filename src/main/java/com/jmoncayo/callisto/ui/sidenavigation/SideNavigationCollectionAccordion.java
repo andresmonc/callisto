@@ -27,11 +27,13 @@ public class SideNavigationCollectionAccordion extends Accordion {
             collectionPane.setContent(new StackPane());
             panes.add(collectionPane);
         }
-        // test
-        TitledPane section1 = new TitledPane("Section 1", new StackPane());
-        section1.setContent(new StackPane(new Button("Test")));
-        panes.add(section1);
-        // end test
         this.getPanes().addAll(panes);
     }
+
+    public void addNewCollection(Collection collection){
+        TitledPane pane = new TitledPane(collection.getName(), new StackPane());
+        pane.setContent(new StackPane(new Button("Test")));
+        this.getPanes().add(pane);
+    }
+
 }

@@ -32,14 +32,16 @@ public class DataLoaderService {
             Storage data = fileStorageService.loadFromFile(Storage.class, saveName);
             collectionService.load(data.getUnSavedCollections());
         } catch (IOException e) {
-            fileStorageService.saveToFile(Storage.builder().build(), saveName);
+            fileStorageService.saveToFile(new Storage(), saveName);
         }
     }
 
     @PreDestroy
     public void saveDataFromServices() {
         try {
-            fileStorageService.saveToFile(Storage.builder().savedCollections(collectionService.getCollections()).build(), saveName);
+            var storage = new Storage();
+            storage.setUnSavedCollections(collectionService.getCollections());
+            fileStorageService.saveToFile(storage, saveName);
         } catch (IOException e) {
             log.error(e);
         }
