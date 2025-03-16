@@ -2,6 +2,8 @@ package com.jmoncayo.callisto.storage;
 
 import com.jmoncayo.callisto.collection.CollectionService;
 import jakarta.annotation.PostConstruct;
+import jakarta.annotation.PreDestroy;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 
 @Service
+@Log4j2
 public class DataLoaderService {
 
     private final FileStorageService fileStorageService;
@@ -29,7 +32,16 @@ public class DataLoaderService {
             Storage data = fileStorageService.loadFromFile(Storage.class, saveName);
             collectionService.load(data.getUnSavedCollections());
         } catch (IOException e) {
-            fileStorageService.saveToFile(new Storage(), saveName);
+            fileStorageService.saveToFile(Storage.builder().build(), saveName);
+        }
+    }
+
+    @PreDestroy
+    public void saveDataFromServices() throws IOException {
+        try {
+            fileStorageService.saveToFile(Storage.builder().savedCollections(collectionService.getCollections()).build(), saveName);
+        } catch (IOException e) {
+            log.error(e);
         }
     }
 }

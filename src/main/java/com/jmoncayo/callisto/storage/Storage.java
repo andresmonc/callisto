@@ -1,14 +1,16 @@
 package com.jmoncayo.callisto.storage;
 
 import com.jmoncayo.callisto.collection.Collection;
-import lombok.Getter;
-import lombok.Setter;
+import com.jmoncayo.callisto.preferences.Preferences;
+import lombok.Builder;
+import lombok.Value;
 
 import java.util.List;
 
-@Getter
-@Setter
+@Value
+@Builder
 public class Storage {
-    private List<Collection> savedCollections;
-    private List<Collection> unSavedCollections;
+    List<Collection> savedCollections;
+    List<Collection> unSavedCollections;
+    Preferences preferences;
 }
