@@ -37,7 +37,7 @@ public class DataLoaderService {
     }
 
     @PreDestroy
-    public void saveDataFromServices() throws IOException {
+    public void saveDataFromServices() {
         try {
             fileStorageService.saveToFile(Storage.builder().savedCollections(collectionService.getCollections()).build(), saveName);
         } catch (IOException e) {
