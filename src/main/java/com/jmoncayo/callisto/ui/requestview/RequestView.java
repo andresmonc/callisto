@@ -34,15 +34,19 @@ public class RequestView extends VBox {
         topSection.getChildren().addAll(requestField, tabsComponent);
 
         // Create the response section with the label and dropdown
-        HBox responseArea = new HBox();
+        VBox responseArea = new VBox();
+        HBox responseAreaNav = new HBox();
+
         Text label = new Text("Response | ");
         ComboBox<String> dropdown = new ComboBox<>();
         dropdown.getItems().addAll("Option 1", "Option 2", "Option 3");
-        this.responseDisplay = new TextArea("asdfjklasdjklfasdf");
+        this.responseDisplay = new TextArea("Send a request to display");
         responseDisplay.setEditable(false);
         responseDisplay.setMinHeight(0);
         responseDisplay.setPrefHeight(600);
-        responseArea.getChildren().addAll(label, dropdown, responseDisplay);
+        responseDisplay.setMaxWidth(Double.MAX_VALUE);
+        responseAreaNav.getChildren().addAll(label,dropdown);
+        responseArea.getChildren().addAll(responseAreaNav, responseDisplay);
 
         // Add the top section and response area to the SplitPane
         splitPane.getItems().addAll(topSection, responseArea);
@@ -56,12 +60,6 @@ public class RequestView extends VBox {
         // Set the VBox to stretch in width
         this.setFillWidth(true);
 
-
-        // request submission
-
-//        requestField.getActionButton().setOnAction(event -> {
-//            responseDisplay.setText(requestController.submitRequest(requestField.getRequestURL().getText(),requestField.getMethod().getValue()));
-//        });
         requestField.getActionButton().setOnAction(event -> handleRequest());
     }
 
