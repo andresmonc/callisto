@@ -4,7 +4,6 @@ import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.StackPane;
 import org.springframework.stereotype.Component;
