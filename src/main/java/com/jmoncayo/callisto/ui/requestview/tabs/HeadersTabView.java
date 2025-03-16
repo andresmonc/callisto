@@ -1,5 +1,6 @@
 package com.jmoncayo.callisto.ui.requestview.tabs;
 
+import com.jmoncayo.callisto.ui.controllers.RequestController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
@@ -9,17 +10,21 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
 import org.springframework.stereotype.Component;
 
 @Component
 public class HeadersTabView extends StackPane {
 
-    public HeadersTabView() {
+    @Getter
+    private final TableView<Header> tableView;
+
+    public HeadersTabView(RequestController requestController) {
         // Create the title label
         Label titleLabel = createTitleLabel();
 
         // Create the TableView and set up the columns
-        TableView<Header> tableView = createTableView();
+        tableView = createTableView();
 
         // Add some sample data (can be replaced later with actual data)
         populateTableData(tableView);
@@ -31,6 +36,9 @@ public class HeadersTabView extends StackPane {
 
         // Add VBox to StackPane
         this.getChildren().add(vbox);
+
+        // send observable to requestController
+        requestController.setHeaders(tableView.getItems());
     }
 
     private Label createTitleLabel() {
