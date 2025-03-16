@@ -15,11 +15,7 @@ import java.util.List;
 @Component
 public class SideNavigationCollectionAccordion extends Accordion {
 
-    private final CollectionController collectionController;
-
     public SideNavigationCollectionAccordion(CollectionController collectionController) {
-        this.collectionController = collectionController;
-
         List<Collection> collections = collectionController.getCollections();
         List<TitledPane> panes = new ArrayList<>(collections.size());
         for (Collection collection : collections) {
