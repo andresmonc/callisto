@@ -16,47 +16,26 @@ public class RequestView extends VBox {
 
     private final RequestController requestController;
     private final RequestField requestField;
-    private final TextArea responseDisplay;
+    private final ResponseArea responseArea;
 
-    public RequestView(RequestController requestController, RequestField requestField, RequestDetails tabsComponent) {
+    public RequestView(RequestController requestController, RequestField requestField, RequestDetails tabsComponent, ResponseArea responseArea) {
         this.requestController = requestController;
         this.requestField = requestField;
-
+        this.responseArea = responseArea;
         // Set up the RequestField and TabsComponent in a VBox
         this.getChildren().addAll(requestField, tabsComponent);
-
         // Create a SplitPane for the resizable area (between RequestField/Tabs and Response area)
         SplitPane splitPane = new SplitPane();
         splitPane.setOrientation(Orientation.VERTICAL);
-
         // Create the top section that contains RequestField and TabsComponent
         VBox topSection = new VBox();
         topSection.getChildren().addAll(requestField, tabsComponent);
-
-        // Create the response section with the label and dropdown
-        VBox responseArea = new VBox();
-        HBox responseAreaNav = new HBox();
-
-        Text label = new Text("Response | ");
-        ComboBox<String> dropdown = new ComboBox<>();
-        dropdown.getItems().addAll("Option 1", "Option 2", "Option 3");
-        this.responseDisplay = new TextArea("Send a request to display");
-        responseDisplay.setEditable(false);
-        responseDisplay.setMinHeight(0);
-        responseDisplay.setPrefHeight(600);
-        responseDisplay.setMaxWidth(Double.MAX_VALUE);
-        responseAreaNav.getChildren().addAll(label,dropdown);
-        responseArea.getChildren().addAll(responseAreaNav, responseDisplay);
-
         // Add the top section and response area to the SplitPane
         splitPane.getItems().addAll(topSection, responseArea);
-
         // Set the SplitPane's divider position to be resizeable (set divider position between 0.8 and 1.0)
-        splitPane.setDividerPositions(0.8);  // Adjust the divider position to your preference
-
+        splitPane.setDividerPositions(0.8);
         // Add the SplitPane to the main VBox
         this.getChildren().add(splitPane);
-
         // Set the VBox to stretch in width
         this.setFillWidth(true);
 
@@ -66,6 +45,7 @@ public class RequestView extends VBox {
     private void handleRequest() {
         String url = requestField.getRequestURL().getText();
         String method = requestField.getMethod().getValue();
+        TextArea responseDisplay = responseArea.getResponseDisplay();
         if (url == null || url.isEmpty()) {
             responseDisplay.setText("Error: URL cannot be empty.");
             return;
