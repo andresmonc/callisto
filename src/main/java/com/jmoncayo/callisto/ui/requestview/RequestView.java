@@ -3,12 +3,9 @@ package com.jmoncayo.callisto.ui.requestview;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import org.springframework.stereotype.Component;
 
 @Component

@@ -22,7 +22,7 @@ public class ResponseArea extends VBox {
         responseDisplay.setMinHeight(0);
         responseDisplay.setPrefHeight(600);
         responseDisplay.setMaxWidth(Double.MAX_VALUE);
-        responseAreaNav.getChildren().addAll(label,dropdown);
+        responseAreaNav.getChildren().addAll(label, dropdown);
         this.getChildren().addAll(responseAreaNav, responseDisplay);
     }
 

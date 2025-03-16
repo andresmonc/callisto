@@ -1,4 +1,5 @@
 package com.jmoncayo.callisto.ui.requestview;
+
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
@@ -7,9 +8,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RequestField extends HBox {
-    private RequestURL requestURL;
-    private Button actionButton;
-    private ComboBox<String> dropdown;  // Dropdown (ComboBox) to the left of the TextField
+    private final RequestURL requestURL;
+    private final Button actionButton;
+    private final ComboBox<String> dropdown;  // Dropdown (ComboBox) to the left of the TextField
 
     @Autowired
     public RequestField(RequestURL requestURL) {
