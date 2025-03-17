@@ -14,6 +14,7 @@ public class RequestView extends VBox {
     private final RequestController requestController;
     private final RequestField requestField;
     private final ResponseArea responseArea;
+    private String activeRequestUUID = "default";
 
     public RequestView(RequestController requestController, RequestField requestField, RequestDetails tabsComponent, ResponseArea responseArea) {
         this.requestController = requestController;
@@ -52,7 +53,7 @@ public class RequestView extends VBox {
         }
         responseDisplay.setText("Sending request...");
 
-        requestController.submitRequest(url, method)
+        requestController.submitRequest(url, method,activeRequestUUID)
                 .subscribe(response -> Platform.runLater(() -> responseDisplay.setText(response)),
                         error -> Platform.runLater(() -> responseDisplay.setText("Error: " + error.getMessage())));
     }

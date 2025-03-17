@@ -38,7 +38,7 @@ public class HeadersTabView extends StackPane {
         this.getChildren().add(vbox);
 
         // send observable to requestController
-        requestController.setHeaders(tableView.getItems());
+        requestController.createHeaderChangeListener(tableView.getItems());
     }
 
     private Label createTitleLabel() {
