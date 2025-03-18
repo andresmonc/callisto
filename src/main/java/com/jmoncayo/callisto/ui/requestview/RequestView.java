@@ -37,7 +37,7 @@ public class RequestView extends VBox {
         // Add the top section and response area to the SplitPane
         splitPane.getItems().addAll(topSection, responseArea);
         // Set the SplitPane's divider position to be resizeable (set divider position between 0.8 and 1.0)
-        splitPane.setDividerPositions(0.8);
+        splitPane.setDividerPositions(0.2);
         // Add the SplitPane to the main VBox
         this.getChildren().add(splitPane);
         // Set the VBox to stretch in width
