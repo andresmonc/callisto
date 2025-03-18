@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
+import java.util.List;
+
 @Component
 public class RequestController {
 
@@ -50,7 +52,11 @@ public class RequestController {
         apiRequestService.updateMethod(string, activeRequestUUID);
     }
 
-    public void loadActiveRequest(){
-        apiRequestService.getRequest(activeRequestUUID);
+    public List<ApiRequest> getActiveRequests() {
+        return apiRequestService.getActiveRequests();
+    }
+
+    public void closeRequest(String requestUUID) {
+        apiRequestService.closeRequest(requestUUID);
     }
 }

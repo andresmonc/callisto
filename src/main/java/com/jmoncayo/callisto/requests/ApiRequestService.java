@@ -66,4 +66,23 @@ public class ApiRequestService {
         }
         return request;
     }
+
+    public List<ApiRequest> getActiveRequests() {
+        return requestRepository.getActiveRequests();
+    }
+
+    public List<ApiRequest> getAllRequests() {
+        return requestRepository.getAllRequests();
+    }
+
+    public void closeRequest(String requestUUID) {
+        ApiRequest request = requestRepository.getApiRequest(requestUUID);
+        if(request!=null){
+            requestRepository.update(request.toBuilder().active(false).build());
+        }
+    }
+
+    public void load(List<ApiRequest> requests) {
+        requestRepository.putAll(requests);
+    }
 }

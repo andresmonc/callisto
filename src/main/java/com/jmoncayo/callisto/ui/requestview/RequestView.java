@@ -6,6 +6,8 @@ import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +21,9 @@ public class RequestView extends VBox {
     private final RequestField requestField;
     private final ResponseArea responseArea;
 
-    // private final requestID ? each request view should be tied to a request ID
-    //
+    @Setter
+    @Getter
+    private String requestUUID;
 
     public RequestView(RequestController requestController, RequestField requestField, RequestDetails tabsComponent, ResponseArea responseArea) {
         this.requestController = requestController;
@@ -64,4 +67,5 @@ public class RequestView extends VBox {
                 .subscribe(response -> Platform.runLater(() -> responseDisplay.setText(response)),
                         error -> Platform.runLater(() -> responseDisplay.setText("Error: " + error.getMessage())));
     }
+
 }
