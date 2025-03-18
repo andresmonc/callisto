@@ -2,14 +2,11 @@ package com.jmoncayo.callisto.ui.requestview.tabs;
 
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import javafx.beans.property.SimpleStringProperty;
-import javafx.geometry.Pos;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -24,50 +21,31 @@ public class HeadersTabView extends StackPane {
     private final TableView<Header> tableView;
 
     public HeadersTabView(RequestController requestController) {
-        // Create the title label
-        Label titleLabel = createTitleLabel();
-
         // Create the TableView and set up the columns
         tableView = createTableView();
 
         // Add some sample data (can be replaced later with actual data)
         populateTableData(tableView);
 
-        // Set up layout
-        VBox vbox = new VBox(titleLabel, tableView);
-        vbox.setSpacing(10);
-        vbox.setAlignment(Pos.TOP_CENTER);
-
         // Add VBox to StackPane
-        this.getChildren().add(vbox);
+        this.getChildren().add(tableView);
 
         // send observable to requestController
         requestController.createHeaderChangeListener(tableView.getItems());
     }
 
-    private Label createTitleLabel() {
-        Label titleLabel = new Label("Headers");
-        titleLabel.setStyle("-fx-font-size: 16px; -fx-font-weight: bold; -fx-padding: 10px;");
-        return titleLabel;
-    }
-
     private TableView<Header> createTableView() {
         TableView<Header> tableView = new TableView<>();
-
         // Create columns
         TableColumn<Header, String> keyColumn = createEditableColumn("Key", "key",tableView);
         TableColumn<Header, String> valueColumn = createEditableColumn("Value", "value",tableView);
         TableColumn<Header, String> descriptionColumn = createEditableColumn("Description", "description",tableView);
-
         // Set table resize policy
         tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
-
         // Add columns to the table
         tableView.getColumns().addAll(keyColumn, valueColumn, descriptionColumn);
-
         // Make the TableView editable
         tableView.setEditable(true);
-
         return tableView;
     }
 

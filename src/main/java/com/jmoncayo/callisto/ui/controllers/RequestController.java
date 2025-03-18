@@ -59,4 +59,8 @@ public class RequestController {
     public void closeRequest(String requestUUID) {
         apiRequestService.closeRequest(requestUUID);
     }
+
+    public String createRequest() {
+        return apiRequestService.createRequest();
+    }
 }

@@ -24,7 +24,7 @@ public class ApiRequestRepository {
     }
 
     public List<ApiRequest> getActiveRequests() {
-        return requests.values().stream().filter(request -> request.isActive()).toList();
+        return requests.values().stream().filter(ApiRequest::isActive).toList();
     }
 
     public List<ApiRequest> getAllRequests() {

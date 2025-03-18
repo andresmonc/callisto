@@ -85,4 +85,8 @@ public class ApiRequestService {
     public void load(List<ApiRequest> requests) {
         requestRepository.putAll(requests);
     }
+
+    public String createRequest() {
+        return "";
+    }
 }

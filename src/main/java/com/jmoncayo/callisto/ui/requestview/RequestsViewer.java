@@ -58,6 +58,7 @@ public class RequestsViewer extends AnchorPane {
 
     private Tab emptyTab() {
         var tab = new Tab("Untitled");
+        requestController.createRequest();
         tab.setContent(requestViewObjectFactory.getObject());
         return tab;
     }
