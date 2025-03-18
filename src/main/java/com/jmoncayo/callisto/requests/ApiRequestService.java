@@ -19,7 +19,8 @@ public class ApiRequestService {
         this.httpClient = WebClient.builder().build();
     }
 
-    public Mono<String> submitRequest(ApiRequest request) {
+    public Mono<String> submitRequest(String requestUUID) {
+        ApiRequest request = requestRepository.getApiRequest(requestUUID);
         return httpClient.method(request.getMethod())
                 .uri(request.getUrl())
                 .headers(httpHeaders -> {
@@ -38,5 +39,31 @@ public class ApiRequestService {
             request = ApiRequest.builder().build();
         }
         requestRepository.update(request.toBuilder().headers(requestHeaders).build());
+    }
+
+    public void updateUrl(String url, String requestUUID) {
+        System.out.println(requestUUID);
+        ApiRequest request = requestRepository.getApiRequest(requestUUID);
+        if (request == null) {
+            request = ApiRequest.builder().build();
+        }
+        requestRepository.update(request.toBuilder().url(url).build());
+    }
+
+    public void updateMethod(String method, String requestUUID) {
+        ApiRequest request = requestRepository.getApiRequest(requestUUID);
+        if (request == null) {
+            request = ApiRequest.builder().build();
+        }
+        requestRepository.update(request.toBuilder().method(method).build());
+    }
+
+    public ApiRequest getRequest(String requestUUID){
+        ApiRequest request = requestRepository.getApiRequest(requestUUID);
+        if (request == null) {
+            request = ApiRequest.builder().build();
+            requestRepository.update(request);
+        }
+        return request;
     }
 }

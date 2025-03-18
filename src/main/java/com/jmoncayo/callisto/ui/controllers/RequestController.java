@@ -15,18 +15,16 @@ public class RequestController {
 
     private final ApiRequestService apiRequestService;
 
+    private final String activeRequestUUID = "default";
+
     @Autowired
     public RequestController(ApiRequestService apiRequestService) {
         this.apiRequestService = apiRequestService;
     }
 
-    public Mono<String> submitRequest(String url, String method, String activeRequestUUID) {
+    public Mono<String> submitRequest() {
         // send UUID somehow - don't send all the details through like this
-
-        return apiRequestService.submitRequest(
-                ApiRequest.builder()
-                        .url(url)
-                        .method(method).build());
+        return apiRequestService.submitRequest(activeRequestUUID);
     }
 
     public void createHeaderChangeListener(ObservableList<HeadersTabView.Header> headers) {
@@ -42,5 +40,17 @@ public class RequestController {
                             .build()).toList();
             apiRequestService.updateHeaders(requestUUID, requestHeaders);
         });
+    }
+
+    public void updateRequestUrl(String committed) {
+        apiRequestService.updateUrl(committed, activeRequestUUID);
+    }
+
+    public void updateRequestMethod(String string) {
+        apiRequestService.updateMethod(string, activeRequestUUID);
+    }
+
+    public void loadActiveRequest(){
+        apiRequestService.getRequest(activeRequestUUID);
     }
 }

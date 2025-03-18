@@ -1,5 +1,6 @@
 package com.jmoncayo.callisto.ui.controllers;
 
+import com.jmoncayo.callisto.ui.requestview.RequestsViewer;
 import com.jmoncayo.callisto.ui.sidenavigation.SideNavigationPanel;
 import com.jmoncayo.callisto.ui.requestview.RequestView;
 import javafx.scene.control.SplitPane;
@@ -14,14 +15,14 @@ public class MainController {
     private BorderPane root;
 
     @Autowired
-    public MainController(SideNavigationPanel sideNav, SplitPane splitPane, RequestView requestView) {
+    public MainController(SideNavigationPanel sideNav, SplitPane splitPane, RequestsViewer requestViewer) {
         // Create the main content container (StackPane for dynamic view switching)
         contentStack = new StackPane();
         contentStack.setPrefWidth(Double.MAX_VALUE); // nothing
         contentStack.setPrefHeight(Double.MAX_VALUE); // nothing
 
-        // Add the RequestField and TabsComponent to the content stack
-        contentStack.getChildren().add(requestView);  // Add the TabsComponent below RequestField
+        // Add the RequestsViewer
+        contentStack.getChildren().add(requestViewer);
 
         // Initialize the SplitPane (add the side navigation and main content area)
         splitPane.getItems().addAll(sideNav, contentStack);

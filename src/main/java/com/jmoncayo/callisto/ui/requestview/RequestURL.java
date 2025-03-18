@@ -3,6 +3,8 @@ package com.jmoncayo.callisto.ui.requestview;
 import javafx.scene.control.TextField;
 import org.springframework.stereotype.Component;
 
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
+
 
 @Component
 public class RequestURL extends TextField {

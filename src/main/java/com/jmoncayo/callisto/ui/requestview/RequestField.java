@@ -4,9 +4,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
+
 @Component
+@Scope(SCOPE_PROTOTYPE)
 public class RequestField extends HBox {
     private final RequestURL requestURL;
     private final Button actionButton;

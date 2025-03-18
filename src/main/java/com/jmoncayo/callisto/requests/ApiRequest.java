@@ -17,6 +17,7 @@ public class ApiRequest {
     private final String url;
     private final String body;
     private final List<Header> headers;
+    private final String collectionId;
 
     public static class ApiRequestBuilder {
         // Change the parameter type to HttpMethod directly

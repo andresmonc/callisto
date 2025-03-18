@@ -6,15 +6,21 @@ import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.VBox;
+import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
+
 @Component
+@Scope(SCOPE_PROTOTYPE)
 public class RequestView extends VBox {
 
     private final RequestController requestController;
     private final RequestField requestField;
     private final ResponseArea responseArea;
-    private String activeRequestUUID = "default";
+
+    // private final requestID ? each request view should be tied to a request ID
+    //
 
     public RequestView(RequestController requestController, RequestField requestField, RequestDetails tabsComponent, ResponseArea responseArea) {
         this.requestController = requestController;
@@ -38,6 +44,8 @@ public class RequestView extends VBox {
         this.setFillWidth(true);
 
         requestField.getActionButton().setOnAction(event -> handleRequest());
+        requestField.getMethod().setOnAction(event -> requestController.updateRequestMethod(requestField.getMethod().getValue()));
+        requestField.getRequestURL().textProperty().addListener((observable, oldValue, newValue) -> requestController.updateRequestUrl(newValue));
     }
 
     private void handleRequest() {
@@ -52,8 +60,7 @@ public class RequestView extends VBox {
             responseDisplay.setText("Error: Method must be selected.");
         }
         responseDisplay.setText("Sending request...");
-
-        requestController.submitRequest(url, method,activeRequestUUID)
+        requestController.submitRequest()
                 .subscribe(response -> Platform.runLater(() -> responseDisplay.setText(response)),
                         error -> Platform.runLater(() -> responseDisplay.setText("Error: " + error.getMessage())));
     }

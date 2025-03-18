@@ -28,8 +28,7 @@ public class MainUI extends Application {
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/style.css")).toExternalForm());
 
         primaryStage.setTitle("Callisto");
-        primaryStage.getIcons().add(new Image("file:src/main/resources/logo.png")); // Set window icon
-
+        primaryStage.getIcons().add(new Image("file:src/main/resources/logo.png"));
         primaryStage.setScene(scene);
         primaryStage.show();
     }
