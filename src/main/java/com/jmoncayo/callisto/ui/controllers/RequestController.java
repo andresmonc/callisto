@@ -60,7 +60,7 @@ public class RequestController {
         apiRequestService.closeRequest(requestUUID);
     }
 
-    public String createRequest() {
+    public ApiRequest createRequest() {
         return apiRequestService.createRequest();
     }
 }

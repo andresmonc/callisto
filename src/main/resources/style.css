@@ -17,3 +17,27 @@
 .request-url {
     -fx-background-color: #ffffff;
 }
+
+
+/* Style for the Add Button */
+.request-tab-pane-add-button {
+    -fx-background-color: #1E88E5; /* Postman's blue */
+    -fx-text-fill: white;
+    -fx-background-radius: 50%; /* Rounded corners */
+    -fx-font-size: 14px;
+    /*-fx-alignment: center;*/
+    /*-fx-effect: dropshadow(gaussian, rgba(0, 0, 0, 0.3), 5, 0.5, 0, 1); !* Shadow effect *!*/
+    -fx-cursor: hand; /* Change cursor on hover */
+}
+
+/* Hover effect */
+.request-tab-pane-add-button:hover {
+    -fx-background-color: #1565C0; /* Darker blue on hover */
+}
+
+/* Focused effect */
+.request-tab-pane-add-button:focused {
+    -fx-background-color: #0D47A1; /* Darkest blue on focus */
+}
+
+/* End Style for Add Button*/

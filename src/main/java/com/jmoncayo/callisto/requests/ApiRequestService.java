@@ -86,7 +86,9 @@ public class ApiRequestService {
         requestRepository.putAll(requests);
     }
 
-    public String createRequest() {
-        return "";
+    public ApiRequest createRequest() {
+        ApiRequest newDefaultRequest = ApiRequest.builder().active(true).name("Untitled").build();
+        requestRepository.update(newDefaultRequest);
+        return newDefaultRequest;
     }
 }

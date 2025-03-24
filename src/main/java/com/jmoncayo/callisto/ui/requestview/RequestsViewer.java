@@ -24,12 +24,12 @@ public class RequestsViewer extends AnchorPane {
         this.requestViewObjectFactory = requestViewObjectFactory;
         this.requestController = requestController;
         final Button addButton = new Button("+");
+        addButton.getStyleClass().add("request-tab-pane-add-button");
         addButton.setOnAction(event -> tabs.getTabs().add(emptyTab()));
-        AnchorPane.setTopAnchor(tabs, 5.0);
-        AnchorPane.setLeftAnchor(tabs, 5.0);
-        AnchorPane.setRightAnchor(tabs, 5.0);
-        AnchorPane.setTopAnchor(addButton, 10.0);
-        AnchorPane.setRightAnchor(addButton, 10.0);
+        AnchorPane.setLeftAnchor(tabs, 0.0);
+        AnchorPane.setRightAnchor(tabs, 0.0);
+        AnchorPane.setTopAnchor(addButton, 2.5);
+        AnchorPane.setRightAnchor(addButton, 5.0);
         this.getChildren().addAll(tabs, addButton);
     }
 
@@ -45,24 +45,22 @@ public class RequestsViewer extends AnchorPane {
         }
     }
 
-    private Tab newTab(ApiRequest request){
-        var tab = new Tab(request.getName());
+    private Tab createTab(ApiRequest request) {
+        var tab = new Tab(request.getName() != null ? request.getName() : "Untitled");
         RequestView requestView = requestViewObjectFactory.getObject();
         requestView.setRequestUUID(request.getId());
-        tab.setOnClosed(event -> {
-            requestController.closeRequest(requestView.getRequestUUID());
-        });
         tab.setContent(requestView);
+        tab.setOnClosed(event -> requestController.closeRequest(requestView.getRequestUUID()));
         return tab;
+    }
+
+    private Tab newTab(ApiRequest request) {
+        return createTab(request);
     }
 
     private Tab emptyTab() {
-        var tab = new Tab("Untitled");
-        requestController.createRequest();
-        tab.setContent(requestViewObjectFactory.getObject());
-        return tab;
+        ApiRequest request = requestController.createRequest();
+        return createTab(request);
     }
-
-
 
 }
