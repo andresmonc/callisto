@@ -1,6 +1,7 @@
 package com.jmoncayo.callisto.ui.requestview;
 
 import com.jmoncayo.callisto.ui.controllers.RequestController;
+import jakarta.annotation.PostConstruct;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
@@ -66,6 +67,11 @@ public class RequestView extends VBox {
         requestController.submitRequest()
                 .subscribe(response -> Platform.runLater(() -> responseDisplay.setText(response)),
                         error -> Platform.runLater(() -> responseDisplay.setText("Error: " + error.getMessage())));
+    }
+
+    @PostConstruct
+    public void initialize(){
+
     }
 
 }

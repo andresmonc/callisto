@@ -28,7 +28,7 @@ public class RequestsViewer extends AnchorPane {
         addButton.setOnAction(event -> tabs.getTabs().add(emptyTab()));
         AnchorPane.setLeftAnchor(tabs, 0.0);
         AnchorPane.setRightAnchor(tabs, 0.0);
-        AnchorPane.setTopAnchor(addButton, 2.5);
+        AnchorPane.setTopAnchor(addButton, 1.0);
         AnchorPane.setRightAnchor(addButton, 5.0);
         this.getChildren().addAll(tabs, addButton);
     }
@@ -50,7 +50,16 @@ public class RequestsViewer extends AnchorPane {
         RequestView requestView = requestViewObjectFactory.getObject();
         requestView.setRequestUUID(request.getId());
         tab.setContent(requestView);
+        // notify the request controller of who is on display
+        requestController.updateCurrentRequest(request.getId());
         tab.setOnClosed(event -> requestController.closeRequest(requestView.getRequestUUID()));
+        // Add listener to handle when the tab becomes active
+        tab.setOnSelectionChanged(event -> {
+            if (tab.isSelected()) {
+                // Tab is selected (active)
+                requestController.updateCurrentRequest(request.getId());
+            }
+        });
         return tab;
     }
 

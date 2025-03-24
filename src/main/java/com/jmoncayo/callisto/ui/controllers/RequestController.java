@@ -17,7 +17,7 @@ public class RequestController {
 
     private final ApiRequestService apiRequestService;
 
-    private final String activeRequestUUID = "default";
+    private String activeRequestUUID = "default";
 
     @Autowired
     public RequestController(ApiRequestService apiRequestService) {
@@ -27,21 +27,6 @@ public class RequestController {
     public Mono<String> submitRequest() {
         // send UUID somehow - don't send all the details through like this
         return apiRequestService.submitRequest(activeRequestUUID);
-    }
-
-    public void createHeaderChangeListener(ObservableList<HeadersTabView.Header> headers) {
-        headers.addListener((ListChangeListener<? super HeadersTabView.Header>) c ->
-        {
-            String requestUUID = "";
-            var requestHeaders = c.getList().stream()
-                    .filter(header -> !header.isPlaceholder())
-                    .map(header -> Header.builder()
-                            .key(header.getKey())
-                            .value(header.getValue())
-                            .description(header.getDescription())
-                            .build()).toList();
-            apiRequestService.updateHeaders(requestUUID, requestHeaders);
-        });
     }
 
     public void updateRequestUrl(String committed) {
@@ -63,4 +48,22 @@ public class RequestController {
     public ApiRequest createRequest() {
         return apiRequestService.createRequest();
     }
+
+    public void updateCurrentRequest(String id) {
+        System.out.println(activeRequestUUID);
+        activeRequestUUID = id;
+    }
+
+    public void updateAllHeaders(ObservableList<HeadersTabView.Header> headerObservableList) {
+        List<Header> headers = headerObservableList.stream()
+                .filter(header -> !header.isPlaceholder())
+                .map(header -> Header.builder()
+                        .key(header.getKey())
+                        .value(header.getValue())
+                        .description(header.getDescription())
+                        .build()).toList();
+        apiRequestService.updateHeaders(activeRequestUUID, headers);
+        System.out.println("updating headers");
+    }
 }
+

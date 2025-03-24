@@ -34,6 +34,7 @@ public class ApiRequestService {
     }
 
     public void updateHeaders(String requestUUID, List<Header> requestHeaders) {
+        System.out.println("updating headers for: " + requestUUID);
         ApiRequest request = requestRepository.getApiRequest(requestUUID);
         if (request == null) {
             request = ApiRequest.builder().build();

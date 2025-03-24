@@ -37,6 +37,7 @@ public class DataLoaderService {
             apiRequestService.load(data.getRequests());
         } catch (IOException e) {
             fileStorageService.saveToFile(new Storage(), saveName);
+            log.error(e);
         }
     }
 
