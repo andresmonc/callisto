@@ -5,12 +5,11 @@ import com.jmoncayo.callisto.requests.ApiRequestService;
 import com.jmoncayo.callisto.requests.Header;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import com.jmoncayo.callisto.ui.requestview.tabs.HeaderRow;
+import java.util.List;
 import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Component
 public class RequestController {
@@ -71,7 +70,7 @@ public class RequestController {
 		tabPane.tabNameProperty().addListener((observable, oldValue, newValue) -> {
 			System.out.println(newValue);
 			System.out.println(activeRequestUUID);
-			apiRequestService.updateName(newValue,activeRequestUUID);
+			apiRequestService.updateName(newValue, activeRequestUUID);
 		});
 	}
 }

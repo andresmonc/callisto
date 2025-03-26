@@ -50,4 +50,3 @@ public class EditableTabPane extends TabPane {
 		tabNameProperty.set(newName); // Notify listeners
 	}
 }
-
