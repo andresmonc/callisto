@@ -21,7 +21,10 @@ public class RequestsViewer extends AnchorPane {
 	private final RequestController requestController;
 
 	@Autowired
-	public RequestsViewer(ObjectFactory<RequestView> requestViewObjectFactory, RequestController requestController, EditableTabPane tabPane) {
+	public RequestsViewer(
+			ObjectFactory<RequestView> requestViewObjectFactory,
+			RequestController requestController,
+			EditableTabPane tabPane) {
 		this.tabs = tabPane;
 		this.requestViewObjectFactory = requestViewObjectFactory;
 		this.requestController = requestController;
