@@ -41,3 +41,33 @@
 }
 
 /* End Style for Add Button*/
+
+
+/*Style for CodeArea*/
+.json-key {
+    -fx-fill: #9CDCFE;
+    -fx-font-weight: bold;
+}
+
+.json-string {
+    -fx-fill: #CE9178;
+}
+
+.json-number {
+    -fx-fill: #B5CEA8;
+}
+
+.json-boolean {
+    -fx-fill: #569CD6;
+}
+
+.html-tag {
+    -fx-fill: #569CD6;
+}
+
+.js-keyword {
+    -fx-fill: #C586C0;
+    -fx-font-weight: bold;
+}
+
+/* End Style for CodeArea*/

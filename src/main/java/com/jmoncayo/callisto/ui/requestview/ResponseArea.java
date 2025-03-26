@@ -1,5 +1,6 @@
 package com.jmoncayo.callisto.ui.requestview;
 
+import com.jmoncayo.callisto.ui.codearea.AutoDetectCodeArea;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -16,7 +17,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 @Component
 @Scope(SCOPE_PROTOTYPE)
 public class ResponseArea extends VBox {
-    private final TextArea responseDisplay;
+    private final AutoDetectCodeArea responseDisplay;
     private WebView responseHtmlDisplay;
     private final Tab preview;
 
@@ -33,7 +34,7 @@ public class ResponseArea extends VBox {
         Text label = new Text("Response | ");
         ComboBox<String> dropdown = new ComboBox<>();
         dropdown.getItems().addAll("Option 1", "Option 2", "Option 3");
-        this.responseDisplay = new TextArea("Send a request to display");
+        this.responseDisplay = new AutoDetectCodeArea();
         responseDisplay.setEditable(false);
         responseDisplay.setMinHeight(0);
         responseDisplay.setPrefHeight(400);
@@ -43,7 +44,7 @@ public class ResponseArea extends VBox {
         raw.setContent(responseDisplay);
     }
 
-    public TextArea getResponseDisplay() {
+    public AutoDetectCodeArea getResponseDisplay() {
         return responseDisplay;
     }
 
@@ -56,6 +57,6 @@ public class ResponseArea extends VBox {
     }
 
     public void rawPreview(String text) {
-        this.responseDisplay.setText(text);
+        this.responseDisplay.replaceText(text);
     }
 }

@@ -2,6 +2,7 @@ package com.jmoncayo.callisto.ui.requestview;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.Header;
+import com.jmoncayo.callisto.ui.codearea.AutoDetectCodeArea;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
@@ -60,21 +61,21 @@ public class RequestView extends VBox {
     private void handleRequest() {
         String url = requestField.getRequestURL().getText();
         String method = requestField.getMethod().getValue();
-        TextArea responseDisplay = responseArea.getResponseDisplay();
+        AutoDetectCodeArea responseDisplay = responseArea.getResponseDisplay();
         if (url == null || url.isEmpty()) {
-            responseDisplay.setText("Error: URL cannot be empty.");
+            responseDisplay.replaceText("Error: URL cannot be empty.");
             return;
         }
         if (method == null) {
-            responseDisplay.setText("Error: Method must be selected.");
+            responseDisplay.replaceText("Error: Method must be selected.");
         }
-        responseDisplay.setText("Sending request...");
+        responseDisplay.replaceText("Sending request...");
         requestController.submitRequest()
                 .subscribe(response -> Platform.runLater(() -> {
                                 responseArea.htmlPreview(response);
                                 responseArea.rawPreview(response);
                         }),
-                        error -> Platform.runLater(() -> responseDisplay.setText("Error: " + error.getMessage())));
+                        error -> Platform.runLater(() -> responseDisplay.replaceText("Error: " + error.getMessage())));
     }
 
     public void initialize(ApiRequest request){
