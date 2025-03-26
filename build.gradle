@@ -3,7 +3,7 @@ plugins {
 	id 'org.springframework.boot' version '3.4.3'
 	id 'io.spring.dependency-management' version '1.1.7'
 	id 'org.openjfx.javafxplugin' version '0.1.0'
-
+	id "com.diffplug.spotless" version "7.0.2"
 }
 
 group = 'com.jmoncayo'
@@ -37,4 +37,20 @@ tasks.named('test') {
 javafx {
 	version = "23.0.2"
 	modules = ['javafx.controls', 'javafx.web']
+}
+
+spotless {
+	java {
+		target "src/**/*.java"
+		removeUnusedImports()
+		importOrder()
+		palantirJavaFormat()
+		leadingSpacesToTabs()
+		endWithNewline()
+	}
+	format 'misc', {
+		target '**/*.proto', '**/*.gradle'
+		trimTrailingWhitespace()
+		leadingSpacesToTabs()
+	}
 }

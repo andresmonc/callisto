@@ -7,13 +7,15 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class SideNavigationCollectionView extends VBox {
-    public SideNavigationCollectionView(CollectionController collectionController, SideNavigationCollectionControls sideNavigationCollectionControls,
-                                        SideNavigationCollectionAccordion sideNavigationCollectionAccordion) {
-        this.getChildren().add(sideNavigationCollectionControls);
-        this.getChildren().add(sideNavigationCollectionAccordion);
-        sideNavigationCollectionControls.getNewCollectionButton().setOnAction(event -> {
-            Collection collection = collectionController.addCollection();
-            sideNavigationCollectionAccordion.addNewCollection(collection);
-        });
-    }
+	public SideNavigationCollectionView(
+			CollectionController collectionController,
+			SideNavigationCollectionControls sideNavigationCollectionControls,
+			SideNavigationCollectionAccordion sideNavigationCollectionAccordion) {
+		this.getChildren().add(sideNavigationCollectionControls);
+		this.getChildren().add(sideNavigationCollectionAccordion);
+		sideNavigationCollectionControls.getNewCollectionButton().setOnAction(event -> {
+			Collection collection = collectionController.addCollection();
+			sideNavigationCollectionAccordion.addNewCollection(collection);
+		});
+	}
 }
