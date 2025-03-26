@@ -1,6 +1,8 @@
 package com.jmoncayo.callisto.ui.requestview;
 
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -16,8 +18,19 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class ResponseArea extends VBox {
     private final TextArea responseDisplay;
     private WebView responseHtmlDisplay;
+    private final TabPane tabPane;
+    private final Tab raw;
+    private final Tab preview;
+
+
 
     public ResponseArea() {
+        this.tabPane = new TabPane();
+        this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        this.raw = new Tab("JSON");
+        this.preview = new Tab("Preview");
+        tabPane.getTabs().add(raw);
+        tabPane.getTabs().add(preview);
         HBox responseAreaNav = new HBox();
         Text label = new Text("Response | ");
         ComboBox<String> dropdown = new ComboBox<>();
@@ -28,7 +41,8 @@ public class ResponseArea extends VBox {
         responseDisplay.setPrefHeight(400);
         responseDisplay.setMaxWidth(Double.MAX_VALUE);
         responseAreaNav.getChildren().addAll(label, dropdown);
-        this.getChildren().addAll(responseAreaNav, responseDisplay);
+        this.getChildren().addAll(responseAreaNav, tabPane);
+        this.raw.setContent(responseDisplay);
     }
 
     public TextArea getResponseDisplay() {
@@ -38,20 +52,12 @@ public class ResponseArea extends VBox {
     public void htmlPreview(String html) {
         if (this.responseHtmlDisplay == null) {
             this.responseHtmlDisplay = new WebView();
-            this.getChildren().add(responseHtmlDisplay);
+            this.preview.setContent(this.responseHtmlDisplay);
         }
         this.responseHtmlDisplay.getEngine().loadContent(html);
-        this.responseDisplay.setVisible(false);
-        this.responseDisplay.setManaged(false);
-        this.responseHtmlDisplay.setManaged(true);
-        this.responseHtmlDisplay.setVisible(true);
     }
 
     public void rawPreview(String text) {
-        this.responseHtmlDisplay.setVisible(false);
-        this.responseHtmlDisplay.setManaged(false);
-        this.responseDisplay.setVisible(true);
-        this.responseDisplay.setManaged(true);
         this.responseDisplay.setText(text);
     }
 }

@@ -3,7 +3,6 @@ package com.jmoncayo.callisto.ui.requestview;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.Header;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
-import com.jmoncayo.callisto.ui.requestview.tabs.HeadersTabView;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
@@ -15,7 +14,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -73,11 +71,8 @@ public class RequestView extends VBox {
         responseDisplay.setText("Sending request...");
         requestController.submitRequest()
                 .subscribe(response -> Platform.runLater(() -> {
-                            if(true){
                                 responseArea.htmlPreview(response);
-                            }else {
                                 responseArea.rawPreview(response);
-                            }
                         }),
                         error -> Platform.runLater(() -> responseDisplay.setText("Error: " + error.getMessage())));
     }
