@@ -38,7 +38,9 @@ public class ParamsTabView extends StackPane {
 
 	private void initializeTable() {
 		// Enable/Disable Column
-		TableColumn<ParamEntry, Boolean> enableColumn = new TableColumn<>("Enable");
+		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
+		TableColumn<ParamEntry, Boolean> enableColumn = new TableColumn<>();
+		enableColumn.setMaxWidth(40);
 		enableColumn.setCellValueFactory(cellData -> cellData.getValue().enabledProperty());
 		enableColumn.setCellFactory(CheckBoxTableCell.forTableColumn(enableColumn));
 
