@@ -18,16 +18,14 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class ResponseArea extends VBox {
     private final TextArea responseDisplay;
     private WebView responseHtmlDisplay;
-    private final TabPane tabPane;
-    private final Tab raw;
     private final Tab preview;
 
 
 
     public ResponseArea() {
-        this.tabPane = new TabPane();
-        this.tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
-        this.raw = new Tab("JSON");
+        TabPane tabPane = new TabPane();
+        tabPane.setTabClosingPolicy(TabPane.TabClosingPolicy.UNAVAILABLE);
+        Tab raw = new Tab("JSON");
         this.preview = new Tab("Preview");
         tabPane.getTabs().add(raw);
         tabPane.getTabs().add(preview);
@@ -42,7 +40,7 @@ public class ResponseArea extends VBox {
         responseDisplay.setMaxWidth(Double.MAX_VALUE);
         responseAreaNav.getChildren().addAll(label, dropdown);
         this.getChildren().addAll(responseAreaNav, tabPane);
-        this.raw.setContent(responseDisplay);
+        raw.setContent(responseDisplay);
     }
 
     public TextArea getResponseDisplay() {
