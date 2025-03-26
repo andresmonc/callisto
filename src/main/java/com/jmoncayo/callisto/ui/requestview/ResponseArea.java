@@ -30,7 +30,6 @@ public class ResponseArea extends VBox {
         responseDisplay.setPrefHeight(400);
         responseDisplay.setMaxWidth(Double.MAX_VALUE);
         responseAreaNav.getChildren().addAll(label, dropdown);
-        // Start asynchronous WebView creation as it greatly slows startup
         createWebViewAsync();
         this.getChildren().addAll(responseAreaNav, responseDisplay);
         System.out.println("ResponseArea booted");
