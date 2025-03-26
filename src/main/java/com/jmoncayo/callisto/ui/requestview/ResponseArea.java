@@ -1,6 +1,5 @@
 package com.jmoncayo.callisto.ui.requestview;
 
-import javafx.application.Platform;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
@@ -20,7 +19,6 @@ public class ResponseArea extends VBox {
 
     public ResponseArea() {
         HBox responseAreaNav = new HBox();
-
         Text label = new Text("Response | ");
         ComboBox<String> dropdown = new ComboBox<>();
         dropdown.getItems().addAll("Option 1", "Option 2", "Option 3");
@@ -30,19 +28,7 @@ public class ResponseArea extends VBox {
         responseDisplay.setPrefHeight(400);
         responseDisplay.setMaxWidth(Double.MAX_VALUE);
         responseAreaNav.getChildren().addAll(label, dropdown);
-        createWebViewAsync();
         this.getChildren().addAll(responseAreaNav, responseDisplay);
-        System.out.println("ResponseArea booted");
-    }
-
-    private void createWebViewAsync() {
-        Platform.runLater(() -> {
-            this.responseHtmlDisplay = new WebView();
-            this.responseHtmlDisplay.setManaged(false);
-            this.responseHtmlDisplay.setVisible(false);
-            this.getChildren().add(responseHtmlDisplay);
-            System.out.println("webview added");
-        });
     }
 
     public TextArea getResponseDisplay() {
@@ -50,6 +36,10 @@ public class ResponseArea extends VBox {
     }
 
     public void htmlPreview(String html) {
+        if (this.responseHtmlDisplay == null) {
+            this.responseHtmlDisplay = new WebView();
+            this.getChildren().add(responseHtmlDisplay);
+        }
         this.responseHtmlDisplay.getEngine().loadContent(html);
         this.responseDisplay.setVisible(false);
         this.responseDisplay.setManaged(false);
