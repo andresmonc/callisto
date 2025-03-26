@@ -1,7 +1,6 @@
 package com.jmoncayo.callisto.ui.requestview;
 
 import javafx.application.Platform;
-import javafx.concurrent.Task;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.HBox;
@@ -32,15 +31,19 @@ public class ResponseArea extends VBox {
         responseDisplay.setMaxWidth(Double.MAX_VALUE);
         responseAreaNav.getChildren().addAll(label, dropdown);
         // Start asynchronous WebView creation as it greatly slows startup
-        Platform.runLater(this::createWebViewAsync);
+        createWebViewAsync();
         this.getChildren().addAll(responseAreaNav, responseDisplay);
+        System.out.println("ResponseArea booted");
     }
 
     private void createWebViewAsync() {
-        this.responseHtmlDisplay = new WebView();
-        this.responseHtmlDisplay.setManaged(false);
-        this.responseHtmlDisplay.setVisible(false);
-        this.getChildren().add(responseHtmlDisplay);
+        Platform.runLater(() -> {
+            this.responseHtmlDisplay = new WebView();
+            this.responseHtmlDisplay.setManaged(false);
+            this.responseHtmlDisplay.setVisible(false);
+            this.getChildren().add(responseHtmlDisplay);
+            System.out.println("webview added");
+        });
     }
 
     public TextArea getResponseDisplay() {
