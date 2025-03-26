@@ -1,11 +1,12 @@
 package com.jmoncayo.callisto.requests;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+
+import java.util.List;
 
 @Service
 public class ApiRequestService {
@@ -96,11 +97,19 @@ public class ApiRequestService {
 
 	/**
 	 * Creates a default request which will contain a generated UUID
+	 *
 	 * @return a default request
 	 */
 	public ApiRequest createRequest() {
 		ApiRequest newDefaultRequest = DEFAULT_REQUEST.build();
 		requestRepository.update(newDefaultRequest);
 		return newDefaultRequest;
+	}
+
+	public void updateName(String name, String id) {
+		ApiRequest request = requestRepository.getApiRequest(id);
+		if (request != null) {
+			requestRepository.update(request.toBuilder().name(name).build());
+		}
 	}
 }

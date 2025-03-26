@@ -26,6 +26,7 @@ public class RequestsViewer extends AnchorPane {
 			RequestController requestController,
 			EditableTabPane tabPane) {
 		this.tabs = tabPane;
+		requestController.watchTabNameChange(tabPane);
 		this.requestViewObjectFactory = requestViewObjectFactory;
 		this.requestController = requestController;
 		final Button addButton = new Button("+");
