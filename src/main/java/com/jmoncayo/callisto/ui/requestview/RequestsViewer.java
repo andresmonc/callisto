@@ -2,6 +2,7 @@ package com.jmoncayo.callisto.ui.requestview;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
+import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import jakarta.annotation.PostConstruct;
 import java.util.List;
 import javafx.application.Platform;
@@ -15,12 +16,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RequestsViewer extends AnchorPane {
-	private final TabPane tabs = new TabPane();
+	private final TabPane tabs;
 	private final ObjectFactory<RequestView> requestViewObjectFactory;
 	private final RequestController requestController;
 
 	@Autowired
-	public RequestsViewer(ObjectFactory<RequestView> requestViewObjectFactory, RequestController requestController) {
+	public RequestsViewer(ObjectFactory<RequestView> requestViewObjectFactory, RequestController requestController, EditableTabPane tabPane) {
+		this.tabs = tabPane;
 		this.requestViewObjectFactory = requestViewObjectFactory;
 		this.requestController = requestController;
 		final Button addButton = new Button("+");
