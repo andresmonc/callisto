@@ -3,6 +3,7 @@ package com.jmoncayo.callisto.ui.requestview.tabs;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -25,6 +26,11 @@ public class EditableTabPane extends TabPane {
 		textField.setOnAction(e -> {
 			tab.setText(textField.getText()); // Set new tab name
 			tab.setGraphic(null); // Remove the text field after editing
+		});
+		textField.setOnKeyPressed(event -> {
+			if (event.getCode() == KeyCode.ESCAPE) {
+				tab.setGraphic(null);
+			}
 		});
 		tab.setGraphic(textField); // Replace the tab header with a text field
 		textField.requestFocus(); // Focus on the text field
