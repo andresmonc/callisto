@@ -12,8 +12,8 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class RequestURL extends TextField {
     public RequestURL() {
         this.setPromptText("Enter URL or paste text");
-        this.setMinWidth(200);
-        this.setWidth(200);
+        this.setMinWidth(400);
+        this.setWidth(400);
         this.getStyleClass().add("request-url");
         this.setVisible(true);
     }

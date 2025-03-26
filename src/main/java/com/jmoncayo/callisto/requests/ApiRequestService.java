@@ -1,6 +1,7 @@
 package com.jmoncayo.callisto.requests;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -13,6 +14,8 @@ public class ApiRequestService {
     private final ApiRequestRepository requestRepository;
     private final WebClient httpClient;
 
+    private static final ApiRequest.ApiRequestBuilder DEFAULT_REQUEST = ApiRequest.builder().method(String.valueOf(HttpMethod.GET)).active(true).name("Untitled");
+
     @Autowired
     public ApiRequestService(ApiRequestRepository requestRepository) {
         this.requestRepository = requestRepository;
@@ -21,7 +24,7 @@ public class ApiRequestService {
 
     public Mono<String> submitRequest(String requestUUID) {
         ApiRequest request = requestRepository.getApiRequest(requestUUID);
-        return httpClient.method(request.getMethod())
+        return httpClient.method(HttpMethod.valueOf(request.getMethod()))
                 .uri(request.getUrl())
                 .headers(httpHeaders -> {
                     if (request.getHeaders() != null) {
@@ -37,7 +40,7 @@ public class ApiRequestService {
         System.out.println("updating headers for: " + requestUUID);
         ApiRequest request = requestRepository.getApiRequest(requestUUID);
         if (request == null) {
-            request = ApiRequest.builder().build();
+            request = DEFAULT_REQUEST.build();
         }
         requestRepository.update(request.toBuilder().headers(requestHeaders).build());
     }
@@ -46,7 +49,7 @@ public class ApiRequestService {
         System.out.println(requestUUID);
         ApiRequest request = requestRepository.getApiRequest(requestUUID);
         if (request == null) {
-            request = ApiRequest.builder().build();
+            request = DEFAULT_REQUEST.build();
         }
         requestRepository.update(request.toBuilder().url(url).build());
     }
@@ -54,7 +57,7 @@ public class ApiRequestService {
     public void updateMethod(String method, String requestUUID) {
         ApiRequest request = requestRepository.getApiRequest(requestUUID);
         if (request == null) {
-            request = ApiRequest.builder().build();
+            request = DEFAULT_REQUEST.build();
         }
         requestRepository.update(request.toBuilder().method(method).build());
     }
@@ -62,7 +65,7 @@ public class ApiRequestService {
     public ApiRequest getRequest(String requestUUID){
         ApiRequest request = requestRepository.getApiRequest(requestUUID);
         if (request == null) {
-            request = ApiRequest.builder().build();
+            request = DEFAULT_REQUEST.build();
             requestRepository.update(request);
         }
         return request;
@@ -87,8 +90,12 @@ public class ApiRequestService {
         requestRepository.putAll(requests);
     }
 
+    /**
+     * Creates a default request which will contain a generated UUID
+     * @return a default request
+     */
     public ApiRequest createRequest() {
-        ApiRequest newDefaultRequest = ApiRequest.builder().active(true).name("Untitled").build();
+        ApiRequest newDefaultRequest = DEFAULT_REQUEST.build();
         requestRepository.update(newDefaultRequest);
         return newDefaultRequest;
     }

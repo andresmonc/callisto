@@ -3,8 +3,8 @@ package com.jmoncayo.callisto.ui.controllers;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.ApiRequestService;
 import com.jmoncayo.callisto.requests.Header;
+import com.jmoncayo.callisto.ui.requestview.tabs.HeaderRow;
 import com.jmoncayo.callisto.ui.requestview.tabs.HeadersTabView;
-import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -29,12 +29,12 @@ public class RequestController {
         return apiRequestService.submitRequest(activeRequestUUID);
     }
 
-    public void updateRequestUrl(String committed) {
-        apiRequestService.updateUrl(committed, activeRequestUUID);
+    public void updateRequestUrl(String committed, String requestUUID) {
+        apiRequestService.updateUrl(committed, requestUUID);
     }
 
-    public void updateRequestMethod(String string) {
-        apiRequestService.updateMethod(string, activeRequestUUID);
+    public void updateRequestMethod(String string, String requestUUID) {
+        apiRequestService.updateMethod(string, requestUUID);
     }
 
     public List<ApiRequest> getActiveRequests() {
@@ -54,7 +54,7 @@ public class RequestController {
         activeRequestUUID = id;
     }
 
-    public void updateAllHeaders(ObservableList<HeadersTabView.Header> headerObservableList) {
+    public void updateAllHeaders(ObservableList<HeaderRow> headerObservableList) {
         List<Header> headers = headerObservableList.stream()
                 .filter(header -> !header.isPlaceholder())
                 .map(header -> Header.builder()

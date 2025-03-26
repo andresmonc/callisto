@@ -5,7 +5,10 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
+
+import java.util.Arrays;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -18,12 +21,10 @@ public class RequestField extends HBox {
 
     @Autowired
     public RequestField(RequestURL requestURL) {
-        this.requestURL = requestURL;  // Initialize the RequestURL
-
-        // Initialize the dropdown with some sample items
+        this.requestURL = requestURL;
         dropdown = new ComboBox<>();
-        dropdown.getItems().addAll("GET", "POST", "PUT", "DELETE", "PATCH", "HEAD", "OPTIONS", "TRACE");
-        dropdown.setValue("GET");  // Set default value
+        dropdown.getItems().addAll(Arrays.stream(HttpMethod.values()).map(HttpMethod::name).toList());
+        dropdown.setValue(HttpMethod.GET.name());
 
         // Create the action button
         actionButton = new Button("Submit");

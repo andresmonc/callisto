@@ -3,6 +3,7 @@ package com.jmoncayo.callisto.ui.requestview;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import jakarta.annotation.PostConstruct;
+import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -36,18 +37,22 @@ public class RequestsViewer extends AnchorPane {
     @PostConstruct
     public void loadRequests() {
         List<ApiRequest> activeRequests = requestController.getActiveRequests();
-        activeRequests.forEach(request -> {
-            Tab tab = newTab(request);
-            tabs.getTabs().add(tab);
+        Platform.runLater(() -> {
+            activeRequests.forEach(request -> {
+                Tab tab = newTab(request);
+                tabs.getTabs().add(tab);
+            });
+
+            if (activeRequests.isEmpty()) {
+                tabs.getTabs().add(emptyTab());
+            }
         });
-        if (activeRequests.isEmpty()) {
-            tabs.getTabs().add(emptyTab());
-        }
     }
 
     private Tab createTab(ApiRequest request) {
         var tab = new Tab(request.getName() != null ? request.getName() : "Untitled");
         RequestView requestView = requestViewObjectFactory.getObject();
+        requestView.initialize(request);
         requestView.setRequestUUID(request.getId());
         tab.setContent(requestView);
         // notify the request controller of who is on display

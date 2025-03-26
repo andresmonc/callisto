@@ -2,10 +2,10 @@ package com.jmoncayo.callisto.requests;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.http.HttpMethod;
 
 import java.util.List;
 import java.util.UUID;
@@ -16,7 +16,7 @@ import java.util.UUID;
 public class ApiRequest {
 
     private final String id;
-    private final HttpMethod method;
+    private final String method;
     private final String url;
     private final String body;
     private final List<Header> headers;
@@ -27,7 +27,7 @@ public class ApiRequest {
     @JsonCreator
     public ApiRequest(
             @JsonProperty("id") String id,
-            @JsonProperty("method") HttpMethod method,
+            @JsonProperty("method") String method,
             @JsonProperty("url") String url,
             @JsonProperty("body") String body,
             @JsonProperty("headers") List<Header> headers,
@@ -43,19 +43,5 @@ public class ApiRequest {
         this.collectionId = collectionId;
         this.active = active;
         this.name = name;
-    }
-
-    public static class ApiRequestBuilder {
-        // Change the parameter type to HttpMethod directly
-        public ApiRequestBuilder method(HttpMethod method) {
-            this.method = method;
-            return this;
-        }
-
-        // Optionally, you can keep the String-based method for convenience
-        public ApiRequestBuilder method(String method) {
-            this.method = HttpMethod.valueOf(method.toUpperCase());
-            return this;
-        }
     }
 }

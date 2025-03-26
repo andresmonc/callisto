@@ -1,7 +1,9 @@
 package com.jmoncayo.callisto.ui.requestview;
 
+import com.jmoncayo.callisto.requests.ApiRequest;
+import com.jmoncayo.callisto.requests.Header;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
-import jakarta.annotation.PostConstruct;
+import com.jmoncayo.callisto.ui.requestview.tabs.HeadersTabView;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
@@ -12,6 +14,9 @@ import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 @Component
@@ -20,6 +25,7 @@ public class RequestView extends VBox {
 
     private final RequestController requestController;
     private final RequestField requestField;
+    private final RequestDetails tabsComponent;
     private final ResponseArea responseArea;
 
     @Setter
@@ -29,6 +35,7 @@ public class RequestView extends VBox {
     public RequestView(RequestController requestController, RequestField requestField, RequestDetails tabsComponent, ResponseArea responseArea) {
         this.requestController = requestController;
         this.requestField = requestField;
+        this.tabsComponent = tabsComponent;
         this.responseArea = responseArea;
         // Set up the RequestField and TabsComponent in a VBox
         this.getChildren().addAll(requestField, tabsComponent);
@@ -48,8 +55,8 @@ public class RequestView extends VBox {
         this.setFillWidth(true);
 
         requestField.getActionButton().setOnAction(event -> handleRequest());
-        requestField.getMethod().setOnAction(event -> requestController.updateRequestMethod(requestField.getMethod().getValue()));
-        requestField.getRequestURL().textProperty().addListener((observable, oldValue, newValue) -> requestController.updateRequestUrl(newValue));
+        requestField.getMethod().setOnAction(event -> requestController.updateRequestMethod(requestField.getMethod().getValue(),requestUUID));
+        requestField.getRequestURL().textProperty().addListener((observable, oldValue, newValue) -> requestController.updateRequestUrl(newValue,requestUUID));
     }
 
     private void handleRequest() {
@@ -65,13 +72,24 @@ public class RequestView extends VBox {
         }
         responseDisplay.setText("Sending request...");
         requestController.submitRequest()
-                .subscribe(response -> Platform.runLater(() -> responseDisplay.setText(response)),
+                .subscribe(response -> Platform.runLater(() -> {
+                            if(true){
+                                responseArea.htmlPreview(response);
+                            }else {
+                                responseArea.rawPreview(response);
+                            }
+                        }),
                         error -> Platform.runLater(() -> responseDisplay.setText("Error: " + error.getMessage())));
     }
 
-    @PostConstruct
-    public void initialize(){
-
+    public void initialize(ApiRequest request){
+        // Must set id first as change listeners from below will try to read
+        requestUUID = request.getId();
+        requestField.getRequestURL().setText(request.getUrl());
+        requestField.getMethod().setValue(request.getMethod());
+        // Todo: update headers somehow
+        List<Header> headers = request.getHeaders();
+        tabsComponent.getHeadersTab().getHeadersTabView().initialize(request);
     }
 
 }
