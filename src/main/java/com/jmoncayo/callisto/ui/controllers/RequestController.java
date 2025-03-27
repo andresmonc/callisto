@@ -3,10 +3,8 @@ package com.jmoncayo.callisto.ui.controllers;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.ApiRequestService;
 import com.jmoncayo.callisto.requests.Header;
-import com.jmoncayo.callisto.requests.Parameter;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import com.jmoncayo.callisto.ui.requestview.tabs.HeaderRow;
-import com.jmoncayo.callisto.ui.requestview.tabs.ParamsTabView;
 import java.util.List;
 import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -76,20 +74,20 @@ public class RequestController {
 		});
 	}
 
-	public void updateAllParameters(ObservableList<ParamsTabView.ParamEntry> items, String requestId) {
-		List<Parameter> parameters = items.stream()
-				.filter(param -> !param.isPlaceholder)
-				.map(paramEntry -> {
-					var parameter = new Parameter();
-					parameter.setDescription(paramEntry.descriptionProperty().get());
-					parameter.setEnabled(paramEntry.enabledProperty().get());
-					parameter.setKey(paramEntry.keyProperty().get());
-					parameter.setValue(paramEntry.valueProperty().getValue());
-					return parameter;
-				})
-				.toList();
-		//		apiRequestService.updateHeaders(activeRequestUUID, headers);
-		System.out.println("updating parameters");
-		System.out.println(parameters);
-	}
+	//	public void updateAllParameters(ObservableList<ParamsTabView.ParamEntry> items, String requestId) {
+	//		List<Parameter> parameters = items.stream()
+	//				.filter(param -> !param.isPlaceholder)
+	//				.map(paramEntry -> {
+	//					var parameter = new Parameter();
+	//					parameter.setDescription(paramEntry.descriptionProperty().get());
+	//					parameter.setEnabled(paramEntry.enabledProperty().get());
+	//					parameter.setKey(paramEntry.keyProperty().get());
+	//					parameter.setValue(paramEntry.valueProperty().getValue());
+	//					return parameter;
+	//				})
+	//				.toList();
+	//		//		apiRequestService.updateHeaders(activeRequestUUID, headers);
+	//		System.out.println("updating parameters");
+	//		System.out.println(parameters);
+	//	}
 }
