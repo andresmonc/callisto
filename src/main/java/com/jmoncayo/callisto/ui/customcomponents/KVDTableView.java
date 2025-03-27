@@ -114,7 +114,7 @@ public class KVDTableView extends TableView<KVDTableView.TableEntry> {
 				updateItem(getItem(), false);
 			}
 		});
-        descriptionColumn.setOnEditCommit(this::handleUpdate);
+		descriptionColumn.setOnEditCommit(this::handleUpdate);
 
 		// Add columns to table
 		getColumns().addAll(enableColumn, keyColumn, valueColumn, descriptionColumn);
