@@ -8,19 +8,19 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RequestsViewer extends AnchorPane {
-	private final ApplicationContext context;
+	private final ObjectFactory<RequestView> requestViewObjectFactory;
 	private final TabPane tabs;
 	private final RequestController requestController;
 
 	@Autowired
-	public RequestsViewer(ApplicationContext context, RequestController requestController, EditableTabPane tabPane) {
-		this.context = context;
+	public RequestsViewer(ObjectFactory<RequestView> requestViewObjectFactory, RequestController requestController, EditableTabPane tabPane) {
+		this.requestViewObjectFactory = requestViewObjectFactory;
 		this.tabs = tabPane;
 		requestController.watchTabNameChange(tabPane);
 		this.requestController = requestController;
@@ -41,7 +41,6 @@ public class RequestsViewer extends AnchorPane {
 			Tab tab = newTab(request);
 			tabs.getTabs().add(tab);
 		});
-
 		if (activeRequests.isEmpty()) {
 			tabs.getTabs().add(emptyTab());
 		}
@@ -49,7 +48,7 @@ public class RequestsViewer extends AnchorPane {
 
 	private Tab createTab(ApiRequest request) {
 		var tab = new Tab(request.getName() != null ? request.getName() : "Untitled");
-		RequestView requestView = context.getBean(RequestView.class);
+		RequestView requestView = requestViewObjectFactory.getObject();
 		requestView.initialize(request);
 		requestView.setRequestUUID(request.getId());
 		tab.setContent(requestView);
