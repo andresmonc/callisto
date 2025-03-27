@@ -80,17 +80,18 @@ public class RequestController {
 	public void updateAllParameters(ObservableList<ParamsTabView.ParamEntry> items, String requestId) {
 		List<Parameter> parameters = items.stream()
 				.filter(param -> !param.isPlaceholder)
-				.map(param -> {
+				.map(paramEntry -> {
 					var parameter = new Parameter();
-					parameter.setDescription(parameter.getDescription());
-					parameter.setEnabled(parameter.isEnabled());
-					parameter.setKey(parameter.getKey());
-					parameter.setValue(parameter.getValue());
+					parameter.setDescription(paramEntry.descriptionProperty().get());
+					parameter.setEnabled(paramEntry.enabledProperty().get());
+					parameter.setKey(paramEntry.keyProperty().get());
+					parameter.setValue(paramEntry.valueProperty().getValue());
 					return parameter;
 				})
 				.toList();
 //		apiRequestService.updateHeaders(activeRequestUUID, headers);
 		System.out.println("updating parameters");
+		System.out.println(parameters);
 
 	}
 }
