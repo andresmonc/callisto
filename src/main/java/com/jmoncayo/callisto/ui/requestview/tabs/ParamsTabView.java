@@ -139,6 +139,7 @@ public class ParamsTabView extends StackPane {
 		private final StringProperty key = new SimpleStringProperty();
 		private final StringProperty value = new SimpleStringProperty();
 		private final StringProperty description = new SimpleStringProperty();
+		public boolean isPlaceholder;
 
 		public ParamEntry(boolean enabled, String key, String value, String description) {
 			this.enabled.set(enabled);

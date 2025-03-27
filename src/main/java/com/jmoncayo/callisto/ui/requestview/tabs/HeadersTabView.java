@@ -7,6 +7,7 @@ import com.jmoncayo.callisto.requests.Header;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.layout.StackPane;
@@ -36,12 +37,18 @@ public class HeadersTabView extends StackPane {
 
 	private void initTableView(TableView<HeaderRow> tableView) {
 		// Create columns
+		TableColumn<HeaderRow, Boolean> enableColumn = new TableColumn<>();
+		enableColumn.setMaxWidth(40);
+		enableColumn.setCellValueFactory(cellData -> cellData.getValue().enabledProperty());
+		enableColumn.setCellFactory(CheckBoxTableCell.forTableColumn(enableColumn));
+
 		TableColumn<HeaderRow, String> keyColumn = createEditableColumn("Key", "key");
 		TableColumn<HeaderRow, String> valueColumn = createEditableColumn("Value", "value");
 		TableColumn<HeaderRow, String> descriptionColumn = createEditableColumn("Description", "description");
 		// Set table resize policy
 		tableView.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY_FLEX_LAST_COLUMN);
 		// Add columns to the table
+		tableView.getColumns().add(enableColumn);
 		tableView.getColumns().add(keyColumn);
 		tableView.getColumns().add(valueColumn);
 		tableView.getColumns().add(descriptionColumn);

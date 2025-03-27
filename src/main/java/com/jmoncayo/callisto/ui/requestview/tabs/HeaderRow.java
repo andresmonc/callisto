@@ -1,9 +1,12 @@
 package com.jmoncayo.callisto.ui.requestview.tabs;
 
 import com.jmoncayo.callisto.requests.Header;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
 
 public class HeaderRow {
+	private final BooleanProperty enabled;
 	public final SimpleStringProperty key;
 	public final SimpleStringProperty value;
 	public final SimpleStringProperty description;
@@ -13,6 +16,7 @@ public class HeaderRow {
 		this.key = new SimpleStringProperty(key);
 		this.value = new SimpleStringProperty(value);
 		this.description = new SimpleStringProperty(description);
+		this.enabled = new SimpleBooleanProperty();
 	}
 
 	public String getKey() {
@@ -45,6 +49,10 @@ public class HeaderRow {
 
 	public boolean isPlaceholder() {
 		return isPlaceholder;
+	}
+
+	public BooleanProperty enabledProperty() {
+		return enabled;
 	}
 
 	public static HeaderRow fromHeader(Header header) {
