@@ -1,10 +1,8 @@
 package com.jmoncayo.callisto.ui.requestview.tabs;
 
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
-
 import com.jmoncayo.callisto.requests.ApiRequest;
+import com.jmoncayo.callisto.requests.Header;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
-import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -15,6 +13,8 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 @Component
 @Scope(SCOPE_PROTOTYPE)
@@ -91,10 +91,10 @@ public class HeadersTabView extends StackPane {
 	}
 
 	public void initialize(ApiRequest request) {
-		tableView.setItems(
-				FXCollections.observableArrayList(new HeaderRow("Authorization", "Bearer token", "Yomamaa token")));
-		tableView.getItems().add(new HeaderRow("balblablalba", "dasfdsaf", "balbab"));
-		tableView.refresh();
-		log.info("inited headers");
+		if (request.getHeaders() != null) {
+			for (Header header : request.getHeaders()) {
+				tableView.getItems().add(HeaderRow.fromHeader(header));
+			}
+		}
 	}
 }

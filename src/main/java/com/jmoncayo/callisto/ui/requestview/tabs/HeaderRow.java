@@ -1,5 +1,6 @@
 package com.jmoncayo.callisto.ui.requestview.tabs;
 
+import com.jmoncayo.callisto.requests.Header;
 import javafx.beans.property.SimpleStringProperty;
 
 public class HeaderRow {
@@ -44,5 +45,11 @@ public class HeaderRow {
 
 	public boolean isPlaceholder() {
 		return isPlaceholder;
+	}
+
+	public static HeaderRow fromHeader(Header header) {
+		var row = new HeaderRow(header.getKey(), header.getValue(), header.getDescription());
+		row.setPlaceholder(false);
+		return row;
 	}
 }
