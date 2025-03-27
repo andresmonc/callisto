@@ -6,9 +6,8 @@ import com.jmoncayo.callisto.requests.Header;
 import com.jmoncayo.callisto.requests.Parameter;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import com.jmoncayo.callisto.ui.requestview.tabs.HeaderRow;
-import java.util.List;
-
 import com.jmoncayo.callisto.ui.requestview.tabs.ParamsTabView;
+import java.util.List;
 import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -89,9 +88,8 @@ public class RequestController {
 					return parameter;
 				})
 				.toList();
-//		apiRequestService.updateHeaders(activeRequestUUID, headers);
+		//		apiRequestService.updateHeaders(activeRequestUUID, headers);
 		System.out.println("updating parameters");
 		System.out.println(parameters);
-
 	}
 }
