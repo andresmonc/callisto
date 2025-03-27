@@ -5,6 +5,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.HBox;
@@ -34,50 +35,77 @@ public class SettingsTab extends Tab {
 		this.setClosable(false);
 
 		// Create the toggle buttons with titles and default them to "off"
-		sslVerificationToggle = createToggleButton("Enable SSL certificate verification",
+		sslVerificationToggle = createToggleButton(
+				"Enable SSL certificate verification",
 				"Verify SSL certificates when sending a request. Verification failures will result in the request being aborted.");
-		autoRedirectToggle = createToggleButton("Automatically follow redirects",
-				"Follow HTTP 3xx responses as redirects.");
-		originalMethodRedirectToggle = createToggleButton("Follow original HTTP Method",
+		autoRedirectToggle =
+				createToggleButton("Automatically follow redirects", "Follow HTTP 3xx responses as redirects.");
+		originalMethodRedirectToggle = createToggleButton(
+				"Follow original HTTP Method",
 				"Redirect with the original HTTP method instead of the default behavior of redirecting with GET.");
-		authHeaderRedirectToggle = createToggleButton("Follow Authorization header",
+		authHeaderRedirectToggle = createToggleButton(
+				"Follow Authorization header",
 				"Retain authorization header when a redirect happens to a different hostname.");
-		removeRefererHeaderToggle = createToggleButton("Remove referer header on redirect",
-				"Remove the referer header when a redirect happens.");
-		strictParserToggle = createToggleButton("Enable strict HTTP parser",
-				"Restrict responses with invalid HTTP headers.");
-		autoEncodeUrlToggle = createToggleButton("Encode URL automatically",
-				"Encode the URL's path, query parameters, and authentication fields.");
-		disableCookieJarToggle = createToggleButton("Disable cookie jar",
-				"Prevent cookies used in this request from being stored in the cookie jar.");
-		serverCipherSuiteToggle = createToggleButton("Use server cipher suite during handshake",
+		removeRefererHeaderToggle = createToggleButton(
+				"Remove referer header on redirect", "Remove the referer header when a redirect happens.");
+		strictParserToggle =
+				createToggleButton("Enable strict HTTP parser", "Restrict responses with invalid HTTP headers.");
+		autoEncodeUrlToggle = createToggleButton(
+				"Encode URL automatically", "Encode the URL's path, query parameters, and authentication fields.");
+		disableCookieJarToggle = createToggleButton(
+				"Disable cookie jar", "Prevent cookies used in this request from being stored in the cookie jar.");
+		serverCipherSuiteToggle = createToggleButton(
+				"Use server cipher suite during handshake",
 				"Use the server's cipher suite order instead of the client's during handshake.");
 
 		// Arrange all settings in a VBox
-		VBox settingsBox = new VBox(10,
-				createSettingRow(sslVerificationToggle, "Enable SSL certificate verification",
+		VBox settingsBox = new VBox(
+				10,
+				createSettingRow(
+						sslVerificationToggle,
+						"Enable SSL certificate verification",
 						"Verify SSL certificates when sending a request. Verification failures will result in the request being aborted."),
-				createSettingRow(autoRedirectToggle, "Automatically follow redirects",
+				createSettingRow(
+						autoRedirectToggle,
+						"Automatically follow redirects",
 						"Follow HTTP 3xx responses as redirects."),
-				createSettingRow(originalMethodRedirectToggle, "Follow original HTTP Method",
+				createSettingRow(
+						originalMethodRedirectToggle,
+						"Follow original HTTP Method",
 						"Redirect with the original HTTP method instead of the default behavior of redirecting with GET."),
-				createSettingRow(authHeaderRedirectToggle, "Follow Authorization header",
+				createSettingRow(
+						authHeaderRedirectToggle,
+						"Follow Authorization header",
 						"Retain authorization header when a redirect happens to a different hostname."),
-				createSettingRow(removeRefererHeaderToggle, "Remove referer header on redirect",
+				createSettingRow(
+						removeRefererHeaderToggle,
+						"Remove referer header on redirect",
 						"Remove the referer header when a redirect happens."),
-				createSettingRow(strictParserToggle, "Enable strict HTTP parser",
+				createSettingRow(
+						strictParserToggle,
+						"Enable strict HTTP parser",
 						"Restrict responses with invalid HTTP headers."),
-				createSettingRow(autoEncodeUrlToggle, "Encode URL automatically",
+				createSettingRow(
+						autoEncodeUrlToggle,
+						"Encode URL automatically",
 						"Encode the URL's path, query parameters, and authentication fields."),
-				createSettingRow(disableCookieJarToggle, "Disable cookie jar",
+				createSettingRow(
+						disableCookieJarToggle,
+						"Disable cookie jar",
 						"Prevent cookies used in this request from being stored in the cookie jar."),
-				createSettingRow(serverCipherSuiteToggle, "Use server cipher suite during handshake",
-						"Use the server's cipher suite order instead of the client's during handshake.")
-		);
+				createSettingRow(
+						serverCipherSuiteToggle,
+						"Use server cipher suite during handshake",
+						"Use the server's cipher suite order instead of the client's during handshake."));
 		settingsBox.setSpacing(10);
 
-		// Set the content of the tab to the VBox
-		this.setContent(new StackPane(settingsBox));
+		// Wrap the VBox in a ScrollPane to make it scrollable
+		ScrollPane scrollPane = new ScrollPane(settingsBox);
+		scrollPane.setFitToWidth(true); // Ensures the VBox fits the width of the ScrollPane
+		scrollPane.setFitToHeight(true); // Ensures the VBox fits the height of the ScrollPane
+
+		// Set the content of the tab to the ScrollPane
+		this.setContent(new StackPane(scrollPane));
 	}
 
 	private HBox createSettingRow(ToggleButton toggleButton, String title, String description) {
