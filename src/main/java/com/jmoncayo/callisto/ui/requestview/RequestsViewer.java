@@ -3,31 +3,26 @@ package com.jmoncayo.callisto.ui.requestview;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
-import jakarta.annotation.PostConstruct;
 import java.util.List;
-import javafx.application.Platform;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
-import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 
 @Component
 public class RequestsViewer extends AnchorPane {
+	private final ApplicationContext context;
 	private final TabPane tabs;
-	private final ObjectFactory<RequestView> requestViewObjectFactory;
 	private final RequestController requestController;
 
 	@Autowired
-	public RequestsViewer(
-			ObjectFactory<RequestView> requestViewObjectFactory,
-			RequestController requestController,
-			EditableTabPane tabPane) {
+	public RequestsViewer(ApplicationContext context, RequestController requestController, EditableTabPane tabPane) {
+		this.context = context;
 		this.tabs = tabPane;
 		requestController.watchTabNameChange(tabPane);
-		this.requestViewObjectFactory = requestViewObjectFactory;
 		this.requestController = requestController;
 		final Button addButton = new Button("+");
 		addButton.getStyleClass().add("request-tab-pane-add-button");
@@ -37,26 +32,24 @@ public class RequestsViewer extends AnchorPane {
 		AnchorPane.setTopAnchor(addButton, 1.0);
 		AnchorPane.setRightAnchor(addButton, 5.0);
 		this.getChildren().addAll(tabs, addButton);
+		loadRequests();
 	}
 
-	@PostConstruct
 	public void loadRequests() {
 		List<ApiRequest> activeRequests = requestController.getActiveRequests();
-		Platform.runLater(() -> {
-			activeRequests.forEach(request -> {
-				Tab tab = newTab(request);
-				tabs.getTabs().add(tab);
-			});
-
-			if (activeRequests.isEmpty()) {
-				tabs.getTabs().add(emptyTab());
-			}
+		activeRequests.forEach(request -> {
+			Tab tab = newTab(request);
+			tabs.getTabs().add(tab);
 		});
+
+		if (activeRequests.isEmpty()) {
+			tabs.getTabs().add(emptyTab());
+		}
 	}
 
 	private Tab createTab(ApiRequest request) {
 		var tab = new Tab(request.getName() != null ? request.getName() : "Untitled");
-		RequestView requestView = requestViewObjectFactory.getObject();
+		RequestView requestView = context.getBean(RequestView.class);
 		requestView.initialize(request);
 		requestView.setRequestUUID(request.getId());
 		tab.setContent(requestView);

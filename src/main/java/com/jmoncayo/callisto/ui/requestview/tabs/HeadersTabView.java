@@ -93,6 +93,7 @@ public class HeadersTabView extends StackPane {
 	public void initialize(ApiRequest request) {
 		tableView.setItems(
 				FXCollections.observableArrayList(new HeaderRow("Authorization", "Bearer token", "Yomamaa token")));
+		tableView.getItems().add(new HeaderRow("balblablalba", "dasfdsaf", "balbab"));
 		tableView.refresh();
 		log.info("inited headers");
 	}

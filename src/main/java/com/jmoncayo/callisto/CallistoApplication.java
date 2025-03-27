@@ -2,7 +2,9 @@ package com.jmoncayo.callisto;
 
 import com.jmoncayo.callisto.ui.MainUI;
 import javafx.application.Application;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SpringBootApplication
 public class CallistoApplication {
 
 	public static void main(String[] args) {
