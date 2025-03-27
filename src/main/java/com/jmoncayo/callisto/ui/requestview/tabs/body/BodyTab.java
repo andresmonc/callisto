@@ -1,4 +1,4 @@
-package com.jmoncayo.callisto.ui.requestview.tabs;
+package com.jmoncayo.callisto.ui.requestview.tabs.body;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
@@ -24,10 +24,10 @@ public class BodyTab extends Tab {
 	private final TextArea formDataTextArea;
 	private final TextArea xwwwFormTextArea;
 	private final TextArea rawTextArea;
-	private final TextArea binaryTextArea;
+	private final FileUpload binaryTextArea;
 	private final TextArea graphqlTextArea;
 
-	public BodyTab() {
+	public BodyTab(FileUpload fileUpload) {
 		this.setText("Body");
 		this.setClosable(false);
 
@@ -64,8 +64,7 @@ public class BodyTab extends Tab {
 		rawTextArea = new TextArea();
 		rawTextArea.setPromptText("Enter raw content here...");
 
-		binaryTextArea = new TextArea();
-		binaryTextArea.setPromptText("Enter binary data here...");
+		binaryTextArea = fileUpload;
 
 		graphqlTextArea = new TextArea();
 		graphqlTextArea.setPromptText("Enter GraphQL query here...");

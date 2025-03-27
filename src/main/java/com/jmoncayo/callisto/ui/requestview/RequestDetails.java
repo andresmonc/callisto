@@ -3,10 +3,10 @@ package com.jmoncayo.callisto.ui.requestview;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 import com.jmoncayo.callisto.ui.requestview.tabs.AuthorizationTab;
-import com.jmoncayo.callisto.ui.requestview.tabs.BodyTab;
 import com.jmoncayo.callisto.ui.requestview.tabs.HeadersTab;
 import com.jmoncayo.callisto.ui.requestview.tabs.ParamsTab;
 import com.jmoncayo.callisto.ui.requestview.tabs.SettingsTab;
+import com.jmoncayo.callisto.ui.requestview.tabs.body.BodyTab;
 import javafx.scene.control.TabPane;
 import lombok.Getter;
 import org.springframework.context.annotation.Scope;
