@@ -4,6 +4,7 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
@@ -35,28 +36,15 @@ public class SettingsTab extends Tab {
 		this.setClosable(false);
 
 		// Create the toggle buttons with titles and default them to "off"
-		sslVerificationToggle = createToggleButton(
-				"Enable SSL certificate verification",
-				"Verify SSL certificates when sending a request. Verification failures will result in the request being aborted.");
-		autoRedirectToggle =
-				createToggleButton("Automatically follow redirects", "Follow HTTP 3xx responses as redirects.");
-		originalMethodRedirectToggle = createToggleButton(
-				"Follow original HTTP Method",
-				"Redirect with the original HTTP method instead of the default behavior of redirecting with GET.");
-		authHeaderRedirectToggle = createToggleButton(
-				"Follow Authorization header",
-				"Retain authorization header when a redirect happens to a different hostname.");
-		removeRefererHeaderToggle = createToggleButton(
-				"Remove referer header on redirect", "Remove the referer header when a redirect happens.");
-		strictParserToggle =
-				createToggleButton("Enable strict HTTP parser", "Restrict responses with invalid HTTP headers.");
-		autoEncodeUrlToggle = createToggleButton(
-				"Encode URL automatically", "Encode the URL's path, query parameters, and authentication fields.");
-		disableCookieJarToggle = createToggleButton(
-				"Disable cookie jar", "Prevent cookies used in this request from being stored in the cookie jar.");
-		serverCipherSuiteToggle = createToggleButton(
-				"Use server cipher suite during handshake",
-				"Use the server's cipher suite order instead of the client's during handshake.");
+		sslVerificationToggle = createToggleButton();
+		autoRedirectToggle = createToggleButton();
+		originalMethodRedirectToggle = createToggleButton();
+		authHeaderRedirectToggle = createToggleButton();
+		removeRefererHeaderToggle = createToggleButton();
+		strictParserToggle = createToggleButton();
+		autoEncodeUrlToggle = createToggleButton();
+		disableCookieJarToggle = createToggleButton();
+		serverCipherSuiteToggle = createToggleButton();
 
 		// Arrange all settings in a VBox
 		VBox settingsBox = new VBox(
@@ -108,7 +96,7 @@ public class SettingsTab extends Tab {
 		this.setContent(new StackPane(scrollPane));
 	}
 
-	private HBox createSettingRow(ToggleButton toggleButton, String title, String description) {
+	private HBox createSettingRow(Node settingControl, String title, String description) {
 		// Create the VBox for title and description (left part)
 		VBox textBox = new VBox(5);
 		Label titleLabel = new Label(title);
@@ -118,7 +106,7 @@ public class SettingsTab extends Tab {
 		textBox.getChildren().addAll(titleLabel, descriptionLabel);
 
 		// Create the HBox with left part (VBox) and right part (ToggleButton)
-		HBox settingRow = new HBox(10, textBox, toggleButton);
+		HBox settingRow = new HBox(10, textBox, settingControl);
 		settingRow.setAlignment(Pos.CENTER_LEFT); // Align left for text
 
 		// Align toggle button to the right side of the HBox
@@ -128,14 +116,20 @@ public class SettingsTab extends Tab {
 		return settingRow;
 	}
 
-	private ToggleButton createToggleButton(String title, String description) {
+	private ToggleButton createToggleButton() {
 		// Create the toggle button with the title and default it to "off"
 		ToggleButton toggleButton = new ToggleButton();
 		toggleButton.setText("Off");
 		toggleButton.setSelected(false);
+		toggleButton.setOnAction(event -> {
+			if (toggleButton.isSelected()) {
+				toggleButton.setText("On");
+			} else {
+				toggleButton.setText("Off");
+			}
+		});
 
 		// Add any additional functionality to the toggle button here if needed
-
 		return toggleButton;
 	}
 }
