@@ -3,9 +3,12 @@ package com.jmoncayo.callisto.ui.controllers;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.ApiRequestService;
 import com.jmoncayo.callisto.requests.Header;
+import com.jmoncayo.callisto.requests.Parameter;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import com.jmoncayo.callisto.ui.requestview.tabs.HeaderRow;
 import java.util.List;
+
+import com.jmoncayo.callisto.ui.requestview.tabs.ParamsTabView;
 import javafx.collections.ObservableList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -72,5 +75,22 @@ public class RequestController {
 			System.out.println(activeRequestUUID);
 			apiRequestService.updateName(newValue, activeRequestUUID);
 		});
+	}
+
+	public void updateAllParameters(ObservableList<ParamsTabView.ParamEntry> items, String requestId) {
+		List<Parameter> parameters = items.stream()
+				.filter(param -> !param.isPlaceholder)
+				.map(param -> {
+					var parameter = new Parameter();
+					parameter.setDescription(parameter.getDescription());
+					parameter.setEnabled(parameter.isEnabled());
+					parameter.setKey(parameter.getKey());
+					parameter.setValue(parameter.getValue());
+					return parameter;
+				})
+				.toList();
+//		apiRequestService.updateHeaders(activeRequestUUID, headers);
+		System.out.println("updating parameters");
+
 	}
 }

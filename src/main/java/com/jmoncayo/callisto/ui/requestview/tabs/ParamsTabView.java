@@ -1,7 +1,6 @@
 package com.jmoncayo.callisto.ui.requestview.tabs;
 
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
-
+import com.jmoncayo.callisto.ui.controllers.RequestController;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -24,14 +23,18 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
+
 @Component
 @Scope(SCOPE_PROTOTYPE)
 @Log4j2
 public class ParamsTabView extends StackPane {
 
 	private final TableView<ParamEntry> tableView = new TableView<>();
+	private final RequestController requestController;
 
-	public ParamsTabView() {
+	public ParamsTabView(RequestController requestController) {
+		this.requestController = requestController;
 		initializeTable();
 		getChildren().add(tableView);
 	}
@@ -48,13 +51,13 @@ public class ParamsTabView extends StackPane {
 		TableColumn<ParamEntry, String> keyColumn = new TableColumn<>("Key");
 		keyColumn.setCellValueFactory(cellData -> cellData.getValue().keyProperty());
 		keyColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-		keyColumn.setOnEditCommit(event -> event.getRowValue().setKey(event.getNewValue()));
+		keyColumn.setOnEditCommit(this::handleUpdate);
 
 		// Value Column (Editable)
 		TableColumn<ParamEntry, String> valueColumn = new TableColumn<>("Value");
 		valueColumn.setCellValueFactory(cellData -> cellData.getValue().valueProperty());
 		valueColumn.setCellFactory(TextFieldTableCell.forTableColumn());
-		valueColumn.setOnEditCommit(event -> event.getRowValue().setValue(event.getNewValue()));
+		valueColumn.setOnEditCommit(this::handleUpdate);
 
 		// Description Column (Starts as Label, Edits on Double Click)
 		TableColumn<ParamEntry, String> descriptionColumn = new TableColumn<>("Description");
@@ -64,7 +67,6 @@ public class ParamsTabView extends StackPane {
 			private final TextField textField = new TextField();
 			private final Button deleteButton = new Button("X");
 			private final Region spacer = new Region(); // Pushes delete button to the right
-
 			{
 				HBox.setHgrow(spacer, Priority.ALWAYS); // Makes the spacer expand
 				deleteButton.setStyle(
@@ -119,6 +121,7 @@ public class ParamsTabView extends StackPane {
 			}
 		});
 
+
 		// Add columns to table
 		tableView.getColumns().addAll(enableColumn, keyColumn, valueColumn, descriptionColumn);
 
@@ -131,6 +134,29 @@ public class ParamsTabView extends StackPane {
 				.addAll(
 						new ParamEntry(true, "apiKey", "12345", "API authentication key"),
 						new ParamEntry(false, "timeout", "5000", "Request timeout in ms"));
+	}
+
+	public void handleUpdate(TableColumn.CellEditEvent<ParamEntry, String> event) {
+
+		ParamEntry param = event.getRowValue();
+		String newValue = event.getNewValue();
+		// Check if the row being edited is the placeholder row
+		if (param.isPlaceholder) {
+			// No longer a placeholder
+			param.isPlaceholder = false;
+			// Add a new placeholder row after the edit
+			ParamEntry placeholderRow = new ParamEntry(false, "Key", "Value", "Description");
+			placeholderRow.isPlaceholder = true;
+			tableView.getItems().add(placeholderRow);
+		}
+
+		// Update the actual row based on the property being edited
+		switch (event.getTableColumn().getText()) {
+			case "Key" -> param.setKey(newValue);
+			case "Value" -> param.setValue(newValue);
+			case "Description" -> param.setDescription(newValue);
+		}
+		requestController.updateAllParameters(tableView.getItems(), "requestId");
 	}
 
 	// Model class for table entries
