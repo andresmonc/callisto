@@ -1,5 +1,7 @@
 package com.jmoncayo.callisto.ui.requestview.tabs;
 
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
+
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.Header;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
@@ -12,8 +14,6 @@ import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 @Component
 @Scope(SCOPE_PROTOTYPE)
@@ -91,6 +91,6 @@ public class HeadersTabView extends StackPane {
 		placeholderRow.setPlaceholder(true);
 		tableView.getItems().add(placeholderRow);
 		getTableView().getItems().addListener((javafx.collections.ListChangeListener<HeaderRow>)
-				change -> requestController.updateAllHeaders(tableView.getItems(),request.getId()));
+				change -> requestController.updateAllHeaders(tableView.getItems(), request.getId()));
 	}
 }
