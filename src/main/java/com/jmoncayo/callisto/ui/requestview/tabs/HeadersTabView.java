@@ -3,7 +3,6 @@ package com.jmoncayo.callisto.ui.requestview.tabs;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.Header;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
-import javafx.collections.ObservableList;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -26,25 +25,13 @@ public class HeadersTabView extends StackPane {
 
 	private final RequestController requestController;
 
+	private String requestId;
+
 	public HeadersTabView(RequestController requestController) {
 		this.requestController = requestController;
 		this.tableView = new TableView<>();
 		initTableView(tableView);
 		this.getChildren().add(tableView);
-		tableView.getItems().add(new HeaderRow("Authorization", "Bearer token", "Authentication token"));
-	}
-
-	private void addPropertyListeners(ObservableList<HeaderRow> headerObservableList) {
-		headerObservableList.addListener((javafx.collections.ListChangeListener<HeaderRow>)
-				change -> requestController.updateAllHeaders(headerObservableList));
-		for (HeaderRow header : headerObservableList) {
-			header.key.addListener(
-					(observable, oldValue, newValue) -> requestController.updateAllHeaders(headerObservableList));
-			header.value.addListener(
-					(observable, oldValue, newValue) -> requestController.updateAllHeaders(headerObservableList));
-			header.description.addListener(
-					(observable, oldValue, newValue) -> requestController.updateAllHeaders(headerObservableList));
-		}
 	}
 
 	private void initTableView(TableView<HeaderRow> tableView) {
@@ -71,13 +58,14 @@ public class HeadersTabView extends StackPane {
 		column.setOnEditCommit(event -> {
 			HeaderRow header = event.getRowValue();
 			String newValue = event.getNewValue();
-
 			// Check if the row being edited is the placeholder row
 			if (header.isPlaceholder()) {
 				// No longer a placeholder
 				header.setPlaceholder(false);
 				// Add a new placeholder row after the edit
-				getTableView().getItems().add(new HeaderRow("Key", "Value", "Description"));
+				HeaderRow placeholderRow = new HeaderRow("Key", "Value", "Description");
+				placeholderRow.setPlaceholder(true);
+				getTableView().getItems().add(placeholderRow);
 			}
 
 			// Update the actual row based on the property being edited
@@ -86,15 +74,23 @@ public class HeadersTabView extends StackPane {
 				case "value" -> header.setValue(newValue);
 				case "description" -> header.setDescription(newValue);
 			}
+			requestController.updateAllHeaders(getTableView().getItems(), requestId);
 		});
 		return column;
 	}
 
 	public void initialize(ApiRequest request) {
+		requestId = request.getId();
 		if (request.getHeaders() != null) {
 			for (Header header : request.getHeaders()) {
-				tableView.getItems().add(HeaderRow.fromHeader(header));
+				HeaderRow headerRow = HeaderRow.fromHeader(header);
+				tableView.getItems().add(headerRow);
 			}
 		}
+		HeaderRow placeholderRow = new HeaderRow("Key", "Value", "Description");
+		placeholderRow.setPlaceholder(true);
+		tableView.getItems().add(placeholderRow);
+		getTableView().getItems().addListener((javafx.collections.ListChangeListener<HeaderRow>)
+				change -> requestController.updateAllHeaders(tableView.getItems(),request.getId()));
 	}
 }

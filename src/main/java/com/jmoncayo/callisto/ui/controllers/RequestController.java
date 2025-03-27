@@ -53,7 +53,7 @@ public class RequestController {
 		activeRequestUUID = id;
 	}
 
-	public void updateAllHeaders(ObservableList<HeaderRow> headerObservableList) {
+	public void updateAllHeaders(ObservableList<HeaderRow> headerObservableList, String id) {
 		List<Header> headers = headerObservableList.stream()
 				.filter(header -> !header.isPlaceholder())
 				.map(header -> Header.builder()
