@@ -26,7 +26,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Scope(SCOPE_PROTOTYPE)
 @Log4j2
-public class KVDTableView extends TableView<KVDTableView.TableEntry> {
+public class KVDTableView extends TableView<TableEntry> {
 
 	public KVDTableView() {
 		initializeTable();
@@ -129,9 +129,9 @@ public class KVDTableView extends TableView<KVDTableView.TableEntry> {
 		TableEntry entry = event.getRowValue();
 		String newValue = event.getNewValue();
 		// Check if the row being edited is the placeholder row
-		if (entry.placeholder.get()) {
+		if (entry.getPlaceholder().get()) {
 			// No longer a placeholder
-			entry.placeholder.set(false);
+			entry.getPlaceholder().set(false);
 			// Add a new placeholder row after the edit
 			TableEntry placeholderRow = new TableEntry(true, "Key", "Value", "Description", true);
 			getItems().add(placeholderRow);
@@ -142,51 +142,6 @@ public class KVDTableView extends TableView<KVDTableView.TableEntry> {
 			case "Key" -> entry.setKey(newValue);
 			case "Value" -> entry.setValue(newValue);
 			case "Description" -> entry.setDescription(newValue);
-		}
-	}
-
-	// Model class for table entries
-	public static class TableEntry {
-		private final BooleanProperty enabled = new SimpleBooleanProperty();
-		private final BooleanProperty placeholder = new SimpleBooleanProperty();
-		private final StringProperty key = new SimpleStringProperty();
-		private final StringProperty value = new SimpleStringProperty();
-		private final StringProperty description = new SimpleStringProperty();
-
-		public TableEntry(boolean enabled, String key, String value, String description, boolean placeholder) {
-			this.enabled.set(enabled);
-			this.key.set(key);
-			this.value.set(value);
-			this.description.set(description);
-			this.placeholder.set(placeholder);
-		}
-
-		public BooleanProperty enabledProperty() {
-			return enabled;
-		}
-
-		public StringProperty keyProperty() {
-			return key;
-		}
-
-		public StringProperty valueProperty() {
-			return value;
-		}
-
-		public StringProperty descriptionProperty() {
-			return description;
-		}
-
-		public void setKey(String key) {
-			this.key.set(key);
-		}
-
-		public void setValue(String value) {
-			this.value.set(value);
-		}
-
-		public void setDescription(String description) {
-			this.description.set(description);
 		}
 	}
 }
