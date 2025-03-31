@@ -45,24 +45,13 @@ public class HeadersTabView extends StackPane {
 		tableView.getItems().forEach(tableEntry -> {
 			tableEntry
 					.getPlaceholder()
-					.addListener((observable, oldValue, newValue) ->
-							requestController.updateAllHeaders(tableView.getItems()));
-			tableEntry
-					.getEnabled()
-					.addListener((observable, oldValue, newValue) ->
-							requestController.updateAllHeaders(tableView.getItems()));
-			tableEntry
-					.getValue()
-					.addListener((observable, oldValue, newValue) ->
-							requestController.updateAllHeaders(tableView.getItems()));
-			tableEntry
-					.getKey()
-					.addListener((observable, oldValue, newValue) ->
-							requestController.updateAllHeaders(tableView.getItems()));
+					.addListener((ob, o, n) -> requestController.updateAllHeaders(tableView.getItems()));
+			tableEntry.getEnabled().addListener((ob, o, n) -> requestController.updateAllHeaders(tableView.getItems()));
+			tableEntry.getValue().addListener((ob, o, n) -> requestController.updateAllHeaders(tableView.getItems()));
+			tableEntry.getKey().addListener((ob, o, n) -> requestController.updateAllHeaders(tableView.getItems()));
 			tableEntry
 					.getDescription()
-					.addListener((observable, oldValue, newValue) ->
-							requestController.updateAllHeaders(tableView.getItems()));
+					.addListener((ob, o, n) -> requestController.updateAllHeaders(tableView.getItems()));
 		});
 	}
 }
