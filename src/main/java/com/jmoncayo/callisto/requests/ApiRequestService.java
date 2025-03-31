@@ -1,11 +1,17 @@
 package com.jmoncayo.callisto.requests;
 
+import io.netty.handler.ssl.SslContextBuilder;
 import java.util.List;
+import java.util.Optional;
+import javax.net.ssl.SSLException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.client.reactive.ReactorClientHttpConnector;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
+import reactor.netty.http.client.HttpClient;
 
 @Service
 public class ApiRequestService {
@@ -26,7 +32,21 @@ public class ApiRequestService {
 
 	public Mono<String> submitRequest(String requestUUID) {
 		ApiRequest request = requestRepository.getApiRequest(requestUUID);
-		return httpClient
+		RequestSettings requestSettings = Optional.ofNullable(request.getRequestSettings())
+				.orElse(RequestSettings.builder().build());
+		HttpClient httpClientConfig =
+				HttpClient.create().followRedirect(requestSettings.isAutomaticallyFollowRedirects());
+		if (requestSettings.isEnableSslCert()) {
+			httpClientConfig.secure(sslContextSpec -> {
+				try {
+					sslContextSpec.sslContext(SslContextBuilder.forClient().build());
+				} catch (SSLException ignored) {
+				}
+			});
+		}
+		WebClient.RequestBodySpec requestSpec = WebClient.builder()
+				.clientConnector(new ReactorClientHttpConnector(httpClientConfig)) // Use custom HttpClient
+				.build()
 				.method(HttpMethod.valueOf(request.getMethod()))
 				.uri(request.getUrl())
 				.headers(httpHeaders -> {
@@ -34,7 +54,11 @@ public class ApiRequestService {
 						request.getHeaders()
 								.forEach(header -> httpHeaders.put(header.getKey(), List.of(header.getValue())));
 					}
-				})
+				});
+		if (requestSettings.isRemoveRefererHeaderOnRedirect()) {
+			requestSpec = requestSpec.headers(headers -> headers.remove(HttpHeaders.REFERER));
+		}
+		return requestSpec
 				.retrieve()
 				.bodyToMono(String.class)
 				.onErrorReturn("Request failed"); // Handle errors gracefully

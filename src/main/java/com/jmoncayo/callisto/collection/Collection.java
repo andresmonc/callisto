@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.jackson.Jacksonized;
 
 @Getter
@@ -14,8 +13,6 @@ import lombok.extern.jackson.Jacksonized;
 public class Collection {
 	private String name;
 	private List<ApiRequest> requests = new ArrayList<>();
-
-	public Collection() {}
 
 	public Collection(String name, List<ApiRequest> requests) {
 		this.name = name;

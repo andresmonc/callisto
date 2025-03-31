@@ -36,12 +36,14 @@ public class RequestsViewer extends AnchorPane {
 		AnchorPane.setRightAnchor(addButton, 5.0);
 		this.getChildren().addAll(tabs, addButton);
 		loadRequests();
+		requestController.updateCurrentRequest(tabPane.getSelectionModel().getSelectedItem().getId());
 	}
 
 	public void loadRequests() {
 		List<ApiRequest> activeRequests = requestController.getActiveRequests();
 		activeRequests.forEach(request -> {
 			Tab tab = newTab(request);
+			tab.setId(request.getId());
 			tabs.getTabs().add(tab);
 		});
 		if (activeRequests.isEmpty()) {

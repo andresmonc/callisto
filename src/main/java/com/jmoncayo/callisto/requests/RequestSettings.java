@@ -1,18 +1,37 @@
 package com.jmoncayo.callisto.requests;
 
 import lombok.Builder;
+import lombok.Getter;
 import lombok.extern.jackson.Jacksonized;
 
 @Builder
 @Jacksonized
+@Getter
 public class RequestSettings {
-    private final boolean enableSslCert;
-    private final boolean automaticallyFollowRedirects;
-    private final boolean followOriginalHttpMethod;
-    private final boolean followAuthorizationHeader;
-    private final boolean removeRefererHeaderOnRedirect;
-    private final boolean enableStrictHttpParser;
-    private final boolean encodeUrlAutomatically;
-    private final boolean disableCookieJar;
-    private final boolean userCipherSuiteDuringHandshake;
+	@Builder.Default
+	private final boolean enableSslCert = false;
+
+	@Builder.Default
+	private final boolean automaticallyFollowRedirects = true;
+
+	@Builder.Default
+	private final boolean followOriginalHttpMethod = true;
+
+	@Builder.Default
+	private final boolean followAuthorizationHeader = true;
+
+	@Builder.Default
+	private final boolean removeRefererHeaderOnRedirect = true;
+
+	@Builder.Default
+	private final boolean enableStrictHttpParser = false;
+
+	@Builder.Default
+	private final boolean encodeUrlAutomatically = true;
+
+	@Builder.Default
+	private final boolean disableCookieJar = false;
+
+	@Builder.Default
+	private final boolean userCipherSuiteDuringHandshake = true;
 }

@@ -2,10 +2,8 @@ package com.jmoncayo.callisto.environment;
 
 import java.util.HashMap;
 import java.util.Map;
-
 import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
 import lombok.extern.jackson.Jacksonized;
 
 @Getter

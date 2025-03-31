@@ -7,11 +7,13 @@ import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import com.jmoncayo.callisto.ui.requestview.tabs.HeaderRow;
 import java.util.List;
 import javafx.collections.ObservableList;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
 
 @Component
+@Log4j2
 public class RequestController {
 
 	private final ApiRequestService apiRequestService;
@@ -24,7 +26,6 @@ public class RequestController {
 	}
 
 	public Mono<String> submitRequest() {
-		// send UUID somehow - don't send all the details through like this
 		return apiRequestService.submitRequest(activeRequestUUID);
 	}
 
@@ -63,13 +64,13 @@ public class RequestController {
 						.build())
 				.toList();
 		apiRequestService.updateHeaders(activeRequestUUID, headers);
-		System.out.println("updating headers");
+		log.info("updating headers");
 	}
 
 	public void watchTabNameChange(EditableTabPane tabPane) {
 		tabPane.tabNameProperty().addListener((observable, oldValue, newValue) -> {
-			System.out.println(newValue);
-			System.out.println(activeRequestUUID);
+			log.info(newValue);
+			log.info(activeRequestUUID);
 			apiRequestService.updateName(newValue, activeRequestUUID);
 		});
 	}

@@ -2,7 +2,6 @@ package com.jmoncayo.callisto.requests;
 
 import java.util.List;
 import java.util.UUID;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.jackson.Jacksonized;
@@ -13,6 +12,7 @@ import lombok.extern.jackson.Jacksonized;
 public class ApiRequest {
 	@Builder.Default
 	private final String id = UUID.randomUUID().toString();
+
 	private final String method;
 	private final String url;
 	private final String body;
