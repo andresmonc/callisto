@@ -3,8 +3,8 @@ package com.jmoncayo.callisto.ui.controllers;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.ApiRequestService;
 import com.jmoncayo.callisto.requests.Header;
+import com.jmoncayo.callisto.ui.customcomponents.TableEntry;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
-import com.jmoncayo.callisto.ui.requestview.tabs.HeaderRow;
 import java.util.List;
 import javafx.collections.ObservableList;
 import lombok.extern.log4j.Log4j2;
@@ -54,13 +54,15 @@ public class RequestController {
 		activeRequestUUID = id;
 	}
 
-	public void updateAllHeaders(ObservableList<HeaderRow> headerObservableList, String id) {
+	public void updateAllHeaders(ObservableList<TableEntry> headerObservableList) {
 		List<Header> headers = headerObservableList.stream()
-				.filter(header -> !header.isPlaceholder())
+				.filter(header -> !header.getPlaceholder().get())
 				.map(header -> Header.builder()
-						.key(header.getKey())
-						.value(header.getValue())
-						.description(header.getDescription())
+						.key(header.getKey().get())
+						.value(header.getValue().get())
+						.description(header.getDescription().get())
+						.placeholder(header.getPlaceholder().get())
+						.enabled(header.getEnabled().get())
 						.build())
 				.toList();
 		apiRequestService.updateHeaders(activeRequestUUID, headers);

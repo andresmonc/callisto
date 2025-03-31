@@ -96,6 +96,7 @@ public class RequestView extends VBox {
 		requestField.getMethod().setValue(request.getMethod());
 		// Todo: update headers somehow
 		List<Header> headers = request.getHeaders();
-//		tabsComponent.getHeadersTab().getHeadersTabView().initialize(request); todo: reimpl
+		tabsComponent.getHeadersTab().getHeadersTabView().initialize(request);
+		//		tabsComponent.getHeadersTab().getHeadersTabView().initialize(request); todo: reimpl
 	}
 }

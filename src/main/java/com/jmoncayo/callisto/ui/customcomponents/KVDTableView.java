@@ -2,10 +2,6 @@ package com.jmoncayo.callisto.ui.customcomponents;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -27,6 +23,8 @@ import org.springframework.stereotype.Component;
 @Scope(SCOPE_PROTOTYPE)
 @Log4j2
 public class KVDTableView extends TableView<TableEntry> {
+
+	private String requestId;
 
 	public KVDTableView() {
 		initializeTable();
@@ -121,11 +119,12 @@ public class KVDTableView extends TableView<TableEntry> {
 
 		// Allow editing
 		setEditable(true);
-		TableEntry tableEntry = new TableEntry(false, "Key", "Value", "Description", true);
+		TableEntry tableEntry = new TableEntry(true, "Key", "Value", "Description", true);
 		this.getItems().add(tableEntry);
 	}
 
 	public void handleUpdate(TableColumn.CellEditEvent<TableEntry, String> event) {
+		log.info("updated");
 		TableEntry entry = event.getRowValue();
 		String newValue = event.getNewValue();
 		// Check if the row being edited is the placeholder row

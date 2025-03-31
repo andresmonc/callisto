@@ -7,9 +7,10 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @Getter
 @Jacksonized
-public class Header {
+public class Header implements KeyValueDescription {
 	private String key;
 	private String value;
 	private String description;
-	private boolean disabled;
+	private boolean enabled;
+	private boolean placeholder;
 }

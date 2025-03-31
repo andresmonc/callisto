@@ -36,7 +36,8 @@ public class RequestsViewer extends AnchorPane {
 		AnchorPane.setRightAnchor(addButton, 5.0);
 		this.getChildren().addAll(tabs, addButton);
 		loadRequests();
-		requestController.updateCurrentRequest(tabPane.getSelectionModel().getSelectedItem().getId());
+		requestController.updateCurrentRequest(
+				tabPane.getSelectionModel().getSelectedItem().getId());
 	}
 
 	public void loadRequests() {
@@ -47,7 +48,10 @@ public class RequestsViewer extends AnchorPane {
 			tabs.getTabs().add(tab);
 		});
 		if (activeRequests.isEmpty()) {
-			tabs.getTabs().add(emptyTab());
+			ApiRequest request = requestController.createRequest();
+			Tab tab = emptyTab();
+			tab.setId(request.getId());
+			tabs.getTabs().add(tab);
 		}
 	}
 
