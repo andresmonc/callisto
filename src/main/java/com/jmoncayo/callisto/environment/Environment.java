@@ -2,11 +2,15 @@ package com.jmoncayo.callisto.environment;
 
 import java.util.HashMap;
 import java.util.Map;
+
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.jackson.Jacksonized;
 
 @Getter
-@Setter
+@Builder
+@Jacksonized
 public class Environment {
 	private String name;
 	private String baseUrl;
