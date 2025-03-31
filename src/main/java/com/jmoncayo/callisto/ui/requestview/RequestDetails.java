@@ -14,9 +14,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(SCOPE_PROTOTYPE)
+@Getter
 public class RequestDetails extends TabPane {
-	@Getter
 	private final HeadersTab headersTab;
+	private final ParamsTab parametersTab;
 
 	public RequestDetails(
 			ParamsTab paramsTab,
@@ -25,6 +26,7 @@ public class RequestDetails extends TabPane {
 			BodyTab bodyTab,
 			SettingsTab settingsTab) {
 		this.headersTab = headersTab;
+		this.parametersTab = paramsTab;
 		this.getTabs().addAll(paramsTab, authorizationTab, headersTab, bodyTab, settingsTab);
 	}
 }

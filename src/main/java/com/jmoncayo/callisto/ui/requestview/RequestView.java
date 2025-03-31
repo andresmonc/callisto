@@ -3,10 +3,8 @@ package com.jmoncayo.callisto.ui.requestview;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
-import com.jmoncayo.callisto.requests.Header;
 import com.jmoncayo.callisto.ui.codearea.AutoDetectCodeArea;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
-import java.util.List;
 import javafx.application.Platform;
 import javafx.geometry.Orientation;
 import javafx.scene.control.SplitPane;
@@ -90,13 +88,10 @@ public class RequestView extends VBox {
 	}
 
 	public void initialize(ApiRequest request) {
-		// Must set id first as change listeners from below will try to read
 		requestUUID = request.getId();
 		requestField.getRequestURL().setText(request.getUrl());
 		requestField.getMethod().setValue(request.getMethod());
-		// Todo: update headers somehow
-		List<Header> headers = request.getHeaders();
 		tabsComponent.getHeadersTab().getHeadersTabView().initialize(request);
-		//		tabsComponent.getHeadersTab().getHeadersTabView().initialize(request); todo: reimpl
+		tabsComponent.getParametersTab().getParamsTabView().initialize(request);
 	}
 }

@@ -64,15 +64,6 @@ public class ApiRequestService {
 				.onErrorReturn("Request failed"); // Handle errors gracefully
 	}
 
-	public void updateHeaders(String requestUUID, List<Header> requestHeaders) {
-		System.out.println("updating headers for: " + requestUUID);
-		ApiRequest request = requestRepository.getApiRequest(requestUUID);
-		if (request == null) {
-			request = DEFAULT_REQUEST.build();
-		}
-		requestRepository.update(request.toBuilder().headers(requestHeaders).build());
-	}
-
 	public void updateUrl(String url, String requestUUID) {
 		System.out.println(requestUUID);
 		ApiRequest request = requestRepository.getApiRequest(requestUUID);
@@ -134,5 +125,24 @@ public class ApiRequestService {
 		if (request != null) {
 			requestRepository.update(request.toBuilder().name(name).build());
 		}
+	}
+
+	public void updateHeaders(String requestUUID, List<Header> requestHeaders) {
+		System.out.println("updating headers for: " + requestUUID);
+		ApiRequest request = requestRepository.getApiRequest(requestUUID);
+		if (request == null) {
+			request = DEFAULT_REQUEST.build();
+		}
+		requestRepository.update(request.toBuilder().headers(requestHeaders).build());
+	}
+
+	public void updateParameters(String requestUUID, List<Parameter> requestParameters) {
+		System.out.println("updating parameters for: " + requestUUID);
+		ApiRequest request = requestRepository.getApiRequest(requestUUID);
+		if (request == null) {
+			request = DEFAULT_REQUEST.build();
+		}
+		requestRepository.update(
+				request.toBuilder().parameters(requestParameters).build());
 	}
 }

@@ -3,6 +3,7 @@ package com.jmoncayo.callisto.ui.controllers;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.requests.ApiRequestService;
 import com.jmoncayo.callisto.requests.Header;
+import com.jmoncayo.callisto.requests.Parameter;
 import com.jmoncayo.callisto.ui.customcomponents.TableEntry;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import java.util.List;
@@ -77,20 +78,19 @@ public class RequestController {
 		});
 	}
 
-	//	public void updateAllParameters(ObservableList<ParamsTabView.ParamEntry> items, String requestId) {
-	//		List<Parameter> parameters = items.stream()
-	//				.filter(param -> !param.isPlaceholder)
-	//				.map(paramEntry -> {
-	//					var parameter = new Parameter();
-	//					parameter.setDescription(paramEntry.descriptionProperty().get());
-	//					parameter.setEnabled(paramEntry.enabledProperty().get());
-	//					parameter.setKey(paramEntry.keyProperty().get());
-	//					parameter.setValue(paramEntry.valueProperty().getValue());
-	//					return parameter;
-	//				})
-	//				.toList();
-	//		//		apiRequestService.updateHeaders(activeRequestUUID, headers);
-	//		System.out.println("updating parameters");
-	//		System.out.println(parameters);
-	//	}
+	public void updateAllParameters(ObservableList<TableEntry> items) {
+		log.info("parameter update called.");
+		List<Parameter> parameters = items.stream()
+				.filter(header -> !header.getPlaceholder().get())
+				.map(header -> Parameter.builder()
+						.key(header.getKey().get())
+						.value(header.getValue().get())
+						.description(header.getDescription().get())
+						.placeholder(header.getPlaceholder().get())
+						.enabled(header.getEnabled().get())
+						.build())
+				.toList();
+		apiRequestService.updateParameters(activeRequestUUID, parameters);
+		log.info("updating headers");
+	}
 }
