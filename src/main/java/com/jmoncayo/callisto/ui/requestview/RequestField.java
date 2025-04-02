@@ -3,9 +3,12 @@ package com.jmoncayo.callisto.ui.requestview;
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
 import java.util.Arrays;
+
+import com.jmoncayo.callisto.ui.save.SaveRequestDialog;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
 import org.kordamp.ikonli.javafx.FontIcon;
@@ -23,7 +26,7 @@ public class RequestField extends HBox {
 	private final ComboBox<String> dropdown;
 
 	@Autowired
-	public RequestField(RequestURL requestURL) {
+	public RequestField(RequestURL requestURL, SaveRequestDialog saveRequestDialog) {
 		this.requestURL = requestURL;
 		dropdown = new ComboBox<>();
 		dropdown.getItems()
@@ -40,6 +43,7 @@ public class RequestField extends HBox {
 		saveButton.setGraphic(saveIcon);
 		saveButton.setOnAction(event -> {
 			log.info("Saving request...");
+			saveRequestDialog.open((Stage) this.getScene().getWindow());
 		});
 
 		this.getChildren().addAll(dropdown, requestURL, actionButton, saveButton);
