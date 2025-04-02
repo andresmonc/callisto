@@ -6,6 +6,9 @@ import java.util.Arrays;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
+import lombok.extern.log4j.Log4j2;
+import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
+import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpMethod;
@@ -13,10 +16,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(SCOPE_PROTOTYPE)
+@Log4j2
 public class RequestField extends HBox {
 	private final RequestURL requestURL;
 	private final Button actionButton;
-	private final ComboBox<String> dropdown; // Dropdown (ComboBox) to the left of the TextField
+	private final ComboBox<String> dropdown;
 
 	@Autowired
 	public RequestField(RequestURL requestURL) {
@@ -25,18 +29,21 @@ public class RequestField extends HBox {
 		dropdown.getItems()
 				.addAll(Arrays.stream(HttpMethod.values()).map(HttpMethod::name).toList());
 		dropdown.setValue(HttpMethod.GET.name());
-
-		// Create the action button
 		actionButton = new Button("Submit");
 		actionButton.setOnAction(event -> {
-			// Logic for when the button is clicked
-			System.out.println("Selected Option: " + dropdown.getValue());
-			System.out.println("URL: " + requestURL.getText());
+			log.info("Selected Option: " + dropdown.getValue());
+			log.info("URL: " + requestURL.getText());
 		});
 
-		// Add the ComboBox (dropdown), TextField (RequestURL), and Button to the HBox
-		this.getChildren().addAll(dropdown, requestURL, actionButton);
-		this.setSpacing(10); // Set spacing between elements
+		Button saveButton = new Button("Save");
+		FontIcon saveIcon = new FontIcon(FontAwesomeSolid.SAVE);
+		saveButton.setGraphic(saveIcon);
+		saveButton.setOnAction(event -> {
+			log.info("Saving request...");
+		});
+
+		this.getChildren().addAll(dropdown, requestURL, actionButton, saveButton);
+		this.setSpacing(10);
 	}
 
 	public RequestURL getRequestURL() {
