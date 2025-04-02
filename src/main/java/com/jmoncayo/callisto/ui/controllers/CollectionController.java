@@ -20,7 +20,7 @@ public class CollectionController {
 		return collectionService.getCollections();
 	}
 
-	public Collection addCollection() {
-		return collectionService.createCollection();
+	public Collection addCollection(String name) {
+		return collectionService.createCollection(name);
 	}
 }

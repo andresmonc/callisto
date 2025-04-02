@@ -1,8 +1,6 @@
 package com.jmoncayo.callisto.collection;
 
-import com.jmoncayo.callisto.requests.ApiRequest;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.jackson.Jacksonized;
@@ -11,11 +9,8 @@ import lombok.extern.jackson.Jacksonized;
 @Builder
 @Jacksonized
 public class Collection {
-	private String name;
-	private List<ApiRequest> requests = new ArrayList<>();
+	@Builder.Default
+	private String id = UUID.randomUUID().toString();
 
-	public Collection(String name, List<ApiRequest> requests) {
-		this.name = name;
-		this.requests = requests;
-	}
+	private String name;
 }
