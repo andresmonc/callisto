@@ -2,9 +2,8 @@ package com.jmoncayo.callisto.ui.requestview;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
-import java.util.Arrays;
-
 import com.jmoncayo.callisto.ui.save.SaveRequestDialog;
+import java.util.Arrays;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
