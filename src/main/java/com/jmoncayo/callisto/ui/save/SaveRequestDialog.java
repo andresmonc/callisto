@@ -1,14 +1,16 @@
 package com.jmoncayo.callisto.ui.save;
 
+import com.jmoncayo.callisto.collection.Subfolder;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.TextFieldListCell;
+import javafx.scene.control.TreeItem;
+import javafx.scene.control.TreeView;
+import javafx.scene.control.cell.TextFieldTreeCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -18,7 +20,7 @@ import org.springframework.stereotype.Component;
 @Component
 @Log4j2
 public class SaveRequestDialog {
-	private final ListView<CollectionInfo> collectionList;
+	private final TreeView<CollectionInfo> collectionTree;
 	private final TextField newCollectionField;
 	private final CollectionController collectionController;
 	private final RequestController requestController;
@@ -28,6 +30,7 @@ public class SaveRequestDialog {
 	private Button saveButton;
 	private Button newCollectionButton;
 	private Button cancelButton;
+	private Button subFolderButton;
 
 	// Inject the service to fetch collections
 	public SaveRequestDialog(
@@ -37,7 +40,7 @@ public class SaveRequestDialog {
 		this.collectionController = collectionController;
 		this.requestController = requestController;
 		this.converter = converter;
-		collectionList = new ListView<>();
+		collectionTree = new TreeView<>();
 		newCollectionField = new TextField();
 		newCollectionField.setPromptText("New collection/subfolder name");
 	}
@@ -46,7 +49,7 @@ public class SaveRequestDialog {
 		stage = createStage(owner);
 		setUpButtons();
 		VBox layout = createLayout();
-		setUpCollectionList();
+		setUpCollectionTree();
 		stage.setScene(new Scene(layout, 400, 300));
 		stage.showAndWait();
 	}
@@ -63,62 +66,80 @@ public class SaveRequestDialog {
 		return new VBox(
 				10,
 				new Label("Select a collection or create a new one:"),
-				collectionList,
+				collectionTree,
 				newCollectionButton,
 				saveButton,
-				cancelButton);
+				cancelButton,
+				subFolderButton);
 	}
 
-	private void setUpCollectionList() {
+	private void setUpCollectionTree() {
+		// Get all collections
 		List<CollectionInfo> collections = collectionController.getAllCollections().stream()
 				.map(c -> new CollectionInfo(c.getName(), c.getId()))
 				.toList();
-		collectionList.getItems().setAll(collections);
 
-		collectionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue != null) {
-				// Handle item click (when selection changes to a new item)
-				log.info("Selected: " + newValue.getName());
-				log.info("Selected: " + newValue.getId());
-				selectedCollection = newValue;
-				// You can trigger any actions you need here based on the selected item
+		// Build TreeItems for collections
+		TreeItem<CollectionInfo> root = new TreeItem<>();
+
+		// Create TreeItems for collections and subfolders
+		for (CollectionInfo collection : collections) {
+			TreeItem<CollectionInfo> collectionItem = new TreeItem<>(collection);
+			root.getChildren().add(collectionItem);
+
+			// Add subfolders as children if available
+			List<Subfolder> subfolders = collectionController.getSubfolders(collection.getId());
+			for (Subfolder subfolder : subfolders) {
+				TreeItem<CollectionInfo> subfolderItem =
+						new TreeItem<>(new CollectionInfo(subfolder.getName(), subfolder.getId()));
+				collectionItem.getChildren().add(subfolderItem);
+			}
+		}
+
+		collectionTree.setRoot(root);
+		collectionTree.setShowRoot(false);
+		collectionTree.setEditable(true);
+		collectionTree.setCellFactory(param -> new TextFieldTreeCell<>(converter) {});
+
+		collectionTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+			if (newValue != null && newValue.getValue() != null) {
+				// Handle item click
+				log.info("Selected: " + newValue.getValue().getName());
+				log.info("Selected: " + newValue.getValue().getId());
+				selectedCollection = newValue.getValue();
 			}
 		});
-
-		collectionList.setOnEditCommit(event -> {
-			String newValue = event.getNewValue().getName();
-			if (newValue == null || newValue.isEmpty()) {
-				collectionList.getItems().remove(event.getIndex());
-				return;
-			}
-			collectionList.getItems().set(event.getIndex(), event.getNewValue());
-		});
-		collectionList.setEditable(true);
-		collectionList.setCellFactory(listView -> new TextFieldListCell<>(converter));
 	}
 
 	private void setUpButtons() {
 		saveButton = new Button("Save");
 		cancelButton = new Button("Cancel");
 		newCollectionButton = new Button("New Collection");
+		subFolderButton = new Button("New Subfolder");
+
 		saveButton.setOnAction(event -> saveRequest());
 		cancelButton.setOnAction(event -> stage.close());
 		newCollectionButton.setOnAction(event -> createNewCollection());
+		subFolderButton.setOnAction(event -> createNewSubFolder());
 	}
 
 	private void saveRequest() {
-		collectionController.addRequestToCollection(
-				collectionList
-						.getItems()
-						.get(collectionList.getSelectionModel().getSelectedIndex())
-						.getId(),
-				requestController.getActiveRequest());
+		collectionController.addRequestToCollection(selectedCollection.getId(), requestController.getActiveRequest());
 		stage.close();
 	}
 
 	private void createNewCollection() {
-		collectionList.getItems().add(new CollectionInfo("", ""));
-		collectionList.getSelectionModel().selectLast();
-		collectionList.edit(collectionList.getItems().size() - 1);
+		// Create a new collection or subfolder
+		TreeItem<CollectionInfo> newItem = new TreeItem<>(new CollectionInfo("", ""));
+		collectionTree.getRoot().getChildren().add(newItem);
+		collectionTree.getSelectionModel().select(newItem);
+		collectionTree.edit(newItem);
+	}
+
+	private void createNewSubFolder() {
+		TreeItem<CollectionInfo> newItem = new TreeItem<>(new CollectionInfo("", ""));
+		collectionTree.getSelectionModel().getSelectedItem().getChildren().add(newItem);
+		collectionTree.getSelectionModel().select(newItem);
+		collectionTree.edit(newItem);
 	}
 }
