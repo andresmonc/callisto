@@ -11,10 +11,10 @@ import java.util.UUID;
 @Getter
 @Builder(toBuilder = true)
 @Jacksonized
-public class Collection {
-	@Builder.Default
-	private final String id = UUID.randomUUID().toString();
-	private final String name;
-	private final List<Subfolder> subfolders;
-	private final List<ApiRequest> requests;
+public class Subfolder {
+    @Builder.Default
+    private final String id = UUID.randomUUID().toString();
+    private final String name;
+    private final List<Subfolder> subfolders;
+    private final List<ApiRequest> requests;
 }
