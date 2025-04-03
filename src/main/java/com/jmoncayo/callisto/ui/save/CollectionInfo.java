@@ -10,6 +10,7 @@ class CollectionInfo {
 	private final String name;
 	private final String id;
 	private List<CollectionInfo> subfolders;
+
 	@Setter
 	private boolean isSubFolder;
 

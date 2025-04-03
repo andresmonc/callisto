@@ -3,6 +3,7 @@ package com.jmoncayo.callisto.ui.save;
 import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
+import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -15,8 +16,6 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @Log4j2
@@ -126,9 +125,11 @@ public class SaveRequestDialog {
 
 	private void saveRequest() {
 		if (!selectedCollection.isSubFolder()) {
-			collectionController.addRequestToCollection(selectedCollection.getId(), requestController.getActiveRequest());
+			collectionController.addRequestToCollection(
+					selectedCollection.getId(), requestController.getActiveRequest());
 		} else {
-			collectionController.addRequestToSubfolder(selectedCollection.getId(), requestController.getActiveRequest());
+			collectionController.addRequestToSubfolder(
+					selectedCollection.getId(), requestController.getActiveRequest());
 		}
 		stage.close();
 	}
