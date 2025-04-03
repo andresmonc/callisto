@@ -2,7 +2,6 @@ package com.jmoncayo.callisto.ui.controllers;
 
 import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.collection.CollectionService;
-import com.jmoncayo.callisto.collection.Subfolder;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,11 +37,11 @@ public class CollectionController {
 		collectionService.deleteCollection(collectionId);
 	}
 
-	public Subfolder addSubfolderToCollection(String collectionId, String subfolderName) {
+	public Collection addSubfolderToCollection(String collectionId, String subfolderName) {
 		return collectionService.addSubfolder(collectionId, subfolderName);
 	}
 
-	public Subfolder addSubfolderToSubfolder(String parentSubfolderId, String subfolderName) {
+	public Collection addSubfolderToSubfolder(String parentSubfolderId, String subfolderName) {
 		return collectionService.addSubfolderToSubfolder(parentSubfolderId, subfolderName);
 	}
 
@@ -58,7 +57,7 @@ public class CollectionController {
 		collectionService.addRequestToSubfolder(subfolderId, request);
 	}
 
-	public List<Subfolder> getSubfolders(String parentId) {
+	public List<Collection> getSubfolders(String parentId) {
 		return collectionService.getSubfolders(parentId);
 	}
 }

@@ -50,26 +50,26 @@ public class CollectionService implements Loadable<Collection> {
 		log.info("Deleted collection: " + collectionId);
 	}
 
-	public Subfolder addSubfolder(String collectionId, String subfolderName) {
+	public Collection addSubfolder(String collectionId, String subfolderName) {
 		Collection collection = collectionRepository
 				.findById(collectionId)
 				.orElseThrow(() -> new RuntimeException("Collection not found"));
-		Subfolder subfolder = Subfolder.builder().name(subfolderName).build();
+		Collection subfolder = Collection.builder().name(subfolderName).build();
 		collection.getSubfolders().add(subfolder);
 		collectionRepository.save(collection);
 		log.info("Added subfolder " + subfolderName + " to collection " + collectionId);
 		return subfolder;
 	}
 
-	public List<Subfolder> getSubfolders(String parentId) {
+	public List<Collection> getSubfolders(String parentId) {
 		Collection collection =
 				collectionRepository.findById(parentId).orElseThrow(() -> new RuntimeException("Collection not found"));
 		return collection.getSubfolders();
 	}
 
-	public Subfolder addSubfolderToSubfolder(String parentSubfolderId, String subfolderName) {
-		Subfolder parentSubfolder = findSubfolderById(parentSubfolderId);
-		Subfolder subfolder = Subfolder.builder().name(subfolderName).build();
+	public Collection addSubfolderToSubfolder(String parentSubfolderId, String subfolderName) {
+		Collection parentSubfolder = findSubfolderById(parentSubfolderId);
+		Collection subfolder = Collection.builder().name(subfolderName).build();
 		parentSubfolder.getSubfolders().add(subfolder);
 		log.info("Added subfolder " + subfolderName + " to subfolder " + parentSubfolderId);
 		return subfolder;
@@ -79,8 +79,7 @@ public class CollectionService implements Loadable<Collection> {
 		Collection collection = collectionRepository
 				.findBySubfolderId(subfolderId)
 				.orElseThrow(() -> new RuntimeException("Subfolder not found"));
-
-		Subfolder subfolder = findSubfolderById(subfolderId);
+		Collection subfolder = findSubfolderById(subfolderId);
 		collection.getSubfolders().remove(subfolder);
 		collectionRepository.save(collection);
 		log.info("Deleted subfolder: " + subfolderId);
@@ -97,15 +96,15 @@ public class CollectionService implements Loadable<Collection> {
 	}
 
 	public void addRequestToSubfolder(String subfolderId, ApiRequest request) {
-		Subfolder subfolder = findSubfolderById(subfolderId);
+		Collection subfolder = findSubfolderById(subfolderId);
 
 		subfolder.getRequests().add(request);
 		log.info("Added request to subfolder " + subfolderId);
 	}
 
-	private Subfolder findSubfolderById(String subfolderId) {
+	private Collection findSubfolderById(String subfolderId) {
 		for (Collection collection : collectionRepository.findAll()) {
-			for (Subfolder subfolder : collection.getSubfolders()) {
+			for (Collection subfolder : collection.getSubfolders()) {
 				if (subfolder.getId().equals(subfolderId)) {
 					return subfolder;
 				}

@@ -1,6 +1,6 @@
 package com.jmoncayo.callisto.ui.save;
 
-import com.jmoncayo.callisto.collection.Subfolder;
+import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import javafx.scene.Scene;
@@ -89,8 +89,8 @@ public class SaveRequestDialog {
 			root.getChildren().add(collectionItem);
 
 			// Add subfolders as children if available
-			List<Subfolder> subfolders = collectionController.getSubfolders(collection.getId());
-			for (Subfolder subfolder : subfolders) {
+			List<Collection> subfolders = collectionController.getSubfolders(collection.getId());
+			for (Collection subfolder : subfolders) {
 				TreeItem<CollectionInfo> subfolderItem =
 						new TreeItem<>(new CollectionInfo(subfolder.getName(), subfolder.getId()));
 				collectionItem.getChildren().add(subfolderItem);

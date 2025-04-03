@@ -36,7 +36,7 @@ public class CollectionRepository {
 
 	public Optional<Collection> findBySubfolderId(String subfolderId) {
 		for (Collection collection : collections.values()) {
-			for (Subfolder subfolder : collection.getSubfolders()) {
+			for (Collection subfolder : collection.getSubfolders()) {
 				if (subfolder.getId().equals(subfolderId)) {
 					return Optional.of(collection);
 				}
