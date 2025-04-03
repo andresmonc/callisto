@@ -1,36 +1,27 @@
 package com.jmoncayo.callisto.ui.save;
 
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
-
-import java.util.Objects;
 
 @Getter
 class CollectionInfo {
-    private final String name;
-    private final String id;
+	private final String name;
+	private final String id;
+	private List<CollectionInfo> subfolders;
 
-    public CollectionInfo(String name, String id) {
-        this.name = name;
-        this.id = id;
-    }
+	public CollectionInfo(String name, String id) {
+		this.name = name;
+		this.id = id;
+		this.subfolders = new ArrayList<>(5);
+	}
 
-    @Override
-    public String toString() {
-        return name;
-    }
+	@Override
+	public String toString() {
+		return name;
+	}
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) return true;
-        if (obj == null || obj.getClass() != this.getClass()) return false;
-        var that = (CollectionInfo) obj;
-        return Objects.equals(this.name, that.name) &&
-                Objects.equals(this.id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(name, id);
-    }
-
+	public void addSubfolder(CollectionInfo subfolder) {
+		subfolders.add(subfolder);
+	}
 }
