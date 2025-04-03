@@ -95,4 +95,8 @@ public class RequestController {
 		apiRequestService.updateParameters(activeRequestId, parameters);
 		log.info("updating headers");
 	}
+
+	public ApiRequest getActiveRequest(){
+		return apiRequestService.getRequest(activeRequestId);
+	}
 }
