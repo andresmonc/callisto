@@ -2,9 +2,10 @@ package com.jmoncayo.callisto.collection;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.storage.Loadable;
-import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Log4j2
@@ -93,7 +94,7 @@ public class CollectionService implements Loadable<Collection> {
 
 		collection.getRequests().add(request);
 		collectionRepository.save(collection);
-		log.info("Added request to collection " + collectionId);
+		log.info("Added request" + request.getName() + " to collection " + collection.getName());
 	}
 
 	public void addRequestToSubfolder(String subfolderId, ApiRequest request) {
