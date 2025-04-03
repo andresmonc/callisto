@@ -5,8 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
 
-@Component
+@Repository
 public class ApiRequestRepository {
 
 	private final Map<String, ApiRequest> requests = new HashMap<>();
