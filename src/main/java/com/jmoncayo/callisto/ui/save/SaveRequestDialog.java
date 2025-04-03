@@ -5,7 +5,6 @@ import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import java.util.List;
 
 import com.jmoncayo.callisto.ui.controllers.RequestController;
-import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
