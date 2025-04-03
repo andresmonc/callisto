@@ -47,7 +47,7 @@ public class DataLoaderService {
 	public void saveDataFromServices() {
 		try {
 			var storage = new Storage();
-			storage.setUnSavedCollections(collectionService.getCollections());
+			storage.setUnSavedCollections(collectionService.getAllCollections());
 			storage.setRequests(apiRequestService.getAllRequests());
 			fileStorageService.saveToFile(storage, saveName);
 		} catch (IOException e) {
