@@ -8,6 +8,7 @@ import com.jmoncayo.callisto.ui.customcomponents.TableEntry;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import java.util.List;
 import javafx.collections.ObservableList;
+import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -19,7 +20,8 @@ public class RequestController {
 
 	private final ApiRequestService apiRequestService;
 
-	private String activeRequestUUID = "default";
+	@Getter
+	private String activeRequestId = "default";
 
 	@Autowired
 	public RequestController(ApiRequestService apiRequestService) {
@@ -27,7 +29,7 @@ public class RequestController {
 	}
 
 	public Mono<String> submitRequest() {
-		return apiRequestService.submitRequest(activeRequestUUID);
+		return apiRequestService.submitRequest(activeRequestId);
 	}
 
 	public void updateRequestUrl(String committed, String requestUUID) {
@@ -51,8 +53,8 @@ public class RequestController {
 	}
 
 	public void updateCurrentRequest(String id) {
-		System.out.println(activeRequestUUID);
-		activeRequestUUID = id;
+		System.out.println(activeRequestId);
+		activeRequestId = id;
 	}
 
 	public void updateAllHeaders(ObservableList<TableEntry> headerObservableList) {
@@ -66,15 +68,15 @@ public class RequestController {
 						.enabled(header.getEnabled().get())
 						.build())
 				.toList();
-		apiRequestService.updateHeaders(activeRequestUUID, headers);
+		apiRequestService.updateHeaders(activeRequestId, headers);
 		log.info("updating headers");
 	}
 
 	public void watchTabNameChange(EditableTabPane tabPane) {
 		tabPane.tabNameProperty().addListener((observable, oldValue, newValue) -> {
 			log.info(newValue);
-			log.info(activeRequestUUID);
-			apiRequestService.updateName(newValue, activeRequestUUID);
+			log.info(activeRequestId);
+			apiRequestService.updateName(newValue, activeRequestId);
 		});
 	}
 
@@ -90,7 +92,7 @@ public class RequestController {
 						.enabled(header.getEnabled().get())
 						.build())
 				.toList();
-		apiRequestService.updateParameters(activeRequestUUID, parameters);
+		apiRequestService.updateParameters(activeRequestId, parameters);
 		log.info("updating headers");
 	}
 }

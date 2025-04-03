@@ -10,10 +10,12 @@ import org.springframework.stereotype.Component;
 public class CollectionController {
 
 	private final CollectionService collectionService;
+	private final RequestController requestController;
 
 	@Autowired
-	public CollectionController(CollectionService collectionService) {
+	public CollectionController(CollectionService collectionService, RequestController requestController) {
 		this.collectionService = collectionService;
+		this.requestController = requestController;
 	}
 
 	public List<Collection> getCollections() {
@@ -22,5 +24,9 @@ public class CollectionController {
 
 	public Collection addCollection(String name) {
 		return collectionService.createCollection(name);
+	}
+
+	public void addRequestToCollection(String collectionName) {
+		collectionService.addRequestToCollection(collectionName);
 	}
 }

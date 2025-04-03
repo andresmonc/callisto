@@ -35,18 +35,17 @@ public class SaveRequestDialog {
 		stage = new Stage();
 		stage.initModality(Modality.WINDOW_MODAL);
 		stage.initOwner(owner);
-		stage.setTitle("Save Request");
+		stage.setTitle("Save Request To Collection");
 
 		// Create the save/cancel buttons
 		Button saveButton = new Button("Save");
 		saveButton.setOnAction(event -> {
+			collectionController.addRequestToCollection(collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()));
 			stage.close();
 		});
 
 		Button cancelButton = new Button("Cancel");
-		cancelButton.setOnAction(event -> {
-			stage.close();
-		});
+		cancelButton.setOnAction(event -> stage.close());
 
 		// Create the "New Collection" button
 		Button newCollectionButton = new Button("New Collection");
@@ -82,8 +81,6 @@ public class SaveRequestDialog {
 			collectionController.addCollection(newValue);
 			collectionList.getItems().set(event.getIndex(), event.getNewValue());
 		});
-
-		// Enable editing in the ListView with TextFieldListCell
 		collectionList.setEditable(true);
 		collectionList.setCellFactory(TextFieldListCell.forListView());
 		stage.showAndWait();

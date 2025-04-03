@@ -6,7 +6,7 @@ import lombok.Getter;
 import lombok.extern.jackson.Jacksonized;
 
 @Getter
-@Builder
+@Builder(toBuilder = true)
 @Jacksonized
 public class Collection {
 	@Builder.Default

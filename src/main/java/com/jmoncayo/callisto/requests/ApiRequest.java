@@ -17,7 +17,6 @@ public class ApiRequest {
 	private final String url;
 	private final String body;
 	private final List<Header> headers;
-	private final String collectionId;
 	private final boolean active;
 	private final String name;
 	private final List<Parameter> parameters;

@@ -27,4 +27,11 @@ public class CollectionService implements Loadable<Collection> {
 		log.info("Collection created: " + collection.getId());
 		return collection;
 	}
+
+	public void addRequestToCollection(String collectionName) {
+		Collection collection = collections.stream()
+				.filter(c -> c.getName().equals(collectionName))
+				.findFirst().get();
+
+	}
 }
