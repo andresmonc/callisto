@@ -1,8 +1,8 @@
 package com.jmoncayo.callisto.ui.save;
 
-import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
+import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -12,11 +12,8 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.util.StringConverter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @Log4j2
@@ -28,9 +25,15 @@ public class SaveRequestDialog {
 	private final CollectionInfoStringConverter converter;
 	private Stage stage;
 	private CollectionInfo selectedCollection;
+	private Button saveButton;
+	private Button newCollectionButton;
+	private Button cancelButton;
 
 	// Inject the service to fetch collections
-	public SaveRequestDialog(CollectionController collectionController, RequestController requestController,CollectionInfoStringConverter converter) {
+	public SaveRequestDialog(
+			CollectionController collectionController,
+			RequestController requestController,
+			CollectionInfoStringConverter converter) {
 		this.collectionController = collectionController;
 		this.requestController = requestController;
 		this.converter = converter;
@@ -41,9 +44,9 @@ public class SaveRequestDialog {
 
 	public void open(Stage owner) {
 		stage = createStage(owner);
+		setUpButtons();
 		VBox layout = createLayout();
 		setUpCollectionList();
-		setUpButtons();
 		stage.setScene(new Scene(layout, 400, 300));
 		stage.showAndWait();
 	}
@@ -57,12 +60,6 @@ public class SaveRequestDialog {
 	}
 
 	private VBox createLayout() {
-		Button saveButton = new Button("Save");
-		Button cancelButton = new Button("Cancel");
-		Button newCollectionButton = new Button("New Collection");
-		saveButton.setOnAction(event -> saveRequest());
-		cancelButton.setOnAction(event -> stage.close());
-		newCollectionButton.setOnAction(event -> createNewCollection());
 		return new VBox(
 				10,
 				new Label("Select a collection or create a new one:"),
@@ -101,9 +98,9 @@ public class SaveRequestDialog {
 	}
 
 	private void setUpButtons() {
-		Button saveButton = new Button("Save");
-		Button cancelButton = new Button("Cancel");
-		Button newCollectionButton = new Button("New Collection");
+		saveButton = new Button("Save");
+		cancelButton = new Button("Cancel");
+		newCollectionButton = new Button("New Collection");
 		saveButton.setOnAction(event -> saveRequest());
 		cancelButton.setOnAction(event -> stage.close());
 		newCollectionButton.setOnAction(event -> createNewCollection());
@@ -111,7 +108,10 @@ public class SaveRequestDialog {
 
 	private void saveRequest() {
 		collectionController.addRequestToCollection(
-				collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()).getId(),
+				collectionList
+						.getItems()
+						.get(collectionList.getSelectionModel().getSelectedIndex())
+						.getId(),
 				requestController.getActiveRequest());
 		stage.close();
 	}
@@ -121,5 +121,4 @@ public class SaveRequestDialog {
 		collectionList.getSelectionModel().selectLast();
 		collectionList.edit(collectionList.getItems().size() - 1);
 	}
-
 }

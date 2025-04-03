@@ -9,21 +9,21 @@ import org.springframework.stereotype.Component;
 @Component
 public class CollectionInfoStringConverter extends StringConverter<CollectionInfo> {
 
-    private final CollectionController collectionController;
+	private final CollectionController collectionController;
 
-    @Autowired
-    public CollectionInfoStringConverter(CollectionController collectionController) {
-        this.collectionController = collectionController;
-    }
+	@Autowired
+	public CollectionInfoStringConverter(CollectionController collectionController) {
+		this.collectionController = collectionController;
+	}
 
-    @Override
-    public String toString(CollectionInfo collection) {
-        return collection == null ? "" : collection.getName();
-    }
+	@Override
+	public String toString(CollectionInfo collection) {
+		return collection == null ? "" : collection.getName();
+	}
 
-    @Override
-    public CollectionInfo fromString(String name) {
-        Collection collection = collectionController.addCollection(name);
-        return new CollectionInfo(name, collection.getId());
-    }
+	@Override
+	public CollectionInfo fromString(String name) {
+		Collection collection = collectionController.addCollection(name);
+		return new CollectionInfo(name, collection.getId());
+	}
 }
