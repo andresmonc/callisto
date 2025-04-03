@@ -2,10 +2,9 @@ package com.jmoncayo.callisto.collection;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.storage.Loadable;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Log4j2
@@ -32,21 +31,28 @@ public class CollectionService implements Loadable<Collection> {
 	}
 
 	public void renameCollection(String collectionId, String newName) {
-		Collection collection = collectionRepository.findById(collectionId)
-				.orElseThrow(() -> new RuntimeException("Collection not found")).toBuilder().name(newName).build();
+		Collection collection =
+				collectionRepository
+						.findById(collectionId)
+						.orElseThrow(() -> new RuntimeException("Collection not found"))
+						.toBuilder()
+						.name(newName)
+						.build();
 		collectionRepository.save(collection);
 		log.info("Renamed collection " + collectionId + " to " + newName);
 	}
 
 	public void deleteCollection(String collectionId) {
-		Collection collection = collectionRepository.findById(collectionId)
+		Collection collection = collectionRepository
+				.findById(collectionId)
 				.orElseThrow(() -> new RuntimeException("Collection not found"));
 		collectionRepository.delete(collection);
 		log.info("Deleted collection: " + collectionId);
 	}
 
 	public Subfolder addSubfolder(String collectionId, String subfolderName) {
-		Collection collection = collectionRepository.findById(collectionId)
+		Collection collection = collectionRepository
+				.findById(collectionId)
 				.orElseThrow(() -> new RuntimeException("Collection not found"));
 		Subfolder subfolder = Subfolder.builder().name(subfolderName).build();
 		collection.getSubfolders().add(subfolder);
@@ -56,8 +62,8 @@ public class CollectionService implements Loadable<Collection> {
 	}
 
 	public List<Subfolder> getSubfolders(String parentId) {
-		Collection collection = collectionRepository.findById(parentId)
-				.orElseThrow(() -> new RuntimeException("Collection not found"));
+		Collection collection =
+				collectionRepository.findById(parentId).orElseThrow(() -> new RuntimeException("Collection not found"));
 		return collection.getSubfolders();
 	}
 
@@ -70,7 +76,8 @@ public class CollectionService implements Loadable<Collection> {
 	}
 
 	public void deleteSubfolder(String subfolderId) {
-		Collection collection = collectionRepository.findBySubfolderId(subfolderId)
+		Collection collection = collectionRepository
+				.findBySubfolderId(subfolderId)
 				.orElseThrow(() -> new RuntimeException("Subfolder not found"));
 
 		Subfolder subfolder = findSubfolderById(subfolderId);
@@ -80,7 +87,8 @@ public class CollectionService implements Loadable<Collection> {
 	}
 
 	public void addRequestToCollection(String collectionId, ApiRequest request) {
-		Collection collection = collectionRepository.findById(collectionId)
+		Collection collection = collectionRepository
+				.findById(collectionId)
 				.orElseThrow(() -> new RuntimeException("Collection not found"));
 
 		collection.getRequests().add(request);
@@ -110,5 +118,3 @@ public class CollectionService implements Loadable<Collection> {
 		return collectionRepository.findAll();
 	}
 }
-
-

@@ -1,10 +1,8 @@
 package com.jmoncayo.callisto.ui.save;
 
-import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
-import java.util.List;
-
 import com.jmoncayo.callisto.ui.controllers.RequestController;
+import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -14,11 +12,12 @@ import javafx.scene.control.cell.TextFieldListCell;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.util.StringConverter;
 import org.springframework.stereotype.Component;
 
 @Component
 public class SaveRequestDialog {
-	private final ListView<String> collectionList;
+	private final ListView<CollectionInfo> collectionList;
 	private final TextField newCollectionField;
 	private final CollectionController collectionController;
 	private final RequestController requestController;
@@ -58,7 +57,8 @@ public class SaveRequestDialog {
 		saveButton.setOnAction(event -> saveRequest());
 		cancelButton.setOnAction(event -> stage.close());
 		newCollectionButton.setOnAction(event -> createNewCollection());
-		return new VBox(10,
+		return new VBox(
+				10,
 				new Label("Select a collection or create a new one:"),
 				collectionList,
 				newCollectionButton,
@@ -67,12 +67,12 @@ public class SaveRequestDialog {
 	}
 
 	private void setUpCollectionList() {
-		List<String> collections = collectionController.getAllCollections().stream()
-				.map(Collection::getName)
+		List<CollectionInfo> collections = collectionController.getAllCollections().stream()
+				.map(c -> new CollectionInfo(c.getName(), c.getId()))
 				.toList();
 		collectionList.getItems().setAll(collections);
 		collectionList.setOnEditCommit(event -> {
-			String newValue = event.getNewValue();
+			String newValue = event.getNewValue().name;
 			if (newValue == null || newValue.isEmpty()) {
 				collectionList.getItems().remove(event.getIndex());
 				return;
@@ -81,7 +81,17 @@ public class SaveRequestDialog {
 			collectionList.getItems().set(event.getIndex(), event.getNewValue());
 		});
 		collectionList.setEditable(true);
-		collectionList.setCellFactory(TextFieldListCell.forListView());
+		collectionList.setCellFactory(listView -> new TextFieldListCell<>(new StringConverter<>() {
+			@Override
+			public String toString(CollectionInfo collection) {
+				return collection == null ? "" : collection.name();
+			}
+
+			@Override
+			public CollectionInfo fromString(String string) {
+				return new CollectionInfo(string, "");
+			}
+		}));
 	}
 
 	private void setUpButtons() {
@@ -94,24 +104,23 @@ public class SaveRequestDialog {
 	}
 
 	private void saveRequest() {
-		collectionController.addRequestToCollection(
-				collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()),
-				requestController.getActiveRequest());
+		//		collectionController.addRequestToCollection(
+		//				collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()),
+		//				requestController.getActiveRequest());
 		stage.close();
 	}
 
 	private void createNewCollection() {
-		// Add an empty string to the ListView for the user to edit
-		collectionList.getItems().add("");
-		collectionList.getSelectionModel().selectLast(); // Focus the new entry for immediate editing
-		collectionList.edit(collectionList.getItems().size() - 1); // Explicitly start editing the newly added item
+		collectionList.getItems().add(new CollectionInfo("", ""));
+		// Start editing the new collections name
+		collectionList.getSelectionModel().selectLast();
+		collectionList.edit(collectionList.getItems().size() - 1);
 	}
 
-	public record CollectionInfo(String name, String id){
+	public record CollectionInfo(String name, String id) {
 		@Override
 		public String toString() {
 			return name;
 		}
 	}
-
 }

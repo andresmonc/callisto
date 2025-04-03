@@ -96,7 +96,7 @@ public class RequestController {
 		log.info("updating headers");
 	}
 
-	public ApiRequest getActiveRequest(){
+	public ApiRequest getActiveRequest() {
 		return apiRequestService.getRequest(activeRequestId);
 	}
 }
