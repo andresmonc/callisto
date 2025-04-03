@@ -99,7 +99,6 @@ public class SaveRequestDialog {
 			public String toString(CollectionInfo collection) {
 				return collection == null ? "" : collection.name();
 			}
-
 			@Override
 			public CollectionInfo fromString(String name) {
 				Collection collection = collectionController.addCollection(name);
@@ -118,15 +117,14 @@ public class SaveRequestDialog {
 	}
 
 	private void saveRequest() {
-		//		collectionController.addRequestToCollection(
-		//				collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()),
-		//				requestController.getActiveRequest());
+		collectionController.addRequestToCollection(
+				collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()).id,
+				requestController.getActiveRequest());
 		stage.close();
 	}
 
 	private void createNewCollection() {
 		collectionList.getItems().add(new CollectionInfo("", ""));
-		// Start editing the new collections name
 		collectionList.getSelectionModel().selectLast();
 		collectionList.edit(collectionList.getItems().size() - 1);
 	}
