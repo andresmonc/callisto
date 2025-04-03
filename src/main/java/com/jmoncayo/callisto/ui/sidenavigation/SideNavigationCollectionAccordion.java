@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component;
 public class SideNavigationCollectionAccordion extends Accordion {
 
 	public SideNavigationCollectionAccordion(CollectionController collectionController) {
-		List<Collection> collections = collectionController.getCollections();
+		List<Collection> collections = collectionController.getAllCollections();
 		List<TitledPane> panes = new ArrayList<>(collections.size());
 		for (Collection collection : collections) {
 			TitledPane collectionPane = new TitledPane(collection.getName(), new StackPane());
