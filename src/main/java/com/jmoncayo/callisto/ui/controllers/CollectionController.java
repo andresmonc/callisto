@@ -3,6 +3,9 @@ package com.jmoncayo.callisto.ui.controllers;
 import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.collection.CollectionService;
 import java.util.List;
+
+import com.jmoncayo.callisto.collection.Subfolder;
+import com.jmoncayo.callisto.requests.ApiRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,23 +13,52 @@ import org.springframework.stereotype.Component;
 public class CollectionController {
 
 	private final CollectionService collectionService;
-	private final RequestController requestController;
 
 	@Autowired
-	public CollectionController(CollectionService collectionService, RequestController requestController) {
+	public CollectionController(CollectionService collectionService) {
 		this.collectionService = collectionService;
-		this.requestController = requestController;
 	}
 
-	public List<Collection> getCollections() {
-		return collectionService.getCollections();
+	public List<Collection> getAllCollections() {
+		return collectionService.getAllCollections();
 	}
 
 	public Collection addCollection(String name) {
 		return collectionService.createCollection(name);
 	}
 
-	public void addRequestToCollection(String collectionName) {
-		collectionService.addRequestToCollection(collectionName);
+	public Collection createCollection(String name) {
+		return collectionService.createCollection(name);
+	}
+
+	public void renameCollection(String collectionId, String newName) {
+		collectionService.renameCollection(collectionId, newName);
+	}
+
+	public void deleteCollection(String collectionId) {
+		collectionService.deleteCollection(collectionId);
+	}
+	public Subfolder addSubfolderToCollection(String collectionId, String subfolderName) {
+		return collectionService.addSubfolder(collectionId, subfolderName);
+	}
+
+	public Subfolder addSubfolderToSubfolder(String parentSubfolderId, String subfolderName) {
+		return collectionService.addSubfolderToSubfolder(parentSubfolderId, subfolderName);
+	}
+
+	public void deleteSubfolder(String subfolderId) {
+		collectionService.deleteSubfolder(subfolderId);
+	}
+
+	public void addRequestToCollection(String collectionId, ApiRequest request) {
+		collectionService.addRequestToCollection(collectionId, request);
+	}
+
+	public void addRequestToSubfolder(String subfolderId, ApiRequest request) {
+		collectionService.addRequestToSubfolder(subfolderId, request);
+	}
+
+	public List<Subfolder> getSubfolders(String parentId) {
+		return collectionService.getSubfolders(parentId);
 	}
 }
