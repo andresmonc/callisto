@@ -36,43 +36,38 @@ public class SaveRequestDialog {
 	}
 
 	public void open(Stage owner) {
-		// Create and configure the Stage here
-		stage = new Stage();
-		stage.initModality(Modality.WINDOW_MODAL);
-		stage.initOwner(owner);
-		stage.setTitle("Save Request To Collection");
+		stage = createStage(owner);
+		VBox layout = createLayout();
+		setUpCollectionList();
+		setUpButtons();
+		stage.setScene(new Scene(layout, 400, 300));
+		stage.showAndWait();
+	}
 
-		// Create the save/cancel buttons
+	private Stage createStage(Stage owner) {
+		Stage newStage = new Stage();
+		newStage.initModality(Modality.WINDOW_MODAL);
+		newStage.initOwner(owner);
+		newStage.setTitle("Save Request To Collection");
+		return newStage;
+	}
+
+	private VBox createLayout() {
 		Button saveButton = new Button("Save");
-		saveButton.setOnAction(event -> {
-			collectionController.addRequestToCollection(collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()),requestController.getActiveRequest());
-			stage.close();
-		});
-
 		Button cancelButton = new Button("Cancel");
-		cancelButton.setOnAction(event -> stage.close());
-
-		// Create the "New Collection" button
 		Button newCollectionButton = new Button("New Collection");
-		newCollectionButton.setOnAction(event -> {
-			// Add an empty string to the ListView for the user to edit
-			collectionList.getItems().add("");
-			collectionList.getSelectionModel().selectLast(); // Focus the new entry for immediate editing
-			collectionList.edit(collectionList.getItems().size() - 1); // Explicitly start editing the newly added item
-		});
-
-		// Layout and scene setup
-		VBox layout = new VBox(
-				10,
+		saveButton.setOnAction(event -> saveRequest());
+		cancelButton.setOnAction(event -> stage.close());
+		newCollectionButton.setOnAction(event -> createNewCollection());
+		return new VBox(10,
 				new Label("Select a collection or create a new one:"),
 				collectionList,
-				newCollectionButton, // Add the "New Collection" button
+				newCollectionButton,
 				saveButton,
 				cancelButton);
-		layout.setPadding(new Insets(10));
-		stage.setScene(new Scene(layout, 400, 300));
+	}
 
-		// Load collections and show the dialog
+	private void setUpCollectionList() {
 		List<String> collections = collectionController.getAllCollections().stream()
 				.map(Collection::getName)
 				.toList();
@@ -88,7 +83,36 @@ public class SaveRequestDialog {
 		});
 		collectionList.setEditable(true);
 		collectionList.setCellFactory(TextFieldListCell.forListView());
-		stage.showAndWait();
+	}
+
+	private void setUpButtons() {
+		Button saveButton = new Button("Save");
+		Button cancelButton = new Button("Cancel");
+		Button newCollectionButton = new Button("New Collection");
+		saveButton.setOnAction(event -> saveRequest());
+		cancelButton.setOnAction(event -> stage.close());
+		newCollectionButton.setOnAction(event -> createNewCollection());
+	}
+
+	private void saveRequest() {
+		collectionController.addRequestToCollection(
+				collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()),
+				requestController.getActiveRequest());
+		stage.close();
+	}
+
+	private void createNewCollection() {
+		// Add an empty string to the ListView for the user to edit
+		collectionList.getItems().add("");
+		collectionList.getSelectionModel().selectLast(); // Focus the new entry for immediate editing
+		collectionList.edit(collectionList.getItems().size() - 1); // Explicitly start editing the newly added item
+	}
+
+	public record CollectionInfo(String name, String id){
+		@Override
+		public String toString() {
+			return name;
+		}
 	}
 
 }
