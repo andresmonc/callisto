@@ -1,11 +1,13 @@
 package com.jmoncayo.callisto.collection;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
-import java.util.List;
-import java.util.UUID;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.extern.jackson.Jacksonized;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 @Getter
 @Builder(toBuilder = true)
@@ -13,8 +15,9 @@ import lombok.extern.jackson.Jacksonized;
 public class Collection {
 	@Builder.Default
 	private final String id = UUID.randomUUID().toString();
-
 	private final String name;
-	private final List<Subfolder> subfolders;
-	private final List<ApiRequest> requests;
+	@Builder.Default
+	private final List<Subfolder> subfolders = new ArrayList<>();
+	@Builder.Default
+	private final List<ApiRequest> requests = new ArrayList<>();
 }
