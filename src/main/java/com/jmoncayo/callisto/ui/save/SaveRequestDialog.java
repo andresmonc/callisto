@@ -3,7 +3,6 @@ package com.jmoncayo.callisto.ui.save;
 import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
-import java.util.List;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -17,6 +16,8 @@ import javafx.util.StringConverter;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Log4j2
 public class SaveRequestDialog {
@@ -24,13 +25,15 @@ public class SaveRequestDialog {
 	private final TextField newCollectionField;
 	private final CollectionController collectionController;
 	private final RequestController requestController;
+	private final CollectionInfoStringConverter converter;
 	private Stage stage;
 	private CollectionInfo selectedCollection;
 
 	// Inject the service to fetch collections
-	public SaveRequestDialog(CollectionController collectionController, RequestController requestController) {
+	public SaveRequestDialog(CollectionController collectionController, RequestController requestController,CollectionInfoStringConverter converter) {
 		this.collectionController = collectionController;
 		this.requestController = requestController;
+		this.converter = converter;
 		collectionList = new ListView<>();
 		newCollectionField = new TextField();
 		newCollectionField.setPromptText("New collection/subfolder name");
@@ -78,15 +81,15 @@ public class SaveRequestDialog {
 		collectionList.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
 			if (newValue != null) {
 				// Handle item click (when selection changes to a new item)
-				log.info("Selected: " + newValue.name());
-				log.info("Selected: " + newValue.id());
+				log.info("Selected: " + newValue.getName());
+				log.info("Selected: " + newValue.getId());
 				selectedCollection = newValue;
 				// You can trigger any actions you need here based on the selected item
 			}
 		});
 
 		collectionList.setOnEditCommit(event -> {
-			String newValue = event.getNewValue().name;
+			String newValue = event.getNewValue().getName();
 			if (newValue == null || newValue.isEmpty()) {
 				collectionList.getItems().remove(event.getIndex());
 				return;
@@ -94,17 +97,7 @@ public class SaveRequestDialog {
 			collectionList.getItems().set(event.getIndex(), event.getNewValue());
 		});
 		collectionList.setEditable(true);
-		collectionList.setCellFactory(listView -> new TextFieldListCell<>(new StringConverter<>() {
-			@Override
-			public String toString(CollectionInfo collection) {
-				return collection == null ? "" : collection.name();
-			}
-			@Override
-			public CollectionInfo fromString(String name) {
-				Collection collection = collectionController.addCollection(name);
-				return new CollectionInfo(name, collection.getId());
-			}
-		}));
+		collectionList.setCellFactory(listView -> new TextFieldListCell<>(converter));
 	}
 
 	private void setUpButtons() {
@@ -118,7 +111,7 @@ public class SaveRequestDialog {
 
 	private void saveRequest() {
 		collectionController.addRequestToCollection(
-				collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()).id,
+				collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()).getId(),
 				requestController.getActiveRequest());
 		stage.close();
 	}
@@ -129,10 +122,4 @@ public class SaveRequestDialog {
 		collectionList.edit(collectionList.getItems().size() - 1);
 	}
 
-	public record CollectionInfo(String name, String id) {
-		@Override
-		public String toString() {
-			return name;
-		}
-	}
 }
