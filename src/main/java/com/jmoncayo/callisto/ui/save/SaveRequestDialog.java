@@ -3,6 +3,8 @@ package com.jmoncayo.callisto.ui.save;
 import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import java.util.List;
+
+import com.jmoncayo.callisto.ui.controllers.RequestController;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -20,11 +22,14 @@ public class SaveRequestDialog {
 	private final ListView<String> collectionList;
 	private final TextField newCollectionField;
 	private final CollectionController collectionController;
+	private final RequestController requestController;
 	private Stage stage;
+	private String selectedCollection;
 
 	// Inject the service to fetch collections
-	public SaveRequestDialog(CollectionController collectionController) {
+	public SaveRequestDialog(CollectionController collectionController, RequestController requestController) {
 		this.collectionController = collectionController;
+		this.requestController = requestController;
 		collectionList = new ListView<>();
 		newCollectionField = new TextField();
 		newCollectionField.setPromptText("New collection/subfolder name");
@@ -40,7 +45,7 @@ public class SaveRequestDialog {
 		// Create the save/cancel buttons
 		Button saveButton = new Button("Save");
 		saveButton.setOnAction(event -> {
-			collectionController.addRequestToCollection(collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()));
+			collectionController.addRequestToCollection(collectionList.getItems().get(collectionList.getSelectionModel().getSelectedIndex()),requestController.getActiveRequest());
 			stage.close();
 		});
 
@@ -68,7 +73,7 @@ public class SaveRequestDialog {
 		stage.setScene(new Scene(layout, 400, 300));
 
 		// Load collections and show the dialog
-		List<String> collections = collectionController.getCollections().stream()
+		List<String> collections = collectionController.getAllCollections().stream()
 				.map(Collection::getName)
 				.toList();
 		collectionList.getItems().setAll(collections);
@@ -85,4 +90,5 @@ public class SaveRequestDialog {
 		collectionList.setCellFactory(TextFieldListCell.forListView());
 		stage.showAndWait();
 	}
+
 }
