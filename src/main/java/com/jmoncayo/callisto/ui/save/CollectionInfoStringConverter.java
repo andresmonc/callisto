@@ -13,8 +13,10 @@ import org.springframework.stereotype.Component;
 public class CollectionInfoStringConverter extends StringConverter<CollectionInfo> {
 
 	private final CollectionController collectionController;
+
 	@Setter
 	private boolean isSubfolder;
+
 	@Setter
 	private String parentCollectionId;
 
@@ -40,7 +42,4 @@ public class CollectionInfoStringConverter extends StringConverter<CollectionInf
 		}
 		return new CollectionInfo(name, collection.getId());
 	}
-
-
-
 }

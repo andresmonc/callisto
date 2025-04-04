@@ -2,10 +2,9 @@ package com.jmoncayo.callisto.collection;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.storage.Loadable;
+import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @Log4j2
@@ -101,12 +100,14 @@ public class CollectionService implements Loadable<Collection> {
 	}
 
 	public void addRequestToSubfolder(String subfolderId, ApiRequest request) {
-		Collection subfolder = collectionRepository.findById(subfolderId)
+		Collection subfolder = collectionRepository
+				.findById(subfolderId)
 				.orElseThrow(() -> new RuntimeException("Subfolder not found: " + subfolderId));
 		subfolder.getRequests().add(request);
 		collectionRepository.save(subfolder);
 		log.info("Added request to subfolder " + subfolderId);
 	}
+
 	private Collection findSubfolderById(String subfolderId) {
 		for (Collection collection : collectionRepository.findAll()) {
 			for (Collection subfolder : collection.getSubfolders()) {

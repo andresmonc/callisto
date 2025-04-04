@@ -96,7 +96,9 @@ public class SaveRequestDialog {
 		collectionTree.setCellFactory(param -> new TextFieldTreeCell<>(converter) {});
 
 		collectionTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue != null && newValue.getValue() != null && !newValue.getValue().getName().isEmpty()) {
+			if (newValue != null
+					&& newValue.getValue() != null
+					&& !newValue.getValue().getName().isEmpty()) {
 				// Handle item click
 				log.info("Selected: " + newValue.getValue().getName());
 				log.info("Selected: " + newValue.getValue().getId());
