@@ -74,7 +74,7 @@ public class RequestsViewer extends AnchorPane {
 		return tab;
 	}
 
-	private Tab newTab(ApiRequest request) {
+	public Tab newTab(ApiRequest request) {
 		return createTab(request);
 	}
 

@@ -10,12 +10,12 @@ public class SideNavigationCollectionView extends VBox {
 	public SideNavigationCollectionView(
 			CollectionController collectionController,
 			SideNavigationCollectionControls sideNavigationCollectionControls,
-			SideNavigationCollectionAccordion sideNavigationCollectionAccordion) {
+			SideNavigationCollectionTreeView sideNavigationCollectionAccordion) {
 		this.getChildren().add(sideNavigationCollectionControls);
 		this.getChildren().add(sideNavigationCollectionAccordion);
 		sideNavigationCollectionControls.getNewCollectionButton().setOnAction(event -> {
 			Collection collection = collectionController.addCollection("Untitled Collection");
-			sideNavigationCollectionAccordion.addNewCollection(collection);
+//			sideNavigationCollectionAccordion.addNewCollection(collection);
 		});
 	}
 }
