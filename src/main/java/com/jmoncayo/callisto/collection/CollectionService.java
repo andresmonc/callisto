@@ -2,9 +2,10 @@ package com.jmoncayo.callisto.collection;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.storage.Loadable;
-import java.util.List;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Log4j2
@@ -76,12 +77,16 @@ public class CollectionService implements Loadable<Collection> {
 	}
 
 	public void deleteSubfolder(String subfolderId) {
-		Collection collection = collectionRepository
-				.findBySubfolderId(subfolderId)
-				.orElseThrow(() -> new RuntimeException("Subfolder not found"));
-		Collection subfolder = findSubfolderById(subfolderId);
-		collection.getSubfolders().remove(subfolder);
-		collectionRepository.save(collection);
+		Collection parentCollection = collectionRepository
+				.findParentById(subfolderId)
+				.orElseThrow(() -> new RuntimeException("Parent collection not found for subfolder: " + subfolderId));
+		Collection subfolderToDelete = parentCollection.getSubfolders().stream()
+				.filter(subfolder -> subfolder.getId().equals(subfolderId))
+				.findFirst()
+				.orElseThrow(() -> new RuntimeException("Subfolder not found in parent"));
+		parentCollection.getSubfolders().remove(subfolderToDelete);
+		collectionRepository.save(parentCollection);
+		collectionRepository.delete(subfolderToDelete);
 		log.info("Deleted subfolder: " + subfolderId);
 	}
 
@@ -96,12 +101,12 @@ public class CollectionService implements Loadable<Collection> {
 	}
 
 	public void addRequestToSubfolder(String subfolderId, ApiRequest request) {
-		Collection subfolder = findSubfolderById(subfolderId);
-
+		Collection subfolder = collectionRepository.findById(subfolderId)
+				.orElseThrow(() -> new RuntimeException("Subfolder not found: " + subfolderId));
 		subfolder.getRequests().add(request);
+		collectionRepository.save(subfolder);
 		log.info("Added request to subfolder " + subfolderId);
 	}
-
 	private Collection findSubfolderById(String subfolderId) {
 		for (Collection collection : collectionRepository.findAll()) {
 			for (Collection subfolder : collection.getSubfolders()) {

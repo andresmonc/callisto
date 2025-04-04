@@ -86,14 +86,8 @@ public class SaveRequestDialog {
 		for (CollectionInfo collection : collections) {
 			TreeItem<CollectionInfo> collectionItem = new TreeItem<>(collection);
 			root.getChildren().add(collectionItem);
-
-			// Add subfolders as children if available
-			List<Collection> subfolders = collectionController.getSubfolders(collection.getId());
-			for (Collection subfolder : subfolders) {
-				TreeItem<CollectionInfo> subfolderItem =
-						new TreeItem<>(new CollectionInfo(subfolder.getName(), subfolder.getId()));
-				collectionItem.getChildren().add(subfolderItem);
-			}
+			// Recursively add subfolders
+			addSubfoldersRecursively(collectionItem, collection.getId());
 		}
 
 		collectionTree.setRoot(root);
@@ -102,11 +96,14 @@ public class SaveRequestDialog {
 		collectionTree.setCellFactory(param -> new TextFieldTreeCell<>(converter) {});
 
 		collectionTree.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-			if (newValue != null && newValue.getValue() != null) {
+			if (newValue != null && newValue.getValue() != null && !newValue.getValue().getName().isEmpty()) {
 				// Handle item click
 				log.info("Selected: " + newValue.getValue().getName());
 				log.info("Selected: " + newValue.getValue().getId());
 				selectedCollection = newValue.getValue();
+				// Let the converter know we're going to be a subfolder
+				converter.setSubfolder(true);
+				converter.setParentCollectionId(selectedCollection.getId());
 			}
 		});
 	}
@@ -135,6 +132,7 @@ public class SaveRequestDialog {
 	}
 
 	private void createNewCollection() {
+		converter.setSubfolder(false);
 		// Create a new collection or subfolder
 		CollectionInfo collectionInfo = new CollectionInfo("", "");
 		collectionInfo.setSubFolder(false);
@@ -151,5 +149,15 @@ public class SaveRequestDialog {
 		collectionTree.getSelectionModel().getSelectedItem().getChildren().add(newItem);
 		collectionTree.getSelectionModel().select(newItem);
 		collectionTree.edit(newItem);
+	}
+
+	private void addSubfoldersRecursively(TreeItem<CollectionInfo> parentItem, String parentId) {
+		List<Collection> subfolders = collectionController.getSubfolders(parentId);
+		for (Collection subfolder : subfolders) {
+			CollectionInfo info = new CollectionInfo(subfolder.getName(), subfolder.getId());
+			TreeItem<CollectionInfo> subfolderItem = new TreeItem<>(info);
+			parentItem.getChildren().add(subfolderItem);
+			addSubfoldersRecursively(subfolderItem, subfolder.getId());
+		}
 	}
 }
