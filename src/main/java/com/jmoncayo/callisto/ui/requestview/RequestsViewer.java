@@ -2,8 +2,8 @@ package com.jmoncayo.callisto.ui.requestview;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
-import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
+import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;

@@ -7,6 +7,7 @@ import com.jmoncayo.callisto.requests.Parameter;
 import com.jmoncayo.callisto.ui.customcomponents.TableEntry;
 import com.jmoncayo.callisto.ui.events.RequestRenamedEvent;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
+import java.util.List;
 import javafx.collections.ObservableList;
 import lombok.Getter;
 import lombok.extern.log4j.Log4j2;
@@ -14,8 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Mono;
-
-import java.util.List;
 
 @Component
 @Log4j2

@@ -6,10 +6,10 @@ import org.springframework.context.ApplicationEvent;
 
 @Getter
 public class NewCollectionEvent extends ApplicationEvent {
-    private final Collection collection;
+	private final Collection collection;
 
-    public NewCollectionEvent(Object source, Collection collection) {
-        super(source);
-        this.collection = collection;
-    }
+	public NewCollectionEvent(Object source, Collection collection) {
+		super(source);
+		this.collection = collection;
+	}
 }
