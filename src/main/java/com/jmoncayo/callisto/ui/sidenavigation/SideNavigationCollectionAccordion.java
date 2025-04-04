@@ -19,7 +19,6 @@ public class SideNavigationCollectionAccordion extends Accordion {
 		for (Collection collection : collections) {
 			VBox contentBox = new VBox(8); // spacing between subfolder items
 			buildSubfolderTree(contentBox, collection.getSubfolders(), 0);
-
 			TitledPane collectionPane = new TitledPane(collection.getName(), contentBox);
 			this.getPanes().add(collectionPane);
 		}
@@ -31,10 +30,7 @@ public class SideNavigationCollectionAccordion extends Accordion {
 			row.setPadding(new Insets(0, 0, 0, depth * 15)); // indent based on depth
 			Label label = new Label(subfolder.getName());
 			row.getChildren().add(label);
-
 			parentBox.getChildren().add(row);
-
-			// Recursively build children
 			buildSubfolderTree(parentBox, subfolder.getSubfolders(), depth + 1);
 		}
 	}
@@ -42,7 +38,6 @@ public class SideNavigationCollectionAccordion extends Accordion {
 	public void addNewCollection(Collection collection) {
 		VBox contentBox = new VBox(8);
 		buildSubfolderTree(contentBox, collection.getSubfolders(), 0);
-
 		TitledPane pane = new TitledPane(collection.getName(), contentBox);
 		this.getPanes().add(pane);
 	}
