@@ -5,6 +5,7 @@ import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
 import com.jmoncayo.callisto.ui.events.NewCollectionEvent;
+import com.jmoncayo.callisto.ui.events.RequestAddedToCollectionEvent;
 import com.jmoncayo.callisto.ui.events.RequestRenamedEvent;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
@@ -112,6 +113,23 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 		log.info("new collection added to sidenav");
 	}
 
+	@EventListener(RequestAddedToCollectionEvent.class)
+	public void onRequestAddedToCollection(RequestAddedToCollectionEvent event) {
+		log.info("Adding request {} to collection {}", event.getRequest().getName(), event.getCollectionId());
+
+		// Find the collection node
+		TreeItem<CollectionTreeNode> parentNode = findTreeItemByCollectionId(getRoot(), event.getCollectionId());
+		if (parentNode != null) {
+			ApiRequest request = event.getRequest();
+			TreeItem<CollectionTreeNode> newRequestItem =
+					new TreeItem<>(new CollectionTreeNode(request.getName(), null, request.getId()));
+			parentNode.getChildren().add(newRequestItem);
+			parentNode.setExpanded(true); // optional: expand so user sees it right away
+		} else {
+			log.warn("Collection with ID {} not found in tree", event.getCollectionId());
+		}
+	}
+
 	private TreeItem<CollectionTreeNode> findRequestTreeItem(TreeItem<CollectionTreeNode> node, String requestId) {
 		if (node == null || node.getValue() == null) return null;
 		CollectionTreeNode value = node.getValue();
@@ -121,6 +139,18 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 		for (TreeItem<CollectionTreeNode> child : node.getChildren()) {
 			TreeItem<CollectionTreeNode> result = findRequestTreeItem(child, requestId);
 			if (result != null) return result;
+		}
+		return null;
+	}
+
+	private TreeItem<CollectionTreeNode> findTreeItemByCollectionId(
+			TreeItem<CollectionTreeNode> current, String collectionId) {
+		if (current.getValue() != null && collectionId.equals(current.getValue().getCollectionId())) {
+			return current;
+		}
+		for (TreeItem<CollectionTreeNode> child : current.getChildren()) {
+			TreeItem<CollectionTreeNode> match = findTreeItemByCollectionId(child, collectionId);
+			if (match != null) return match;
 		}
 		return null;
 	}

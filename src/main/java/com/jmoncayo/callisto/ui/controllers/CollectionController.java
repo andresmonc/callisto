@@ -4,6 +4,7 @@ import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.collection.CollectionService;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.events.NewCollectionEvent;
+import com.jmoncayo.callisto.ui.events.RequestAddedToCollectionEvent;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
@@ -57,6 +58,7 @@ public class CollectionController {
 
 	public void addRequestToCollection(String collectionId, ApiRequest request) {
 		collectionService.addRequestToCollection(collectionId, request);
+		eventPublisher.publishEvent(new RequestAddedToCollectionEvent(this, request, collectionId));
 	}
 
 	public void addRequestToSubfolder(String subfolderId, ApiRequest request) {
