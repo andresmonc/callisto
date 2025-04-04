@@ -96,7 +96,7 @@ public class CollectionService implements Loadable<Collection> {
 
 		collection.getRequests().add(request);
 		collectionRepository.save(collection);
-		log.info("Added request" + request.getName() + " to collection " + collection.getName());
+		log.info("Added request " + request.getName() + " to collection " + collection.getName());
 	}
 
 	public void addRequestToSubfolder(String subfolderId, ApiRequest request) {
