@@ -2,16 +2,12 @@ package com.jmoncayo.callisto.ui.sidenavigation;
 
 import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
-import java.util.ArrayList;
 import java.util.List;
-
 import javafx.geometry.Insets;
 import javafx.scene.control.Accordion;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import org.springframework.stereotype.Component;
 
@@ -51,4 +47,3 @@ public class SideNavigationCollectionAccordion extends Accordion {
 		this.getPanes().add(pane);
 	}
 }
-
