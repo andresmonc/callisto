@@ -107,9 +107,9 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 
 	@EventListener(NewCollectionEvent.class)
 	public void onApplicationEvent(NewCollectionEvent requestRenamedEvent) {
-		createCollectionTreeItem(requestRenamedEvent.getCollection());
+		TreeItem<CollectionTreeNode> collectionTreeItem = createCollectionTreeItem(requestRenamedEvent.getCollection());
+		getRoot().getChildren().add(collectionTreeItem);
 		log.info("new collection added to sidenav");
-		// todo: fix this
 	}
 
 	private TreeItem<CollectionTreeNode> findRequestTreeItem(TreeItem<CollectionTreeNode> node, String requestId) {
