@@ -3,17 +3,21 @@ package com.jmoncayo.callisto.ui.requestview;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
+import com.jmoncayo.callisto.ui.sidenavigation.LaunchRequest;
 import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.layout.AnchorPane;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationListener;
 import org.springframework.stereotype.Component;
 
 @Component
-public class RequestsViewer extends AnchorPane {
+@Log4j2
+public class RequestsViewer extends AnchorPane implements ApplicationListener<LaunchRequest> {
 	private final ObjectFactory<RequestView> requestViewObjectFactory;
 	private final TabPane tabs;
 	private final RequestController requestController;
@@ -67,10 +71,10 @@ public class RequestsViewer extends AnchorPane {
 		// Add listener to handle when the tab becomes active
 		tab.setOnSelectionChanged(event -> {
 			if (tab.isSelected()) {
-				// Tab is selected (active)
 				requestController.updateCurrentRequest(request.getId());
 			}
 		});
+		tab.setId(request.getId());
 		return tab;
 	}
 
@@ -81,5 +85,27 @@ public class RequestsViewer extends AnchorPane {
 	private Tab emptyTab() {
 		ApiRequest request = requestController.createRequest();
 		return createTab(request);
+	}
+
+	@Override
+	public void onApplicationEvent(LaunchRequest event) {
+		String requestId = event.getRequestId();
+		if (hasTabWithId(requestId)) {
+			log.info("A tab for this request is already opened!");
+			return;
+		}
+		Tab tab = createTab(requestController.getRequest(requestId));
+		requestController.openRequest(requestId);
+		tabs.getTabs().add(tab);
+		tabs.getSelectionModel().select(tab);
+	}
+
+	public boolean hasTabWithId(String targetId) {
+		for (Tab tab : tabs.getTabs()) {
+			if (targetId.equals(tab.getId())) {
+				return true;
+			}
+		}
+		return false;
 	}
 }

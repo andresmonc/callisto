@@ -157,4 +157,11 @@ public class ApiRequestService {
 		requestRepository.update(
 				request.toBuilder().parameters(requestParameters).build());
 	}
+
+	public void openRequest(String requestId) {
+		ApiRequest request = requestRepository.getApiRequest(requestId);
+		if (request != null) {
+			requestRepository.update(request.toBuilder().active(true).build());
+		}
+	}
 }

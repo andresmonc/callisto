@@ -99,4 +99,12 @@ public class RequestController {
 	public ApiRequest getActiveRequest() {
 		return apiRequestService.getRequest(activeRequestId);
 	}
+
+	public ApiRequest getRequest(String requestId) {
+		return apiRequestService.getRequest(requestId);
+	}
+
+	public void openRequest(String requestId) {
+		apiRequestService.openRequest(requestId);
+	}
 }
