@@ -4,17 +4,22 @@ import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.collection.CollectionService;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import java.util.List;
+
+import com.jmoncayo.callisto.ui.events.NewCollectionEvent;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CollectionController {
 
 	private final CollectionService collectionService;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Autowired
-	public CollectionController(CollectionService collectionService) {
+	public CollectionController(CollectionService collectionService, ApplicationEventPublisher eventPublisher) {
 		this.collectionService = collectionService;
+		this.eventPublisher = eventPublisher;
 	}
 
 	public List<Collection> getAllCollections() {
@@ -22,7 +27,9 @@ public class CollectionController {
 	}
 
 	public Collection addCollection(String name) {
-		return collectionService.createCollection(name);
+		Collection collection = collectionService.createCollection(name);
+		eventPublisher.publishEvent(new NewCollectionEvent(this, collection));
+		return collection;
 	}
 
 	public Collection createCollection(String name) {

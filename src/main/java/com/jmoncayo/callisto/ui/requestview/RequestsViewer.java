@@ -3,7 +3,7 @@ package com.jmoncayo.callisto.ui.requestview;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
-import com.jmoncayo.callisto.ui.sidenavigation.LaunchRequest;
+import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
 import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
-public class RequestsViewer extends AnchorPane implements ApplicationListener<LaunchRequest> {
+public class RequestsViewer extends AnchorPane implements ApplicationListener<LaunchRequestEvent> {
 	private final ObjectFactory<RequestView> requestViewObjectFactory;
 	private final TabPane tabs;
 	private final RequestController requestController;
@@ -88,7 +88,7 @@ public class RequestsViewer extends AnchorPane implements ApplicationListener<La
 	}
 
 	@Override
-	public void onApplicationEvent(LaunchRequest event) {
+	public void onApplicationEvent(LaunchRequestEvent event) {
 		String requestId = event.getRequestId();
 		if (hasTabWithId(requestId)) {
 			log.info("A tab for this request is already opened!");

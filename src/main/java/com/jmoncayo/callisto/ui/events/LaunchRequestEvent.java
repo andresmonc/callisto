@@ -1,13 +1,13 @@
-package com.jmoncayo.callisto.ui.sidenavigation;
+package com.jmoncayo.callisto.ui.events;
 
 import lombok.Getter;
 import org.springframework.context.ApplicationEvent;
 
 @Getter
-public class LaunchRequest extends ApplicationEvent {
+public class LaunchRequestEvent extends ApplicationEvent {
 	private final String requestId;
 
-	public LaunchRequest(Object source, String requestId) {
+	public LaunchRequestEvent(Object source, String requestId) {
 		super(source);
 		this.requestId = requestId;
 	}
