@@ -40,6 +40,7 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 		}
 		this.setRoot(root);
 		this.setShowRoot(false);
+		this.setEditable(true);
 		this.setCellFactory(tv -> new TreeCell<>() {
 			@Override
 			protected void updateItem(CollectionTreeNode item, boolean empty) {
