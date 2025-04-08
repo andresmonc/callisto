@@ -15,7 +15,8 @@ public class MainController {
 	private BorderPane root;
 
 	@Autowired
-	public MainController(Toolbar toolbar, SideNavigationPanel sideNav, SplitPane splitPane, RequestCollectionViewer requestViewer) {
+	public MainController(
+			Toolbar toolbar, SideNavigationPanel sideNav, SplitPane splitPane, RequestCollectionViewer requestViewer) {
 		// Create the main content container (StackPane for dynamic view switching)
 		contentStack = new StackPane();
 		contentStack.setPrefWidth(Double.MAX_VALUE); // nothing

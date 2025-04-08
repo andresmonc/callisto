@@ -104,7 +104,8 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 						// TODO: Expand collection or show info
 					}
 				} else if (event.getButton() == MouseButton.SECONDARY) {
-					TreeItem<CollectionTreeNode> clickedItem = this.getSelectionModel().getSelectedItem();
+					TreeItem<CollectionTreeNode> clickedItem =
+							this.getSelectionModel().getSelectedItem();
 					if (clickedItem != null) {
 						// Show context menu at the position of the mouse click
 						setMenuItemContexts(clickedItem);
