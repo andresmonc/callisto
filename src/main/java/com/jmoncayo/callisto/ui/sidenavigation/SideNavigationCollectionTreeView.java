@@ -3,13 +3,18 @@ package com.jmoncayo.callisto.ui.sidenavigation;
 import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
+import com.jmoncayo.callisto.ui.events.DeleteCollectionEvent;
+import com.jmoncayo.callisto.ui.events.DeleteRequestEvent;
 import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
 import com.jmoncayo.callisto.ui.events.NewCollectionEvent;
 import com.jmoncayo.callisto.ui.events.RequestAddedToCollectionEvent;
 import com.jmoncayo.callisto.ui.events.RequestRenamedEvent;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
+import javafx.scene.input.MouseButton;
 import lombok.extern.log4j.Log4j2;
 import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.context.ApplicationEventPublisher;
@@ -22,12 +27,35 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 
 	private final CollectionController collectionController;
 	private final ApplicationEventPublisher eventPublisher;
+	private ContextMenu contextMenu;
+	private MenuItem deleteMenuItem;
 
 	public SideNavigationCollectionTreeView(
 			CollectionController collectionController, ApplicationEventPublisher eventPublisher) {
 		this.collectionController = collectionController;
 		this.eventPublisher = eventPublisher;
 		initialize();
+		createContextMenu();
+	}
+
+	private void createContextMenu() {
+		ContextMenu contextMenu = new ContextMenu();
+		this.deleteMenuItem = new MenuItem("Delete");
+		deleteMenuItem.setOnAction(event -> {
+			CollectionTreeNode userData = (CollectionTreeNode) deleteMenuItem.getUserData();
+			if (userData.isRequest()) {
+				eventPublisher.publishEvent(new DeleteRequestEvent(this, userData.getRequestId()));
+			} else {
+				eventPublisher.publishEvent(new DeleteCollectionEvent(this, userData.getCollectionId()));
+			}
+			log.info("deleting request");
+		});
+		contextMenu.getItems().addAll(deleteMenuItem);
+		this.contextMenu = contextMenu;
+	}
+
+	private void setMenuItemContexts(TreeItem<CollectionTreeNode> clickedItem) {
+		this.deleteMenuItem.setUserData(clickedItem);
 	}
 
 	private void initialize() {
@@ -65,14 +93,23 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 		this.setOnMouseClicked(event -> {
 			TreeItem<CollectionTreeNode> selected = this.getSelectionModel().getSelectedItem();
 			if (selected != null) {
-				CollectionTreeNode node = selected.getValue();
-				if (node.isRequest()) {
-					log.info("Clicked request: " + node.getRequestId());
-					eventPublisher.publishEvent(new LaunchRequestEvent(this, node.getRequestId()));
-					// TODO: Open or trigger request
-				} else if (node.getCollectionId() != null) {
-					log.info("Clicked collection: " + node.getCollectionId());
-					// TODO: Expand collection or show info
+				if (event.getButton() == MouseButton.PRIMARY) {
+					CollectionTreeNode node = selected.getValue();
+					if (node.isRequest()) {
+						log.info("Clicked request: " + node.getRequestId());
+						eventPublisher.publishEvent(new LaunchRequestEvent(this, node.getRequestId()));
+						// TODO: Open or trigger request
+					} else if (node.getCollectionId() != null) {
+						log.info("Clicked collection: " + node.getCollectionId());
+						// TODO: Expand collection or show info
+					}
+				} else if (event.getButton() == MouseButton.SECONDARY) {
+					TreeItem<CollectionTreeNode> clickedItem = this.getSelectionModel().getSelectedItem();
+					if (clickedItem != null) {
+						// Show context menu at the position of the mouse click
+						setMenuItemContexts(clickedItem);
+						contextMenu.show(this, event.getScreenX(), event.getScreenY());
+					}
 				}
 			}
 		});

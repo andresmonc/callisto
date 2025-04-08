@@ -22,7 +22,7 @@ public class StageInitializer implements ApplicationListener<StageReadyEvent> {
 	@Override
 	public void onApplicationEvent(StageReadyEvent event) {
 		Stage stage = event.getStage();
-		Scene scene = new Scene(mainController.getRoot(), 800, 600);
+		Scene scene = new Scene(mainController.getRoot(), 900, 700);
 		scene.getStylesheets()
 				.add(Objects.requireNonNull(getClass().getResource("/style.css"))
 						.toExternalForm());

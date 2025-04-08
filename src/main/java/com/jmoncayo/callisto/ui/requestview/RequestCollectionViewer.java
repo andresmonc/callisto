@@ -17,13 +17,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
-public class RequestsViewer extends AnchorPane implements ApplicationListener<LaunchRequestEvent> {
+public class RequestCollectionViewer extends AnchorPane implements ApplicationListener<LaunchRequestEvent> {
 	private final ObjectFactory<RequestView> requestViewObjectFactory;
 	private final TabPane tabs;
 	private final RequestController requestController;
 
 	@Autowired
-	public RequestsViewer(
+	public RequestCollectionViewer(
 			ObjectFactory<RequestView> requestViewObjectFactory,
 			RequestController requestController,
 			EditableTabPane tabPane) {
@@ -33,7 +33,7 @@ public class RequestsViewer extends AnchorPane implements ApplicationListener<La
 		this.requestController = requestController;
 		final Button addButton = new Button("+");
 		addButton.getStyleClass().add("request-tab-pane-add-button");
-		addButton.setOnAction(event -> tabs.getTabs().add(emptyTab()));
+		addButton.setOnAction(event -> tabs.getTabs().add(emptyRequestTab()));
 		AnchorPane.setLeftAnchor(tabs, 0.0);
 		AnchorPane.setRightAnchor(tabs, 0.0);
 		AnchorPane.setTopAnchor(addButton, 1.0);
@@ -47,19 +47,19 @@ public class RequestsViewer extends AnchorPane implements ApplicationListener<La
 	public void loadRequests() {
 		List<ApiRequest> activeRequests = requestController.getActiveRequests();
 		activeRequests.forEach(request -> {
-			Tab tab = newTab(request);
+			Tab tab = newRequestTab(request);
 			tab.setId(request.getId());
 			tabs.getTabs().add(tab);
 		});
 		if (activeRequests.isEmpty()) {
 			ApiRequest request = requestController.createRequest();
-			Tab tab = emptyTab();
+			Tab tab = emptyRequestTab();
 			tab.setId(request.getId());
 			tabs.getTabs().add(tab);
 		}
 	}
 
-	private Tab createTab(ApiRequest request) {
+	private Tab createRequestTab(ApiRequest request) {
 		var tab = new Tab(request.getName() != null ? request.getName() : "Untitled");
 		RequestView requestView = requestViewObjectFactory.getObject();
 		requestView.initialize(request);
@@ -78,13 +78,13 @@ public class RequestsViewer extends AnchorPane implements ApplicationListener<La
 		return tab;
 	}
 
-	public Tab newTab(ApiRequest request) {
-		return createTab(request);
+	public Tab newRequestTab(ApiRequest request) {
+		return createRequestTab(request);
 	}
 
-	private Tab emptyTab() {
+	private Tab emptyRequestTab() {
 		ApiRequest request = requestController.createRequest();
-		return createTab(request);
+		return createRequestTab(request);
 	}
 
 	@Override
@@ -94,7 +94,7 @@ public class RequestsViewer extends AnchorPane implements ApplicationListener<La
 			log.info("A tab for this request is already opened!");
 			return;
 		}
-		Tab tab = createTab(requestController.getRequest(requestId));
+		Tab tab = createRequestTab(requestController.getRequest(requestId));
 		requestController.openRequest(requestId);
 		tabs.getTabs().add(tab);
 		tabs.getSelectionModel().select(tab);
