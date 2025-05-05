@@ -45,16 +45,17 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 			CollectionTreeNode userData = (CollectionTreeNode) deleteMenuItem.getUserData();
 			if (userData.isRequest()) {
 				eventPublisher.publishEvent(new DeleteRequestEvent(this, userData.getRequestId()));
+				log.info("Event fired to delete request: " + userData.getRequestId());
 			} else {
 				eventPublisher.publishEvent(new DeleteCollectionEvent(this, userData.getCollectionId()));
+				log.info("Event fired to delete collection: " + userData.getCollectionId());
 			}
-			log.info("deleting request");
 		});
 		contextMenu.getItems().addAll(deleteMenuItem);
 		this.contextMenu = contextMenu;
 	}
 
-	private void setMenuItemContexts(TreeItem<CollectionTreeNode> clickedItem) {
+	private void setMenuItemContexts(CollectionTreeNode clickedItem) {
 		this.deleteMenuItem.setUserData(clickedItem);
 	}
 
@@ -108,7 +109,7 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 							this.getSelectionModel().getSelectedItem();
 					if (clickedItem != null) {
 						// Show context menu at the position of the mouse click
-						setMenuItemContexts(clickedItem);
+						setMenuItemContexts(clickedItem.getValue());
 						contextMenu.show(this, event.getScreenX(), event.getScreenY());
 					}
 				}
