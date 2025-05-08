@@ -27,5 +27,4 @@ public class Environment {
 	public String getVariable(String key) {
 		return variables.get(key);
 	}
-
 }

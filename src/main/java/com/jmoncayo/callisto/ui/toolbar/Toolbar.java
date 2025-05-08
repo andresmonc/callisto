@@ -2,7 +2,6 @@ package com.jmoncayo.callisto.ui.toolbar;
 
 import javafx.geometry.Insets;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import org.kordamp.ikonli.fontawesome5.FontAwesomeSolid;
