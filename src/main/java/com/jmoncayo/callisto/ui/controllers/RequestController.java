@@ -121,4 +121,14 @@ public class RequestController {
 		log.info("Deleting request with ID: " + id);
 		apiRequestService.deleteRequest(id);
 	}
+
+	public void saveRequest(String id) {
+		ApiRequest request = apiRequestService.getRequest(id);
+		if (request != null) {
+			apiRequestService.saveRequest(request);
+			log.info("Saved request with ID: " + id);
+		} else {
+			log.warn("Request with ID: " + id + " not found.");
+		}
+	}
 }

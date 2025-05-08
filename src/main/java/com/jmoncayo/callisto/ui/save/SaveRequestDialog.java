@@ -1,6 +1,7 @@
 package com.jmoncayo.callisto.ui.save;
 
 import com.jmoncayo.callisto.collection.Collection;
+import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import java.util.List;
@@ -123,12 +124,16 @@ public class SaveRequestDialog {
 	}
 
 	private void saveRequest() {
+		ApiRequest activeRequest = requestController.getActiveRequest();
+		if(!activeRequest.isHasParent()){
+			requestController.saveRequest(activeRequest.getId());
+		}
 		if (!selectedCollection.isSubFolder()) {
 			collectionController.addRequestToCollection(
-					selectedCollection.getId(), requestController.getActiveRequest());
+					selectedCollection.getId(), activeRequest);
 		} else {
 			collectionController.addRequestToSubfolder(
-					selectedCollection.getId(), requestController.getActiveRequest());
+					selectedCollection.getId(), activeRequest);
 		}
 		stage.close();
 	}
