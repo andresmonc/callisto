@@ -164,4 +164,11 @@ public class ApiRequestService {
 			requestRepository.update(request.toBuilder().active(true).build());
 		}
 	}
+
+	public void deleteRequest(String id) {
+		ApiRequest request = requestRepository.getApiRequest(id);
+		if (request != null) {
+			requestRepository.delete(request);
+		}
+	}
 }

@@ -50,6 +50,11 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 				eventPublisher.publishEvent(new DeleteCollectionEvent(this, userData.getCollectionId()));
 				log.info("Event fired to delete collection: " + userData.getCollectionId());
 			}
+			// remove node from tree
+			TreeItem<CollectionTreeNode> selectedItem = this.getSelectionModel().getSelectedItem();
+			if (selectedItem != null) {
+				selectedItem.getParent().getChildren().remove(selectedItem);
+			}
 		});
 		contextMenu.getItems().addAll(deleteMenuItem);
 		this.contextMenu = contextMenu;
