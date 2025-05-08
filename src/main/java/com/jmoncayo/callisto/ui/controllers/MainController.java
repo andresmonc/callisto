@@ -1,6 +1,6 @@
 package com.jmoncayo.callisto.ui.controllers;
 
-import com.jmoncayo.callisto.ui.requestview.RequestCollectionViewer;
+import com.jmoncayo.callisto.ui.requestview.MainTabViewer;
 import com.jmoncayo.callisto.ui.sidenavigation.SideNavigationPanel;
 import com.jmoncayo.callisto.ui.toolbar.Toolbar;
 import javafx.scene.control.SplitPane;
@@ -16,7 +16,7 @@ public class MainController {
 
 	@Autowired
 	public MainController(
-			Toolbar toolbar, SideNavigationPanel sideNav, SplitPane splitPane, RequestCollectionViewer requestViewer) {
+			Toolbar toolbar, SideNavigationPanel sideNav, SplitPane splitPane, MainTabViewer requestViewer) {
 		// Create the main content container (StackPane for dynamic view switching)
 		contentStack = new StackPane();
 		contentStack.setPrefWidth(Double.MAX_VALUE); // nothing

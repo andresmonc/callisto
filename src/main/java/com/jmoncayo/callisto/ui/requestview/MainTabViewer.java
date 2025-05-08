@@ -2,6 +2,7 @@ package com.jmoncayo.callisto.ui.requestview;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
+import com.jmoncayo.callisto.ui.environmentview.EnvironmentTab;
 import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import java.util.List;
@@ -17,13 +18,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
-public class RequestCollectionViewer extends AnchorPane implements ApplicationListener<LaunchRequestEvent> {
+public class MainTabViewer extends AnchorPane implements ApplicationListener<LaunchRequestEvent> {
 	private final ObjectFactory<RequestView> requestViewObjectFactory;
 	private final TabPane tabs;
 	private final RequestController requestController;
 
 	@Autowired
-	public RequestCollectionViewer(
+	public MainTabViewer(
 			ObjectFactory<RequestView> requestViewObjectFactory,
 			RequestController requestController,
 			EditableTabPane tabPane) {
@@ -42,6 +43,11 @@ public class RequestCollectionViewer extends AnchorPane implements ApplicationLi
 		loadRequests();
 		requestController.updateCurrentRequest(
 				tabPane.getSelectionModel().getSelectedItem().getId());
+
+		// testing
+		EnvironmentTab environmentTab = new EnvironmentTab();
+		environmentTab.initialize();
+		this.tabs.getTabs().add(environmentTab);
 	}
 
 	public void loadRequests() {
