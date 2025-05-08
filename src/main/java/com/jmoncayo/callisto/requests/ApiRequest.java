@@ -23,4 +23,5 @@ public class ApiRequest {
 	private final RequestSettings requestSettings;
 	private final boolean hasParent;
 	private final ApiRequest unsavedChanges;
+	private final String collectionId;
 }

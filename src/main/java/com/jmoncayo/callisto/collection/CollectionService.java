@@ -1,6 +1,7 @@
 package com.jmoncayo.callisto.collection;
 
 import com.jmoncayo.callisto.requests.ApiRequest;
+import com.jmoncayo.callisto.requests.ApiRequestService;
 import com.jmoncayo.callisto.storage.Loadable;
 import java.util.List;
 import lombok.extern.log4j.Log4j2;
@@ -11,9 +12,11 @@ import org.springframework.stereotype.Service;
 public class CollectionService implements Loadable<Collection> {
 
 	private final CollectionRepository collectionRepository;
+	private final ApiRequestService apiRequestService;
 
-	public CollectionService(CollectionRepository collectionRepository) {
+	public CollectionService(CollectionRepository collectionRepository, ApiRequestService apiRequestService) {
 		this.collectionRepository = collectionRepository;
+		this.apiRequestService = apiRequestService;
 	}
 
 	@Override
@@ -94,7 +97,7 @@ public class CollectionService implements Loadable<Collection> {
 				.findById(collectionId)
 				.orElseThrow(() -> new RuntimeException("Collection not found"));
 
-		collection.getRequests().add(request);
+		apiRequestService.setCollectionIdOnRequest(request.getId(),collection.getId());
 		collectionRepository.save(collection);
 		log.info("Added request " + request.getName() + " to collection " + collection.getName());
 	}
@@ -103,7 +106,7 @@ public class CollectionService implements Loadable<Collection> {
 		Collection subfolder = collectionRepository
 				.findById(subfolderId)
 				.orElseThrow(() -> new RuntimeException("Subfolder not found: " + subfolderId));
-		subfolder.getRequests().add(request);
+		apiRequestService.setCollectionIdOnRequest(request.getId(),subfolder.getId());
 		collectionRepository.save(subfolder);
 		log.info("Added request to subfolder " + subfolderId);
 	}

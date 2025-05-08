@@ -178,4 +178,15 @@ public class ApiRequestService {
 			requestRepository.save(request);
 		}
 	}
+
+	public List<ApiRequest> getRequestsForCollectionID(String id) {
+		return requestRepository.getRequestsForCollectionID(id);
+	}
+
+	public void setCollectionIdOnRequest(String id, String collectionId) {
+		ApiRequest request = requestRepository.getApiRequest(id);
+		if (request != null) {
+			requestRepository.update(request.toBuilder().collectionId(collectionId).build());
+		}
+	}
 }

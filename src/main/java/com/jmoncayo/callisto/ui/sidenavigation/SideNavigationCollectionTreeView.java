@@ -3,6 +3,7 @@ package com.jmoncayo.callisto.ui.sidenavigation;
 import com.jmoncayo.callisto.collection.Collection;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.CollectionController;
+import com.jmoncayo.callisto.ui.controllers.RequestController;
 import com.jmoncayo.callisto.ui.events.DeleteCollectionEvent;
 import com.jmoncayo.callisto.ui.events.DeleteRequestEvent;
 import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
@@ -21,6 +22,8 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 @Log4j2
 public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNode> {
@@ -29,11 +32,13 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 	private final ApplicationEventPublisher eventPublisher;
 	private ContextMenu contextMenu;
 	private MenuItem deleteMenuItem;
+	private RequestController requestController;
 
 	public SideNavigationCollectionTreeView(
-			CollectionController collectionController, ApplicationEventPublisher eventPublisher) {
+			CollectionController collectionController, ApplicationEventPublisher eventPublisher, RequestController requestController) {
 		this.collectionController = collectionController;
 		this.eventPublisher = eventPublisher;
+		this.requestController = requestController;
 		initialize();
 		createContextMenu();
 	}
@@ -130,7 +135,8 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 			TreeItem<CollectionTreeNode> subfolderItem = createCollectionTreeItem(subfolder);
 			collectionItem.getChildren().add(subfolderItem);
 		}
-		for (ApiRequest request : collection.getRequests()) {
+		List<ApiRequest> requests = requestController.getRequestsForCollectionID(collection.getId());
+		for (ApiRequest request : requests) {
 			TreeItem<CollectionTreeNode> requestItem =
 					new TreeItem<>(new CollectionTreeNode(request.getName(), null, request.getId()));
 			collectionItem.getChildren().add(requestItem);

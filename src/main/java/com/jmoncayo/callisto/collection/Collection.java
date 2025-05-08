@@ -18,8 +18,4 @@ public class Collection {
 	private final String name;
 
 	@Builder.Default
-	private final List<Collection> subfolders = new ArrayList<>();
-
-	@Builder.Default
-	private final List<ApiRequest> requests = new ArrayList<>();
-}
+	private final List<Collection> subfolders = new ArrayList<>();}

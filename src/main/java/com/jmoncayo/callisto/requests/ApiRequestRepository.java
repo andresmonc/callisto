@@ -63,4 +63,11 @@ public class ApiRequestRepository {
 		requests.put(request.getId(), request);
 		log.info("Saving request: " + request.getId());
 	}
+
+	public List<ApiRequest> getRequestsForCollectionID(String id) {
+		return requests.values().stream()
+				.filter(request -> request.getCollectionId() != null && request.getCollectionId().equals(id))
+				.map(this::getSavedOrUnsavedRequest)
+				.toList();
+	}
 }

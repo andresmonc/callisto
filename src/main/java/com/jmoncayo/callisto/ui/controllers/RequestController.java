@@ -131,4 +131,15 @@ public class RequestController {
 			log.warn("Request with ID: " + id + " not found.");
 		}
 	}
+
+	public List<ApiRequest> getRequestsForCollectionID(String id) {
+		List<ApiRequest> requests = apiRequestService.getRequestsForCollectionID(id);
+		if (requests != null) {
+			log.info("Found " + requests.size() + " requests for collection ID: " + id);
+			return requests;
+		} else {
+			log.warn("No requests found for collection ID: " + id);
+			return List.of();
+		}
+	}
 }
