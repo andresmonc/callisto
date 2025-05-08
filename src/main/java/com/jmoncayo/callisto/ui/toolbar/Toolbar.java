@@ -11,14 +11,10 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class Toolbar extends HBox {
-	public Toolbar() {
+	public Toolbar(EnvironmentDropDown environmentDropDown) {
 		setSpacing(10);
 		setPadding(new Insets(2));
 		setStyle("-fx-background-color: #f0f0f0;");
-
-		// Create the ComboBox
-		ComboBox<String> stringComboBox = new ComboBox<>();
-		stringComboBox.setPromptText("No Environment");
 
 		// Create the gear icon using FontAwesome5
 		FontIcon gearIcon = new FontIcon(FontAwesomeSolid.COG);
@@ -33,6 +29,6 @@ public class Toolbar extends HBox {
 		HBox.setHgrow(spacer, javafx.scene.layout.Priority.ALWAYS);
 
 		// Add ComboBox, spacer, and button to the HBox
-		this.getChildren().addAll(spacer, stringComboBox, gearButton);
+		this.getChildren().addAll(spacer, environmentDropDown, gearButton);
 	}
 }

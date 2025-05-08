@@ -35,4 +35,8 @@ public class EnvironmentService {
     public boolean exists(String name) {
         return repository.exists(name);
     }
+
+    public Environment getActiveEnvironment() {
+        return repository.findActive();
+    }
 }

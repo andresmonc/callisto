@@ -14,6 +14,7 @@ public class Environment {
 	private String baseUrl;
 	private Map<String, String> headers = new HashMap<>();
 	private Map<String, String> variables = new HashMap<>();
+	private boolean active;
 
 	public void addVariable(String key, String value) {
 		variables.put(key, value);
@@ -26,4 +27,5 @@ public class Environment {
 	public String getVariable(String key) {
 		return variables.get(key);
 	}
+
 }

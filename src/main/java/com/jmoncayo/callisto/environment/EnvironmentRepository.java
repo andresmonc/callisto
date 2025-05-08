@@ -12,13 +12,27 @@ import java.util.concurrent.ConcurrentHashMap;
 public class EnvironmentRepository {
 
     private final Map<String, Environment> environments = new ConcurrentHashMap<>();
+    // Default environment
+    private final static Environment defaultEnvironment = Environment.builder()
+            .name("No Environment")
+            .active(true)
+            .build();
+
 
     public Optional<Environment> findByName(String name) {
         return Optional.ofNullable(environments.get(name));
     }
 
     public List<Environment> findAll() {
-        return new ArrayList<>(environments.values());
+        ArrayList<Environment> environmentsResponse = new ArrayList<>(environments.values());
+        environmentsResponse.add(defaultEnvironment);
+        return environmentsResponse;
+    }
+
+    public Environment findActive() {
+        return environments.values().stream()
+                .filter(Environment::isActive)
+                .findFirst().orElse(defaultEnvironment);
     }
 
     public void save(Environment environment) {
