@@ -1,6 +1,5 @@
 package com.jmoncayo.callisto.collection;
 
-import com.jmoncayo.callisto.requests.ApiRequest;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,4 +17,5 @@ public class Collection {
 	private final String name;
 
 	@Builder.Default
-	private final List<Collection> subfolders = new ArrayList<>();}
+	private final List<Collection> subfolders = new ArrayList<>();
+}

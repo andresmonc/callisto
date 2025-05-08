@@ -116,7 +116,7 @@ public class RequestController {
 	}
 
 	@EventListener(DeleteRequestEvent.class)
-	public void deleteEventListener(DeleteRequestEvent deleteRequestEvent){
+	public void deleteEventListener(DeleteRequestEvent deleteRequestEvent) {
 		String id = deleteRequestEvent.getId();
 		log.info("Deleting request with ID: " + id);
 		apiRequestService.deleteRequest(id);

@@ -10,6 +10,7 @@ import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
 import com.jmoncayo.callisto.ui.events.NewCollectionEvent;
 import com.jmoncayo.callisto.ui.events.RequestAddedToCollectionEvent;
 import com.jmoncayo.callisto.ui.events.RequestRenamedEvent;
+import java.util.List;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TreeCell;
@@ -22,8 +23,6 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @Log4j2
 public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNode> {
@@ -35,7 +34,9 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 	private RequestController requestController;
 
 	public SideNavigationCollectionTreeView(
-			CollectionController collectionController, ApplicationEventPublisher eventPublisher, RequestController requestController) {
+			CollectionController collectionController,
+			ApplicationEventPublisher eventPublisher,
+			RequestController requestController) {
 		this.collectionController = collectionController;
 		this.eventPublisher = eventPublisher;
 		this.requestController = requestController;

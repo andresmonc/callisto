@@ -97,7 +97,7 @@ public class CollectionService implements Loadable<Collection> {
 				.findById(collectionId)
 				.orElseThrow(() -> new RuntimeException("Collection not found"));
 
-		apiRequestService.setCollectionIdOnRequest(request.getId(),collection.getId());
+		apiRequestService.setCollectionIdOnRequest(request.getId(), collection.getId());
 		collectionRepository.save(collection);
 		log.info("Added request " + request.getName() + " to collection " + collection.getName());
 	}
@@ -106,7 +106,7 @@ public class CollectionService implements Loadable<Collection> {
 		Collection subfolder = collectionRepository
 				.findById(subfolderId)
 				.orElseThrow(() -> new RuntimeException("Subfolder not found: " + subfolderId));
-		apiRequestService.setCollectionIdOnRequest(request.getId(),subfolder.getId());
+		apiRequestService.setCollectionIdOnRequest(request.getId(), subfolder.getId());
 		collectionRepository.save(subfolder);
 		log.info("Added request to subfolder " + subfolderId);
 	}

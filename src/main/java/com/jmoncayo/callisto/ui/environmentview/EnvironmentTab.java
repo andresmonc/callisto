@@ -61,17 +61,19 @@ public class EnvironmentTab extends Tab {
 
 	private void setTextFieldStyle(boolean editing) {
 		if (editing) {
-			editableEnvironmentName.setStyle("""
-            -fx-background-color: white;
-            -fx-border-color: lightgray;
-            -fx-padding: 2 4 2 4;
-        """);
+			editableEnvironmentName.setStyle(
+					"""
+			-fx-background-color: white;
+			-fx-border-color: lightgray;
+			-fx-padding: 2 4 2 4;
+		""");
 		} else {
-			editableEnvironmentName.setStyle("""
-            -fx-background-color: transparent;
-            -fx-border-color: transparent;
-            -fx-padding: 2 4 2 4;
-        """);
+			editableEnvironmentName.setStyle(
+					"""
+			-fx-background-color: transparent;
+			-fx-border-color: transparent;
+			-fx-padding: 2 4 2 4;
+		""");
 		}
 	}
 }

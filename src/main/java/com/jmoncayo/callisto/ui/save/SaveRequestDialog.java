@@ -125,15 +125,13 @@ public class SaveRequestDialog {
 
 	private void saveRequest() {
 		ApiRequest activeRequest = requestController.getActiveRequest();
-		if(!activeRequest.isHasParent()){
+		if (!activeRequest.isHasParent()) {
 			requestController.saveRequest(activeRequest.getId());
 		}
 		if (!selectedCollection.isSubFolder()) {
-			collectionController.addRequestToCollection(
-					selectedCollection.getId(), activeRequest);
+			collectionController.addRequestToCollection(selectedCollection.getId(), activeRequest);
 		} else {
-			collectionController.addRequestToSubfolder(
-					selectedCollection.getId(), activeRequest);
+			collectionController.addRequestToSubfolder(selectedCollection.getId(), activeRequest);
 		}
 		stage.close();
 	}

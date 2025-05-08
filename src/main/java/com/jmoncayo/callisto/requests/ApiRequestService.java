@@ -1,5 +1,8 @@
 package com.jmoncayo.callisto.requests;
 
+import java.net.URI;
+import java.util.List;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -7,10 +10,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
-
-import java.net.URI;
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ApiRequestService {
@@ -186,7 +185,8 @@ public class ApiRequestService {
 	public void setCollectionIdOnRequest(String id, String collectionId) {
 		ApiRequest request = requestRepository.getApiRequest(id);
 		if (request != null) {
-			requestRepository.save(request.toBuilder().collectionId(collectionId).build());
+			requestRepository.save(
+					request.toBuilder().collectionId(collectionId).build());
 		}
 	}
 }

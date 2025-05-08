@@ -1,8 +1,11 @@
 package com.jmoncayo.callisto.ui.requestview;
 
+import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
+
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import com.jmoncayo.callisto.ui.save.SaveRequestDialog;
+import java.util.Arrays;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.HBox;
@@ -15,10 +18,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-
-import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
-
 @Component
 @Scope(SCOPE_PROTOTYPE)
 @Log4j2
@@ -29,7 +28,8 @@ public class RequestField extends HBox {
 	private final ComboBox<String> dropdown;
 
 	@Autowired
-	public RequestField(RequestURL requestURL, SaveRequestDialog saveRequestDialog, RequestController requestController) {
+	public RequestField(
+			RequestURL requestURL, SaveRequestDialog saveRequestDialog, RequestController requestController) {
 		this.requestURL = requestURL;
 		this.requestController = requestController;
 		dropdown = new ComboBox<>();

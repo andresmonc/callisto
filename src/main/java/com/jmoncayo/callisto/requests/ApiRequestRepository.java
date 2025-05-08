@@ -1,12 +1,11 @@
 package com.jmoncayo.callisto.requests;
 
-import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Repository;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @Log4j2
@@ -20,15 +19,20 @@ public class ApiRequestRepository {
 	}
 
 	public void update(ApiRequest request) {
-		if(!requests.containsKey(request.getId())){
+		if (!requests.containsKey(request.getId())) {
 			requests.put(request.getId(), request);
 		}
-		ApiRequest newRequest = requests.get(request.getId()).toBuilder().unsavedChanges(request).build();
+		ApiRequest newRequest = requests.get(request.getId()).toBuilder()
+				.unsavedChanges(request)
+				.build();
 		requests.put(request.getId(), newRequest);
 	}
 
 	public List<ApiRequest> getActiveRequests() {
-		return requests.values().stream().filter(ApiRequest::isActive).map(this::getSavedOrUnsavedRequest).toList();
+		return requests.values().stream()
+				.filter(ApiRequest::isActive)
+				.map(this::getSavedOrUnsavedRequest)
+				.toList();
 	}
 
 	public List<ApiRequest> getAllRequests() {
@@ -65,7 +69,8 @@ public class ApiRequestRepository {
 
 	public List<ApiRequest> getRequestsForCollectionID(String id) {
 		return requests.values().stream()
-				.filter(request -> request.getCollectionId() != null && request.getCollectionId().equals(id))
+				.filter(request -> request.getCollectionId() != null
+						&& request.getCollectionId().equals(id))
 				.map(this::getSavedOrUnsavedRequest)
 				.toList();
 	}
