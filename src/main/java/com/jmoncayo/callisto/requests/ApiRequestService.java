@@ -175,7 +175,7 @@ public class ApiRequestService {
 
 	public void saveRequest(ApiRequest request) {
 		if (request != null) {
-			requestRepository.update(request.toBuilder().hasParent(true).build());
+			requestRepository.save(request);
 		}
 	}
 }
