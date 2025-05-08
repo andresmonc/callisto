@@ -18,7 +18,7 @@ public class ApiRequestService {
 	private final ApiRequestRepository requestRepository;
 	private final WebClient httpClient;
 
-	private static final ApiRequest.ApiRequestBuilder DEFAULT_REQUEST = ApiRequest.builder()
+	public static final ApiRequest.ApiRequestBuilder DEFAULT_REQUEST = ApiRequest.builder()
 			.method(String.valueOf(HttpMethod.GET))
 			.active(true)
 			.name("Untitled");
@@ -186,7 +186,7 @@ public class ApiRequestService {
 	public void setCollectionIdOnRequest(String id, String collectionId) {
 		ApiRequest request = requestRepository.getApiRequest(id);
 		if (request != null) {
-			requestRepository.update(request.toBuilder().collectionId(collectionId).build());
+			requestRepository.save(request.toBuilder().collectionId(collectionId).build());
 		}
 	}
 }

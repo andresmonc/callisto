@@ -22,7 +22,6 @@ public class ApiRequestRepository {
 	public void update(ApiRequest request) {
 		if(!requests.containsKey(request.getId())){
 			requests.put(request.getId(), request);
-			return;
 		}
 		ApiRequest newRequest = requests.get(request.getId()).toBuilder().unsavedChanges(request).build();
 		requests.put(request.getId(), newRequest);

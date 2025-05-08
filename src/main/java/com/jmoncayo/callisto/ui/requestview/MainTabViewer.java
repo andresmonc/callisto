@@ -57,9 +57,8 @@ public class MainTabViewer extends AnchorPane {
 			tabs.getTabs().add(tab);
 		});
 		if (activeRequests.isEmpty()) {
-			ApiRequest request = requestController.createRequest();
 			Tab tab = emptyRequestTab();
-			tab.setId(request.getId());
+			tab.setId(tab.getId());
 			tabs.getTabs().add(tab);
 		}
 	}
