@@ -35,7 +35,7 @@ public class DataLoaderService {
 	public void loadDataToServices() throws IOException {
 		try {
 			Storage data = fileStorageService.loadFromFile(Storage.class, saveName);
-			collectionService.load(data.getUnSavedCollections());
+			collectionService.load(data.getCollections());
 			apiRequestService.load(data.getRequests());
 		} catch (IOException e) {
 			fileStorageService.saveToFile(new Storage(), saveName);
@@ -47,7 +47,7 @@ public class DataLoaderService {
 	public void saveDataFromServices() {
 		try {
 			var storage = new Storage();
-			storage.setUnSavedCollections(collectionService.getAllCollections());
+			storage.setCollections(collectionService.getAllCollections());
 			storage.setRequests(apiRequestService.getAllRequests());
 			fileStorageService.saveToFile(storage, saveName);
 		} catch (IOException e) {

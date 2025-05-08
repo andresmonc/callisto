@@ -8,8 +8,7 @@ import lombok.Data;
 
 @Data
 public class Storage {
-	List<Collection> savedCollections;
-	List<Collection> unSavedCollections;
+	List<Collection> collections;
 	List<ApiRequest> requests;
 	Preferences preferences;
 
@@ -17,11 +16,10 @@ public class Storage {
 
 	public Storage(
 			List<Collection> savedCollections,
-			List<Collection> unSavedCollections,
+			List<Collection> collections,
 			Preferences preferences,
 			List<ApiRequest> requests) {
-		this.savedCollections = savedCollections;
-		this.unSavedCollections = unSavedCollections;
+		this.collections = collections;
 		this.preferences = preferences;
 		this.requests = requests;
 	}
