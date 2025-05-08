@@ -43,7 +43,7 @@ public class EnvironmentDropDown extends StackPane {
 
         // Active environment name
         Environment activeEnvironment = environmentController.getActiveEnvironment();
-        dropdownButton.setText(activeEnvironment.getName());
+        dropdownButton.setText(activeEnvironment.getName() + " ▼");
 
         // Layout for search + button
         searchField.setPromptText("Search...");
