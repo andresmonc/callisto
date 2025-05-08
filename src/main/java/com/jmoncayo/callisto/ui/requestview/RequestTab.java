@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Scope(SCOPE_PROTOTYPE)
-public class RequestView extends VBox {
+public class RequestTab extends VBox {
 
 	private final RequestController requestController;
 	private final RequestField requestField;
@@ -27,7 +27,7 @@ public class RequestView extends VBox {
 	@Getter
 	private String requestUUID;
 
-	public RequestView(
+	public RequestTab(
 			RequestController requestController,
 			RequestField requestField,
 			RequestDetails tabsComponent,

@@ -2,13 +2,12 @@ package com.jmoncayo.callisto.ui.toolbar;
 
 import com.jmoncayo.callisto.environment.Environment;
 import com.jmoncayo.callisto.ui.controllers.EnvironmentController;
+import com.jmoncayo.callisto.ui.events.LaunchNewEnvironmentEvent;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.collections.transformation.FilteredList;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
@@ -16,6 +15,7 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Popup;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -24,6 +24,7 @@ import java.util.List;
 public class EnvironmentDropDown extends StackPane {
 
     private final EnvironmentController environmentController;
+    private final ApplicationEventPublisher aep;
     private final Button dropdownButton = new Button("Select Environment");
     private final Popup popup = new Popup();
     private final TextField searchField = new TextField();
@@ -32,8 +33,9 @@ public class EnvironmentDropDown extends StackPane {
     private final ObservableList<String> allItems = FXCollections.observableArrayList();
 
     @Autowired
-    public EnvironmentDropDown(EnvironmentController environmentController) {
+    public EnvironmentDropDown(EnvironmentController environmentController, ApplicationEventPublisher aep) {
         this.environmentController = environmentController;
+        this.aep = aep;
 
         // Load data
         List<String> envNames = environmentController.getAllEnvironments().stream()
@@ -88,14 +90,8 @@ public class EnvironmentDropDown extends StackPane {
 
         // Add button logic
         addButton.setOnAction(e -> {
-            String newEnvName = searchField.getText().trim();
-            if (!newEnvName.isEmpty() && !allItems.contains(newEnvName)) {
-                allItems.add(newEnvName);
-                FXCollections.sort(allItems);
-                listView.setItems(allItems.filtered(item -> item.toLowerCase().contains(newEnvName.toLowerCase())));
-                dropdownButton.setText(newEnvName);
-                popup.hide();
-            }
+            aep.publishEvent(new LaunchNewEnvironmentEvent(this));
+            popup.hide();
         });
 
         this.getChildren().add(dropdownButton);

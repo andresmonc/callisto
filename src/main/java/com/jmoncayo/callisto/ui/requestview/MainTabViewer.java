@@ -3,6 +3,7 @@ package com.jmoncayo.callisto.ui.requestview;
 import com.jmoncayo.callisto.requests.ApiRequest;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import com.jmoncayo.callisto.ui.environmentview.EnvironmentTab;
+import com.jmoncayo.callisto.ui.events.LaunchNewEnvironmentEvent;
 import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
 import java.util.List;
@@ -13,22 +14,25 @@ import javafx.scene.layout.AnchorPane;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationListener;
+import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
 
 @Component
 @Log4j2
-public class MainTabViewer extends AnchorPane implements ApplicationListener<LaunchRequestEvent> {
-	private final ObjectFactory<RequestView> requestViewObjectFactory;
+public class MainTabViewer extends AnchorPane {
+	private final ObjectFactory<RequestTab> requestViewObjectFactory;
+	private final ObjectFactory<EnvironmentTab> environmentTabFactory;
 	private final TabPane tabs;
 	private final RequestController requestController;
 
 	@Autowired
 	public MainTabViewer(
-			ObjectFactory<RequestView> requestViewObjectFactory,
+			ObjectFactory<RequestTab> requestViewObjectFactory,
+			ObjectFactory<EnvironmentTab> environmentTabFactory,
 			RequestController requestController,
 			EditableTabPane tabPane) {
 		this.requestViewObjectFactory = requestViewObjectFactory;
+		this.environmentTabFactory = environmentTabFactory;
 		this.tabs = tabPane;
 		requestController.watchTabNameChange(tabPane);
 		this.requestController = requestController;
@@ -43,11 +47,6 @@ public class MainTabViewer extends AnchorPane implements ApplicationListener<Lau
 		loadRequests();
 		requestController.updateCurrentRequest(
 				tabPane.getSelectionModel().getSelectedItem().getId());
-
-		// testing
-		EnvironmentTab environmentTab = new EnvironmentTab();
-		environmentTab.initialize();
-		this.tabs.getTabs().add(environmentTab);
 	}
 
 	public void loadRequests() {
@@ -67,13 +66,13 @@ public class MainTabViewer extends AnchorPane implements ApplicationListener<Lau
 
 	private Tab createRequestTab(ApiRequest request) {
 		var tab = new Tab(request.getName() != null ? request.getName() : "Untitled");
-		RequestView requestView = requestViewObjectFactory.getObject();
-		requestView.initialize(request);
-		requestView.setRequestUUID(request.getId());
-		tab.setContent(requestView);
+		RequestTab requestTab = requestViewObjectFactory.getObject();
+		requestTab.initialize(request);
+		requestTab.setRequestUUID(request.getId());
+		tab.setContent(requestTab);
 		// notify the request controller of who is on display
 		requestController.updateCurrentRequest(request.getId());
-		tab.setOnClosed(event -> requestController.closeRequest(requestView.getRequestUUID()));
+		tab.setOnClosed(event -> requestController.closeRequest(requestTab.getRequestUUID()));
 		// Add listener to handle when the tab becomes active
 		tab.setOnSelectionChanged(event -> {
 			if (tab.isSelected()) {
@@ -93,7 +92,7 @@ public class MainTabViewer extends AnchorPane implements ApplicationListener<Lau
 		return createRequestTab(request);
 	}
 
-	@Override
+	@EventListener(LaunchRequestEvent.class)
 	public void onApplicationEvent(LaunchRequestEvent event) {
 		String requestId = event.getRequestId();
 		if (hasTabWithId(requestId)) {
@@ -102,6 +101,14 @@ public class MainTabViewer extends AnchorPane implements ApplicationListener<Lau
 		}
 		Tab tab = createRequestTab(requestController.getRequest(requestId));
 		requestController.openRequest(requestId);
+		tabs.getTabs().add(tab);
+		tabs.getSelectionModel().select(tab);
+	}
+
+	@EventListener(LaunchNewEnvironmentEvent.class)
+	public void onApplicationEvent(LaunchNewEnvironmentEvent event) {
+		EnvironmentTab tab = environmentTabFactory.getObject();
+		tab.initNewEnvironment();
 		tabs.getTabs().add(tab);
 		tabs.getSelectionModel().select(tab);
 	}

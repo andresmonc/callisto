@@ -11,10 +11,10 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 public class EnvironmentTab extends Tab {
 
     public EnvironmentTab() {
+        this.setClosable(true);
     }
 
-    public void initialize(){
-        this.setText("Environment");
-        this.setClosable(true);
+    public void initNewEnvironment(){
+        this.setText("New Environment");
     }
 }
