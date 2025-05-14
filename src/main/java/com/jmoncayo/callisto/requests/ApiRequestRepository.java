@@ -1,11 +1,12 @@
 package com.jmoncayo.callisto.requests;
 
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Repository;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Repository;
 
 @Repository
 @Log4j2
@@ -46,9 +47,14 @@ public class ApiRequestRepository {
 		this.requests.putAll(requests.stream().collect(Collectors.toMap(ApiRequest::getId, o -> o)));
 	}
 
-	public void delete(ApiRequest request) {
-		log.info("Deleting request: " + request.getId());
-		requests.remove(request.getId());
+	public void delete(String id) {
+		log.info("Deleting request: " + id);
+		ApiRequest request = requests.get(id);
+		if (!request.isParented() || request.getUnsavedChanges() == null) {
+			requests.remove(request.getId());
+		} else {
+			requests.put(request.getId(), request.toBuilder().unsavedChanges(null).build());
+		}
 	}
 
 	public ApiRequest getSavedOrUnsavedRequest(ApiRequest request) {
@@ -61,7 +67,7 @@ public class ApiRequestRepository {
 
 	public void save(ApiRequest request) {
 		if (request.getUnsavedChanges() != null) {
-			request = request.toBuilder().hasParent(true).unsavedChanges(null).build();
+			request = request.toBuilder().parented(true).unsavedChanges(null).build();
 		}
 		requests.put(request.getId(), request);
 		log.info("Saving request: " + request.getId());

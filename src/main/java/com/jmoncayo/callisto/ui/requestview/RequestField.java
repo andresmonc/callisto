@@ -49,7 +49,7 @@ public class RequestField extends HBox {
 			log.info("Saving request...");
 			// dont open request dialog if it's been saved before
 			ApiRequest activeRequest = requestController.getActiveRequest();
-			if (activeRequest != null && activeRequest.isHasParent()) {
+			if (activeRequest != null && activeRequest.isParented()) {
 				log.info("Request already saved, not opening save dialog");
 				requestController.saveRequest(activeRequest.getId());
 			} else {

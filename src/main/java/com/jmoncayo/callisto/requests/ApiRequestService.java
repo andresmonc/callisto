@@ -3,6 +3,8 @@ package com.jmoncayo.callisto.requests;
 import java.net.URI;
 import java.util.List;
 import java.util.Optional;
+
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.client.reactive.ReactorClientHttpConnector;
@@ -12,6 +14,7 @@ import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
 
 @Service
+@Log4j2
 public class ApiRequestService {
 
 	private final ApiRequestRepository requestRepository;
@@ -111,6 +114,7 @@ public class ApiRequestService {
 	}
 
 	public void closeRequest(String requestUUID) {
+		log.info("Closing request: " + requestUUID);
 		ApiRequest request = requestRepository.getApiRequest(requestUUID);
 		if (request != null) {
 			requestRepository.update(request.toBuilder().active(false).build());
@@ -168,7 +172,7 @@ public class ApiRequestService {
 	public void deleteRequest(String id) {
 		ApiRequest request = requestRepository.getApiRequest(id);
 		if (request != null) {
-			requestRepository.delete(request);
+			requestRepository.delete(request.getId());
 		}
 	}
 
@@ -187,6 +191,13 @@ public class ApiRequestService {
 		if (request != null) {
 			requestRepository.save(
 					request.toBuilder().collectionId(collectionId).build());
+		}
+	}
+
+	public void destroyUnsavedRequest(String id) {
+		ApiRequest request = requestRepository.getApiRequest(id);
+		if (request != null) {
+			requestRepository.delete(request.getId());
 		}
 	}
 }

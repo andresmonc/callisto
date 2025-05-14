@@ -24,7 +24,6 @@ import org.springframework.stereotype.Component;
 @Log4j2
 public class KVDTableView extends TableView<TableEntry> {
 
-	private String requestId;
 
 	public KVDTableView() {
 		initializeTable();

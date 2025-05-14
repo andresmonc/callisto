@@ -142,4 +142,8 @@ public class RequestController {
 			return List.of();
 		}
 	}
+
+	public void destroyUnsavedRequest(String id) {
+		apiRequestService.destroyUnsavedRequest(id);
+	}
 }

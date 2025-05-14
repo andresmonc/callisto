@@ -2,6 +2,8 @@ package com.jmoncayo.callisto.ui.environmentview;
 
 import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROTOTYPE;
 
+import com.jmoncayo.callisto.ui.controllers.EnvironmentController;
+import com.jmoncayo.callisto.ui.customcomponents.VariableTableView;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
@@ -16,9 +18,10 @@ import org.springframework.stereotype.Component;
 public class EnvironmentTab extends Tab {
 
 	private final TextField editableEnvironmentName;
-	private final TableView<EnvironmentVariableRow> table;
+	private final EnvironmentController environmentController;
 
-	public EnvironmentTab() {
+	public EnvironmentTab(EnvironmentController environmentController, VariableTableView variableTableView) {
+		this.environmentController = environmentController;
 		editableEnvironmentName = new TextField("New Environment");
 		editableEnvironmentName.setEditable(false);
 		editableEnvironmentName.setFocusTraversable(false);
@@ -48,26 +51,7 @@ public class EnvironmentTab extends Tab {
 		TextField searchField = new TextField();
 		searchField.setPromptText("Filter variables");
 
-		table = new TableView<>();
-		table.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY);
-
-		TableColumn<EnvironmentVariableRow, String> nameCol = new TableColumn<>("Variable");
-		nameCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-
-		TableColumn<EnvironmentVariableRow, String> typeCol = new TableColumn<>("Type");
-		typeCol.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
-
-		TableColumn<EnvironmentVariableRow, String> initialValCol = new TableColumn<>("Initial value");
-		initialValCol.setCellValueFactory(cellData -> cellData.getValue().initialValueProperty());
-
-		TableColumn<EnvironmentVariableRow, String> currentValCol = new TableColumn<>("Current value");
-		currentValCol.setCellValueFactory(cellData -> cellData.getValue().currentValueProperty());
-
-		TableColumn<EnvironmentVariableRow, Void> actionsCol = new TableColumn<>("");
-
-		table.getColumns().addAll(nameCol, typeCol, initialValCol, currentValCol, actionsCol);
-
-		VBox layout = new VBox(10, editableEnvironmentName, searchField, table);
+		VBox layout = new VBox(10, editableEnvironmentName, searchField);
 		layout.setPadding(new Insets(20));
 
 		StackPane stackPane = new StackPane(layout);
@@ -89,15 +73,5 @@ public class EnvironmentTab extends Tab {
 	}
 
 	// Placeholder for table row data
-	public static class EnvironmentVariableRow {
-		private final StringProperty name = new SimpleStringProperty("");
-		private final StringProperty type = new SimpleStringProperty("");
-		private final StringProperty initialValue = new SimpleStringProperty("");
-		private final StringProperty currentValue = new SimpleStringProperty("");
 
-		public StringProperty nameProperty() { return name; }
-		public StringProperty typeProperty() { return type; }
-		public StringProperty initialValueProperty() { return initialValue; }
-		public StringProperty currentValueProperty() { return currentValue; }
-	}
 }

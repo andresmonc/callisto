@@ -21,7 +21,7 @@ public class ApiRequest {
 	private final String name;
 	private final List<Parameter> parameters;
 	private final RequestSettings requestSettings;
-	private final boolean hasParent;
+	private final boolean parented;
 	private final ApiRequest unsavedChanges;
 	private final String collectionId;
 }
