@@ -4,8 +4,6 @@ import static org.springframework.beans.factory.config.BeanDefinition.SCOPE_PROT
 
 import com.jmoncayo.callisto.ui.controllers.EnvironmentController;
 import com.jmoncayo.callisto.ui.customcomponents.VariableTableView;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
 import javafx.geometry.Insets;
 import javafx.scene.control.*;
 import javafx.scene.layout.StackPane;
@@ -66,9 +64,11 @@ public class EnvironmentTab extends Tab {
 
 	private void setTextFieldStyle(boolean editing) {
 		if (editing) {
-			editableEnvironmentName.setStyle("-fx-background-color: white; -fx-border-color: lightgray; -fx-padding: 2 4 2 4;");
+			editableEnvironmentName.setStyle(
+					"-fx-background-color: white; -fx-border-color: lightgray; -fx-padding: 2 4 2 4;");
 		} else {
-			editableEnvironmentName.setStyle("-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 2 4 2 4;");
+			editableEnvironmentName.setStyle(
+					"-fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 2 4 2 4;");
 		}
 	}
 

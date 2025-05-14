@@ -11,6 +11,7 @@ import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
 import com.jmoncayo.callisto.ui.events.NewCollectionEvent;
 import com.jmoncayo.callisto.ui.events.RequestAddedToCollectionEvent;
 import com.jmoncayo.callisto.ui.events.RequestRenamedEvent;
+import java.util.List;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -23,8 +24,6 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @Log4j2
@@ -158,7 +157,8 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 			// we need to enter renaming mode on double click
 			if (event.getClickCount() == 2) {
 				// Handle double-click event
-				TreeItem<CollectionTreeNode> selectedItem = this.getSelectionModel().getSelectedItem();
+				TreeItem<CollectionTreeNode> selectedItem =
+						this.getSelectionModel().getSelectedItem();
 				if (selectedItem != null) {
 					this.edit(selectedItem);
 					log.info("Editing item: " + selectedItem.getValue().getDisplayName());

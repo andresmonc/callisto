@@ -20,7 +20,6 @@ public class CollectionTreeNode {
 		return requestId != null;
 	}
 
-
 	@Override
 	public String toString() {
 		return displayName;

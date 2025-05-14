@@ -1,12 +1,11 @@
 package com.jmoncayo.callisto.requests;
 
-import lombok.extern.log4j.Log4j2;
-import org.springframework.stereotype.Repository;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.stereotype.Repository;
 
 @Repository
 @Log4j2
@@ -53,7 +52,8 @@ public class ApiRequestRepository {
 		if (!request.isParented() || request.getUnsavedChanges() == null) {
 			requests.remove(request.getId());
 		} else {
-			requests.put(request.getId(), request.toBuilder().unsavedChanges(null).build());
+			requests.put(
+					request.getId(), request.toBuilder().unsavedChanges(null).build());
 		}
 	}
 

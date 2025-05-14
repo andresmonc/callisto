@@ -8,6 +8,7 @@ import com.jmoncayo.callisto.ui.events.CloseTabEvent;
 import com.jmoncayo.callisto.ui.events.LaunchNewEnvironmentEvent;
 import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
 import com.jmoncayo.callisto.ui.requestview.tabs.EditableTabPane;
+import java.util.List;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -18,8 +19,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 @Log4j2
@@ -83,7 +82,8 @@ public class MainTabViewer extends AnchorPane {
 		requestController.updateCurrentRequest(request.getId());
 		tab.setOnCloseRequest(event -> {
 			event.consume();
-			applicationEventPublisher.publishEvent(new CloseTabEvent(this, request.getId(), CloseTabEvent.TabType.REQUEST, tab));
+			applicationEventPublisher.publishEvent(
+					new CloseTabEvent(this, request.getId(), CloseTabEvent.TabType.REQUEST, tab));
 		});
 		// Add listener to handle when the tab becomes active
 		tab.setOnSelectionChanged(event -> {
