@@ -6,13 +6,14 @@ import com.jmoncayo.callisto.ui.controllers.CollectionController;
 import com.jmoncayo.callisto.ui.controllers.RequestController;
 import com.jmoncayo.callisto.ui.events.DeleteCollectionEvent;
 import com.jmoncayo.callisto.ui.events.DeleteRequestEvent;
+import com.jmoncayo.callisto.ui.events.LaunchCollectionEvent;
 import com.jmoncayo.callisto.ui.events.LaunchRequestEvent;
 import com.jmoncayo.callisto.ui.events.NewCollectionEvent;
 import com.jmoncayo.callisto.ui.events.RequestAddedToCollectionEvent;
 import com.jmoncayo.callisto.ui.events.RequestRenamedEvent;
-import java.util.List;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
@@ -22,6 +23,8 @@ import org.kordamp.ikonli.javafx.FontIcon;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 @Log4j2
@@ -81,28 +84,86 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 		this.setRoot(root);
 		this.setShowRoot(false);
 		this.setEditable(true);
+		this.setEditable(true);
+
 		this.setCellFactory(tv -> new TreeCell<>() {
+			private TextField textField;
+
+			@Override
+			public void startEdit() {
+				super.startEdit();
+				if (textField == null) {
+					createTextField();
+				}
+				setText(null);
+				setGraphic(textField);
+				textField.setText(getItem().getDisplayName());
+				textField.selectAll();
+				textField.requestFocus();
+			}
+
+			@Override
+			public void cancelEdit() {
+				super.cancelEdit();
+				setText(getItem().getDisplayName());
+				updateIcon();
+			}
+
 			@Override
 			protected void updateItem(CollectionTreeNode item, boolean empty) {
 				super.updateItem(item, empty);
+
 				if (empty || item == null) {
 					setText(null);
 					setGraphic(null);
 				} else {
-					setText(item.getDisplayName());
-					if (item.isRequest()) {
-						// FA icon or fallback to image
-						setGraphic(new FontIcon("fas-file-alt"));
-						// setGraphic(new ImageView(new Image("request-icon.png"))); // ← image fallback
+					if (isEditing()) {
+						if (textField != null) {
+							textField.setText(item.getDisplayName());
+						}
+						setText(null);
+						setGraphic(textField);
 					} else {
-						setGraphic(new FontIcon("fas-folder"));
-						// setGraphic(new ImageView(new Image("folder-icon.png"))); // ← image fallback
+						setText(item.getDisplayName());
+						updateIcon();
 					}
+				}
+			}
+
+			private void createTextField() {
+				textField = new TextField(getItem().getDisplayName());
+				textField.setOnAction(e -> commitEdit(renameItem(textField.getText())));
+				textField.focusedProperty().addListener((obs, wasFocused, isNowFocused) -> {
+					if (!isNowFocused) {
+						commitEdit(renameItem(textField.getText()));
+					}
+				});
+			}
+
+			private CollectionTreeNode renameItem(String newName) {
+				getItem().setDisplayName(newName);
+				return getItem();
+			}
+
+			private void updateIcon() {
+				if (getItem().isRequest()) {
+					setGraphic(new FontIcon("fas-file-alt"));
+				} else {
+					setGraphic(new FontIcon("fas-folder"));
 				}
 			}
 		});
 
 		this.setOnMouseClicked(event -> {
+			// we need to enter renaming mode on double click
+			if (event.getClickCount() == 2) {
+				// Handle double-click event
+				TreeItem<CollectionTreeNode> selectedItem = this.getSelectionModel().getSelectedItem();
+				if (selectedItem != null) {
+					this.edit(selectedItem);
+					log.info("Editing item: " + selectedItem.getValue().getDisplayName());
+				}
+			}
 			TreeItem<CollectionTreeNode> selected = this.getSelectionModel().getSelectedItem();
 			if (selected != null) {
 				if (event.getButton() == MouseButton.PRIMARY) {
@@ -113,6 +174,7 @@ public class SideNavigationCollectionTreeView extends TreeView<CollectionTreeNod
 						// TODO: Open or trigger request
 					} else if (node.getCollectionId() != null) {
 						log.info("Clicked collection: " + node.getCollectionId());
+						eventPublisher.publishEvent(new LaunchCollectionEvent(this, node.getCollectionId()));
 						// TODO: Expand collection or show info
 					}
 				} else if (event.getButton() == MouseButton.SECONDARY) {
